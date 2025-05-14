@@ -33,15 +33,15 @@ export function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 mt-0.5 text-accent flex-shrink-0" />
-                <span>123 Education Lane, Knowledge City, KC 12345</span>
+                <span>Baraka Mowlem, Behind Kinyago Secondary School, Nairobi</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-accent flex-shrink-0" />
-                <a href="tel:+1234567890" className="hover:text-accent transition-colors">(123) 456-7890</a>
+                <a href="tel:+1234567890" className="hover:text-accent transition-colors">(254) 721-412004 / (254) 700-337557 / (254) 720-676660</a>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-accent flex-shrink-0" />
-                <a href="mailto:info@sibiahstar.edu" className="hover:text-accent transition-colors">info@sibiahstar.edu</a>
+                <a href="mailto:info@sibiahstar.edu" className="hover:text-accent transition-colors">sibiahstarschool@gmail.com</a>
               </li>
             </ul>
           </div>

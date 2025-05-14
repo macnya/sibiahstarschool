@@ -11,17 +11,17 @@ const sampleEvents: EventProps[] = [
   {
     title: "Annual Sports Day",
     date: "March 15, 2025",
-    location: "School Sports Ground",
+    location: "Sports Ground",
     description: "Join us for a day of thrilling athletic competitions, team spirit, and fun for the whole family.",
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "sports day",
     slug: "annual-sports-day-2025"
   },
   {
-    title: "Science Fair & Exhibition",
+    title: "CBC Exhibition",
     date: "April 22, 2025",
-    location: "School Auditorium",
-    description: "Witness the innovative projects and scientific talents of our students from all grades.",
+    location: "School Ground",
+    description: "Witness the innovative projects and talents of our students from all grades.",
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "science fair",
     slug: "science-fair-2025"
@@ -38,7 +38,7 @@ const sampleEvents: EventProps[] = [
   {
     title: "Cultural Day Celebration",
     date: "June 5, 2025",
-    location: "School Hall",
+    location: "School Ground",
     description: "Experience a vibrant display of diverse cultures through music, dance, and drama performances.",
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "cultural festival",
@@ -47,7 +47,7 @@ const sampleEvents: EventProps[] = [
     {
     title: "Pre-School Graduation",
     date: "July 12, 2025",
-    location: "School Auditorium",
+    location: "School Ground",
     description: "Celebrating our little stars as they move on to Primary school. A joyous occasion for PP2 students and their families.",
     imageUrl: "https://placehold.co/600x400.png",
     imageHint: "preschool graduation",

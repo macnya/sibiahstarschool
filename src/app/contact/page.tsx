@@ -34,7 +34,7 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Address</h3>
-                      <p className="text-foreground/80">Sibiah Star School, 123 Education Lane, Knowledge City, KC 12345</p>
+                      <p className="text-foreground/80">Sibiah Star School, Baraka Mowlem, Behind Kinyago Secondary School, Nairobi.</p>
                     </div>
                   </div>
                   <div className="flex items-start">
@@ -48,7 +48,7 @@ export default function ContactPage() {
                     <Mail className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Email</h3>
-                      <a href="mailto:info@sibiahstar.edu" className="text-foreground/80 hover:text-accent">info@sibiahstar.edu</a>
+                      <a href="mailto:info@sibiahstar.edu" className="text-foreground/80 hover:text-accent">sibiahstarschool@gmail.com</a>
                     </div>
                   </div>
                    <div className="flex items-start">

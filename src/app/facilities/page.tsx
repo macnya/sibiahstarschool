@@ -1,6 +1,6 @@
 import { PageHeader } from '@/components/shared/page-header';
 import Image from 'next/image';
-import { BookOpen, FlaskConical, MonitorPlay, Utensils, Bus, ShieldCheck, Wifi, Trees } from 'lucide-react';
+import { BookOpen, FlaskConical, MonitorPlay, Utensils, Bus, ShieldCheck, Wifi, Trees, ShoppingCart } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -40,14 +40,6 @@ const facilitiesData = [
     imageSrc: "https://placehold.co/600x400.png",
     imageAlt: "School library",
     imageHint: "school library"
-  },
-  {
-    name: "Cafeteria / Dining Hall",
-    description: "A clean and hygienic cafeteria providing nutritious and balanced meals for students and staff.",
-    icon: <Utensils className="h-10 w-10 text-accent" />,
-    imageSrc: "https://placehold.co/600x400.png",
-    imageAlt: "School cafeteria",
-    imageHint: "school cafeteria"
   },
   {
     name: "Sports Grounds & Play Areas",
@@ -113,14 +105,14 @@ export default function FacilitiesPage() {
                  <h2 className="text-2xl md:text-3xl font-bold text-primary">Transportation Services</h2>
               </div>
               <p className="text-foreground/80 mb-4 leading-relaxed">
-                Sibiah Star School offers a comprehensive and reliable transportation service for students, covering the entire local area. Our fleet of buses is well-maintained and equipped with safety features to ensure a secure and comfortable journey for your child.
+                Sibiah Star School offers a comprehensive and reliable transportation service for students, covering the entire local area. Our bus is well-maintained and equipped with safety features to ensure a secure and comfortable journey for your child.
               </p>
               <ul className="space-y-2 text-foreground/80">
-                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Experienced and vetted drivers.</li>
-                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> GPS tracking on all buses for real-time monitoring.</li>
+                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Experienced and vetted driver.</li>
+                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> GPS tracking on the bus for real-time monitoring.</li>
                 <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Regular safety checks and maintenance.</li>
                 <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Convenient routes and pick-up/drop-off points.</li>
-                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Attendants on board for younger children.</li>
+                <li className="flex items-center"><ShieldCheck className="h-5 w-5 mr-2 text-green-500" /> Attendant on board for younger children.</li>
               </ul>
               <p className="mt-4 text-foreground/80 leading-relaxed">
                 We strive to make the daily commute safe, convenient, and stress-free for both students and parents. For more details on routes and fees, please contact our administration office.
@@ -136,8 +128,8 @@ export default function FacilitiesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
             {[
               { name: "Campus-wide Wi-Fi", icon: <Wifi className="h-8 w-8 text-accent" /> },
-              { name: "Secure Campus with CCTV", icon: <ShieldCheck className="h-8 w-8 text-accent" /> },
-              { name: "Green Spaces & Gardens", icon: <Trees className="h-8 w-8 text-accent" /> },
+              { name: "Secure Campus with 24/7 security", icon: <ShieldCheck className="h-8 w-8 text-accent" /> },
+              { name: "Campus Shop for Uniforms and accessories", icon: <ShoppingCart className="h-8 w-8 text-accent" /> }
             ].map(item => (
               <div key={item.name} className="p-6 bg-card rounded-lg shadow-md">
                 {item.icon}

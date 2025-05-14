@@ -22,7 +22,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-2xl font-bold text-primary mb-4">Our Story</h2>
               <p className="text-foreground/80 mb-4 leading-relaxed">
-                Sibiah Star Pre-school, Primary & Junior School was founded with a passion for providing holistic education that nurtures both academic prowess and strong moral character. For over [Number] years, we have been committed to creating a supportive and stimulating environment where students can thrive and reach their full potential. Our journey began with a small group of dedicated educators and has grown into a vibrant community recognized for its commitment to excellence.
+                Sibiah Star Pre-school, Primary & Junior School was founded with a passion for providing holistic education that nurtures both academic prowess and strong moral character. For over 20 years, we have been committed to creating a supportive and stimulating environment where students can thrive and reach their full potential. Our journey began with a small group of dedicated educators and has grown into a vibrant community recognized for its commitment to excellence.
               </p>
               <p className="text-foreground/80 leading-relaxed">
                 We believe in a balanced approach to education, integrating rigorous academics with enriching co-curricular activities. Our focus extends beyond textbooks to instill values such as integrity, respect, and responsibility in every student.
@@ -30,7 +30,7 @@ export default function AboutPage() {
             </div>
             <div>
               <Image
-                src="https://placehold.co/600x400.png"
+                src="/images/SibiahStarposter.jpg"
                 alt="School building or happy students"
                 width={600}
                 height={400}
@@ -76,7 +76,7 @@ export default function AboutPage() {
       
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-10">Message from the Principal</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-10">Message from the Director</h2>
           <div className="max-w-3xl mx-auto bg-card p-8 rounded-lg shadow-lg">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
               <Image
@@ -88,8 +88,8 @@ export default function AboutPage() {
                 data-ai-hint="portrait person"
               />
               <div>
-                <h3 className="text-xl font-semibold text-primary">Mrs. Jane Doe</h3>
-                <p className="text-accent font-medium">School Principal</p>
+                <h3 className="text-xl font-semibold text-primary">Mrs. Sibiah Kwamboka Nyamwamu</h3>
+                <p className="text-accent font-medium">School Director</p>
               </div>
             </div>
             <p className="text-foreground/80 mb-4 leading-relaxed">
@@ -110,10 +110,12 @@ export default function AboutPage() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { name: "Mr. John Smith", role: "Head of Primary", imageHint: "teacher portrait" },
-              { name: "Ms. Alice Green", role: "Lead Pre-school Teacher", imageHint: "teacher portrait" },
-              { name: "Mr. David Brown", role: "Junior Secondary Coordinator", imageHint: "teacher portrait" },
-              { name: "Ms. Emily White", role: "School Counselor", imageHint: "counselor portrait" },
+              { name: "Mr. Raphael ", role: "Head of Primary", imageHint: "teacher portrait" },
+              { name: "Mrs. Edith Ojiambo", role: "Head of Administration & Finance", imageHint: "teacher portrait" },
+              { name: "Mr. Martin", role: "Junior Secondary Coordinator", imageHint: "teacher portrait" },
+              { name: "Mrs. Fanne Mwambi", role: "Administration & Communication", imageHint: "counselor portrait" },
+              { name: "Mr. Emmanuel Odongo", role: "Transport Coordinator", imageHint: "teacher portrait" },
+              { name: "Mr. Sam ", role: "Head of Clubs & Co-curriculum", imageHint: "teacher portrait" }
             ].map((staff) => (
               <div key={staff.name} className="text-center bg-card p-4 rounded-lg shadow-md">
                 <Image

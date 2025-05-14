@@ -102,14 +102,15 @@ export default function AdmissionsPage() {
           <p className="text-foreground/80 mb-8 max-w-xl mx-auto">
             Download the necessary application forms here. Please ensure all sections are completed accurately.
           </p>
-          <div className="space-x-4">
-            <Button size="lg" variant="outline" disabled> {/* Placeholder, actual download link needed */}
-              <Download className="mr-2 h-5 w-5" /> Pre-school Application Form
-            </Button>
-            <Button size="lg" variant="outline" disabled> {/* Placeholder, actual download link needed */}
-              <Download className="mr-2 h-5 w-5" /> Primary & Junior Secondary Form
-            </Button>
-          </div>
+        
+        <div>
+           <Button size="lg" variant="outline" asChild>
+             <a
+                href="https://drive.google.com/file/d/1JSusZZDhgqaj2uG7VZ8-lqxD7wx_5_dE/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 h-5 w-5" /> Download Admission Form (All Levels)
+              </a>
+           </Button>
+         </div>
           <p className="mt-6 text-sm text-muted-foreground">
             Note: Online application portal coming soon!
           </p>
