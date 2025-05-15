@@ -5,13 +5,12 @@ import {vertexAI, gemini15Flash} from "@genkit-ai/vertexai";
 
 // Import models from the Vertex AI plugin. The Vertex AI API provides access to
 // several generative models. Here, we import Gemini 1.5 Flash.
-// import {gemini15Flash} from "@genkit-ai/vertexai"; // Duplicate import removed
 
 // Cloud Functions for Firebase supports Genkit natively. The onCallGenkit
-// function creates a callable function from a Genkit action. It automatically
-// implements streaming if your flow does. The https library also has other
-// utility methods such as hasClaim, which verifies that a caller's token has a
-// specific claim (optionally matching a specific value)
+// function creates a callable function from a Genkit action.
+// It automatically implements streaming if your flow does. The https library
+// also has other utility methods such as hasClaim, which verifies that a
+// caller's token has a specific claim (optionally matching a specific value)
 import {onCallGenkit/* , hasClaim */} from "firebase-functions/https";
 
 // Genkit models generally depend on an API key. APIs should be stored in Cloud
