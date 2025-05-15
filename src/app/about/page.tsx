@@ -110,12 +110,12 @@ export default function AboutPage() {
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              { name: "Mr. Raphael ", role: "Head of Primary", imageHint: "teacher portrait" },
-              { name: "Mrs. Edith Ojiambo", role: "Head of Administration & Finance", imageHint: "teacher portrait" },
-              { name: "Mr. Martin", role: "Junior Secondary Coordinator", imageHint: "teacher portrait" },
-              { name: "Mrs. Fanne Mwambi", role: "Administration & Communication", imageHint: "counselor portrait" },
-              { name: "Mr. Emmanuel Odongo", role: "Transport Coordinator", imageHint: "teacher portrait" },
-              { name: "Mr. Sam ", role: "Head of Clubs & Co-curriculum", imageHint: "teacher portrait" }
+              { name: "Tr. Raphael Odongo ", role: "Head of Primary", imageHint: "teacher portrait" },
+              { name: "Ms. Moraa Ojiambo", role: "Head of Administration & Finance", imageHint: "teacher portrait" },
+              { name: "Tr. Martin", role: "Junior Secondary Coordinator", imageHint: "teacher portrait" },
+              { name: "Ms. Fanne Mwambi", role: "Administration & Communication", imageHint: "counselor portrait" },
+              { name: "Tr. Emmanuel Odongo", role: "Transport Coordinator", imageHint: "teacher portrait" },
+              { name: "Tr. Sam ", role: "Head of Clubs & Co-curriculum", imageHint: "teacher portrait" }
             ].map((staff) => (
               <div key={staff.name} className="text-center bg-card p-4 rounded-lg shadow-md">
                 <Image
