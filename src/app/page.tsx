@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,9 +14,10 @@ export default function HomePage() {
             <Image 
               src="https://placehold.co/1920x1080.png" 
               alt="School campus background" 
-              layout="fill" 
-              objectFit="cover" 
+              fill
+              style={{ objectFit: "cover" }}
               className="opacity-20"
+              priority // Good to add for LCP images
               data-ai-hint="school campus"
             />
         </div>
