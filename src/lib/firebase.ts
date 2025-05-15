@@ -1,7 +1,7 @@
 
 'use client';
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -13,10 +13,10 @@ const firebaseConfig = {
 };
 
 // Check if the essential API key is present
-if (!firebaseConfig.apiKey) {
-  console.error("Firebase API Key is missing from environment variables.");
+if (!firebaseConfig.apiKey || firebaseConfig.apiKey.trim() === "") {
+  console.error("Firebase API Key is missing or empty in environment variables.");
   throw new Error(
-    "Firebase API Key is missing. Please ensure that NEXT_PUBLIC_FIREBASE_API_KEY is correctly set in your .env.local file and that the Next.js development server was restarted after creating/modifying the .env.local file."
+    "Firebase API Key is missing or empty. Critical step: Please ensure that NEXT_PUBLIC_FIREBASE_API_KEY is correctly set with your actual API key in the .env.local file (located in the root of your project). After saving changes to .env.local, you MUST restart your Next.js development server for the new environment variables to be loaded."
   );
 }
 
