@@ -12,6 +12,11 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+// !!! DEBUGGING LOG !!!
+console.log("DEBUG: NEXT_PUBLIC_FIREBASE_API_KEY as seen by firebase.ts:", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
+// You should see your API key printed in the server console (terminal where `npm run dev` runs)
+// If it's undefined or empty, the .env.local file is not being loaded correctly or the variable is misspelled.
+
 // Check if the essential API key is present
 if (!firebaseConfig.apiKey || firebaseConfig.apiKey.trim() === "") {
   console.error("Firebase API Key is missing or empty in environment variables.");
