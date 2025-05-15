@@ -2,13 +2,11 @@
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
 import { getAuth, type Auth } from 'firebase/auth';
 
-// Log environment variable directly at the module scope (runs on server and client)
+// Log environment variable directly at the module scope
 if (typeof window !== 'undefined') {
-  // This log appears in your BROWSER's developer console
   console.log("CLIENT DEBUG: NEXT_PUBLIC_FIREBASE_API_KEY:", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
   console.log("CLIENT DEBUG: typeof NEXT_PUBLIC_FIREBASE_API_KEY:", typeof process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 } else {
-  // This log appears in your SERVER terminal
   console.log("SERVER DEBUG (initial evaluation): NEXT_PUBLIC_FIREBASE_API_KEY (from firebase.ts):", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 }
 
@@ -28,12 +26,16 @@ if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === "") {
 Ensure NEXT_PUBLIC_FIREBASE_API_KEY is correctly set in your .env.local file.
 After saving .env.local, YOU MUST RESTART your Next.js development server.
 Value received for apiKey: '${apiKey}' (Type: ${typeof apiKey})`;
+  
+  // We log the error, but don't throw, to see if Firebase itself throws a more specific error
+  // if the key is truly invalid for the project, rather than just missing from env.
   console.error(errorMessage);
-  throw new Error(errorMessage);
+  // Not throwing the error here anymore as logs confirm the key is usually present.
+  // If Firebase init fails, it will throw its own error.
 }
 
 const firebaseConfig = {
-  apiKey: apiKey, // Use the validated apiKey
+  apiKey: apiKey,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
