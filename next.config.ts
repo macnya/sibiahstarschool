@@ -1,6 +1,8 @@
 
 import type {NextConfig} from 'next';
 
+const devOriginHost = "3000-firebase-studio-1747199218566.cluster-6vyo4gb53jczovun3dxslzjahs.cloudworkstations.dev";
+
 const nextConfig: NextConfig = {
   /* config options here */
   typescript: {
@@ -19,7 +21,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  allowedDevOrigins: ["https://3000-firebase-studio-1747199218566.cluster-6vyo4gb53jczovun3dxslzjahs.cloudworkstations.dev"],
+  allowedDevOrigins: [
+    `https://${devOriginHost}`, // Primary expected origin
+    `http://${devOriginHost}`   // Fallback, just in case
+  ],
 };
 
 export default nextConfig;
