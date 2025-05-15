@@ -4,25 +4,15 @@ import { getAuth, type Auth } from 'firebase/auth';
 
 // Log environment variable directly at the module scope for debugging
 if (typeof window !== 'undefined') {
+  // This log runs only on the client-side
   // console.log("CLIENT DEBUG: NEXT_PUBLIC_FIREBASE_API_KEY:", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
   // console.log("CLIENT DEBUG: typeof NEXT_PUBLIC_FIREBASE_API_KEY:", typeof process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 } else {
-  // console.log("SERVER DEBUG (initial evaluation): NEXT_PUBLIC_FIREBASE_API_KEY (from firebase.ts):", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
+  // This log runs only on the server-side during module initialization
+  console.log("SERVER DEBUG (initial evaluation): NEXT_PUBLIC_FIREBASE_API_KEY (from firebase.ts):", process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 }
 
 const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
-
-// Check if the essential API key is present and is a non-empty string
-// This check is primarily for early warning; Firebase init will also fail if key is truly invalid.
-if (!apiKey || typeof apiKey !== 'string' || apiKey.trim() === "") {
-  const context = typeof window !== 'undefined' ? 'Client' : 'Server';
-  console.error(`(${context} Context) Firebase API Key Error: The API key is missing, empty, or not a string.
-Ensure NEXT_PUBLIC_FIREBASE_API_KEY is correctly set in your .env.local file.
-After saving .env.local, YOU MUST RESTART your Next.js development server.
-Value received for apiKey: '${apiKey}' (Type: ${typeof apiKey})`);
-  // Not throwing an error here, as previous logs confirmed the key is usually present.
-  // If Firebase init fails due to the key, it will throw its own more specific error.
-}
 
 const firebaseConfig = {
   apiKey: apiKey,
