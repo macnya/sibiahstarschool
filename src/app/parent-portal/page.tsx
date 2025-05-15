@@ -5,8 +5,8 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LogIn, Users } from 'lucide-react';
-import type { Metadata } from 'next';
+import { LogIn, Users, LogOut } from 'lucide-react';
+// import type { Metadata } from 'next'; // Metadata should be defined in server components or layout for client components
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -19,47 +19,71 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
-import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/contexts/auth-provider';
 
-// export const metadata: Metadata = { // Metadata should be defined in server components
+// export const metadata: Metadata = {
 //   title: 'Parent Portal',
 //   description: 'Access the Sibiah Star School Parent Portal.',
 // };
 
 const formSchema = z.object({
-  parentId: z.string().min(1, { message: "Parent ID/Email is required." }),
-  password: z.string().min(1, { message: "Password is required." }),
+  email: z.string().email({ message: "Please enter a valid email." }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 export default function ParentPortalPage() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { user, login, logout, loading: authLoading } = useAuth();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      parentId: '',
+      email: '',
       password: '',
     },
   });
 
   async function onSubmit(values: FormValues) {
-    setIsLoading(true);
-    console.log('Parent Login Attempt:', values);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    toast({
-      title: 'Login Attempted',
-      description: 'Login functionality is for demonstration. Check console for credentials.',
-      variant: 'default',
-    });
-    // In a real app, you would authenticate here and redirect or show an error.
-    // For now, we'll just reset the form as an example.
-    // form.reset(); 
+    await login(values.email, values.password);
+    form.reset(); 
+  }
+
+  if (user) {
+    return (
+      <div>
+        <PageHeader
+          title="Parent Portal"
+          subtitle={`Welcome, ${user.displayName || user.email}!`}
+        />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+          <Card className="max-w-md mx-auto shadow-xl">
+            <CardHeader className="text-center">
+              <Users className="h-16 w-16 mx-auto text-primary mb-4" />
+              <CardTitle className="text-2xl font-bold text-primary">Welcome!</CardTitle>
+              <CardDescription>You are now logged in to the Parent Portal.</CardDescription>
+            </CardHeader>
+            <CardContent className="text-center">
+              <p className="mb-4">View your child's information, announcements, and more.</p>
+              <Button onClick={logout} disabled={authLoading} className="w-full bg-destructive hover:bg-destructive/90">
+                {authLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Logging out...
+                  </>
+                ) : (
+                  <>
+                    <LogOut className="mr-2 h-4 w-4" /> Logout
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -80,12 +104,12 @@ export default function ParentPortalPage() {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
-                  name="parentId"
+                  name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="parentId">Parent ID / Email</FormLabel>
+                      <FormLabel htmlFor="email">Email</FormLabel>
                       <FormControl>
-                        <Input id="parentId" type="text" placeholder="Your Parent ID or Email" {...field} />
+                        <Input id="email" type="email" placeholder="your.email@example.com" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -104,8 +128,8 @@ export default function ParentPortalPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isLoading}>
-                  {isLoading ? (
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading}>
+                  {authLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Logging in...
