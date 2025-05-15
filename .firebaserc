@@ -1,5 +1,11 @@
 {
   "projects": {
     "default": "sibiah-star-connect"
+  },
+  "targets": {},
+  "etags": {
+    "sibiah-star-connect": {
+      "extensionInstances": {}
+    }
   }
 }

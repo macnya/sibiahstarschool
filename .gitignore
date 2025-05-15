@@ -1,46 +1,40 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+.pnp.js
+.yarn/install-state.gz
 
-# testing
-/coverage
-
-# next.js
+# Next.js build outputs
 /.next/
 /out/
 
-# production
+# Production build folder (generic)
 /build
 
-# misc
+# Local Environment Variables
+# IMPORTANT: Ensure .env.local contains sensitive keys and is listed here!
+.env*.local
+.env # Also ignore general .env if not specifically needed in repo
+
+# IDE & System files
+.vscode/
+*.swp
 .DS_Store
-*.pem
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# Firebase / Log files
+*-debug.log
+*.log
+firebase-debug.*.log
 
-# vercel
-.vercel
+# Turbopack
+.turbo/
 
-# typescript
+# TypeScript
 *.tsbuildinfo
-next-env.d.ts
+# next-env.d.ts # Typically, this should be committed as it contains Next.js specific types
 
-.genkit/*
-.env*
+# Coverage directory
+/coverage
 
-# firebase
-firebase-debug.log
-firestore-debug.log
-node_modules
+# Misc
+*.pem
