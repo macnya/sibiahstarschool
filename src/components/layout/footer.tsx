@@ -41,7 +41,7 @@ export function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-accent flex-shrink-0" />
-                <a href="mailto:info@sibiahstar.edu" className="hover:text-accent transition-colors">sibiahstarschool@gmail.com</a>
+                <a href="mailto:sibiahstarschool@gmail.com" className="hover:text-accent transition-colors">sibiahstarschool@gmail.com</a>
               </li>
             </ul>
           </div>

@@ -12,16 +12,17 @@ const openSans = Open_Sans({
   weight: ['300', '400', '500', '600', '700', '800'],
 });
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | Sibiah Star School',
-    default: 'Sibiah Star Pre-school, Primary & Junior School',
-  },
-  description: 'Welcome to Sibiah Star Pre-school, Primary & Junior School. Nurturing young minds for a bright future with modern facilities, transport services, excellent academics, and focus on character development.',
-  icons: {
-    icon: '/favicon.ico', // Placeholder, actual favicon not generated
-  }
-};
+// Moved title and description to individual pages for better SEO and specificity
+// export const metadata: Metadata = {
+//   title: {
+//     template: '%s | Sibiah Star School',
+//     default: 'Sibiah Star Pre-school, Primary & Junior School',
+//   },
+//   description: 'Welcome to Sibiah Star Pre-school, Primary & Junior School. Nurturing young minds for a bright future with modern facilities, transport services, excellent academics, and focus on character development.',
+//   icons: {
+//     icon: '/favicon.ico', // Placeholder, actual favicon not generated
+//   }
+// };
 
 export default function RootLayout({
   children,
