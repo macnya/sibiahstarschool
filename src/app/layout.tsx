@@ -23,7 +23,7 @@ const openSans = Open_Sans({
 //   },
 //   description: 'Welcome to Sibiah Star Pre-school, Primary & Junior School. Nurturing young minds for a bright future with modern facilities, transport services, excellent academics, and focus on character development.',
 //   icons: {
-//     icon: '/favicon.ico', 
+//     icon: '/favicon.ico',
 //   }
 // };
 
@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${openSans.variable} font-sans antialiased flex flex-col min-h-screen`}>
+      <body className={`${openSans.variable} font-sans antialiased flex flex-col min-h-screen`} suppressHydrationWarning={true}>
         <AuthProvider>
           <Navbar />
           <main className="flex-grow">
