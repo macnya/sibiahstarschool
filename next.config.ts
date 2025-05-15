@@ -1,6 +1,8 @@
 
 import type { NextConfig } from 'next';
 
+const WORKSTATIONS_DOMAIN = "3000-firebase-studio-1747199218566.cluster-6vyo4gb53jczovun3dxslzjahs.cloudworkstations.dev";
+
 const config: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -19,7 +21,8 @@ const config: NextConfig = {
     ],
   },
   allowedDevOrigins: [
-    "https://3000-firebase-studio-1747199218566.cluster-6vyo4gb53jczovun3dxslzjahs.cloudworkstations.dev",
+    WORKSTATIONS_DOMAIN, // Try without scheme
+    `https://${WORKSTATIONS_DOMAIN}`, // Keep with HTTPS as well
   ],
 };
 
