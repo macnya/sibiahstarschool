@@ -7,10 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LogIn, UserCircle, LogOut } from 'lucide-react';
 // import type { Metadata } from 'next'; // Metadata should be defined in server components or layout for client components
-import { useForm } from 'react-hook-form';
+import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
+import{\n
   Form,
   FormControl,
   FormField,
@@ -21,7 +21,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-provider';
-
+import Link from 'next/link';
+import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';\nimport { auth } from '@/lib/firebase';\n
 // export const metadata: Metadata = {
 //   title: 'Student Portal',
 //   description: 'Access the Sibiah Star School Student Portal.',
@@ -35,7 +36,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function StudentPortalPage() {
-  const { toast } = useToast();
+  const { toast } = useToast(); // Initialize useToast here
   const { user, login, logout, loading: authLoading } = useAuth();
 
   const form = useForm<FormValues>({
@@ -45,10 +46,10 @@ export default function StudentPortalPage() {
       password: '',
     },
   });
+  const { isSubmitting } = useFormState({ control: form.control });
 
   async function onSubmit(values: FormValues) {
-    await login(values.email, values.password);
-    form.reset();
+    try {\n      await login(values.email, values.password);\n      form.reset();\n    } catch (error: any) {\n      toast({\n        title: 'Login Failed',\n        description: error.message,\n        variant: 'destructive',\n      });\n    }\n  }\n\n  async function handleGoogleSignIn() {\n    const provider = new GoogleAuthProvider();\n    try {\n      await signInWithPopup(auth, provider);\n      toast({\n        title: 'Login Successful',\n        description: 'You have successfully logged in with Google.',\n      });\n    } catch (error: any) {\n      toast({\n        title: 'Google Sign-In Failed',\n        description: error.message,\n        variant: 'destructive',\n      });\n    }\n
   }
 
   if (user) {
@@ -102,7 +103,7 @@ export default function StudentPortalPage() {
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
+                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
@@ -116,7 +117,7 @@ export default function StudentPortalPage() {
                   )}
                 />
                 <FormField
-                  control={form.control}
+                   control={form.control}
                   name="password"
                   render={({ field }) => (
                     <FormItem>
@@ -128,8 +129,8 @@ export default function StudentPortalPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading}>
-                   {authLoading ? (
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isSubmitting || authLoading}>
+                    {isSubmitting || authLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Logging in...
@@ -141,12 +142,25 @@ export default function StudentPortalPage() {
                   )}
                 </Button>
                 <div className="text-center">
+
+                  {/* Google Sign-In Button (Placeholder) */}
+                  <Button variant="outline" className="w-full mb-4">
+                    Sign in with Google
+                  </Button>
+
+                  {/* Forgot Password (Placeholder) */}
                   <Button variant="link" size="sm" className="text-accent" onClick={() => toast({ title: "Feature Coming Soon", description: "Password recovery is not yet implemented."})}>
                     Forgot Password?
                   </Button>
                 </div>
               </form>
             </Form>
+            <div className="mt-6 text-center">
+               <p className="text-sm text-gray-600 dark:text-gray-400">
+                Don't have an account?{' '}
+                <Link href="/student-portal/register" className="text-primary hover:underline">Sign Up</Link>
+               </p>
+            </div>
           </CardContent>
         </Card>
       </div>

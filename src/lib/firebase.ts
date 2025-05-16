@@ -1,6 +1,6 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import { getAuth, type Auth } from 'firebase/auth';
+import { getAuth, type Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
 
 // Log environment variable directly at the module scope for debugging
 if (typeof window === 'undefined') {
@@ -30,4 +30,29 @@ if (!getApps().length) {
 
 const auth: Auth = getAuth(app);
 
-export { app, auth };
+const googleProvider = new GoogleAuthProvider();
+
+const signupWithEmailAndPassword = (email: string, password: string) => {
+  return createUserWithEmailAndPassword(auth, email, password);
+};
+
+const loginWithEmailAndPassword = (email: string, password: string) => {
+  return signInWithEmailAndPassword(auth, email, password);
+};
+
+const signInWithGoogle = () => {
+  return signInWithPopup(auth, googleProvider);
+};
+
+const handleAuthStateChange = (callback: (user: any) => void) => {
+  return onAuthStateChanged(auth, callback);
+};
+
+export {
+  app,
+  auth,
+  signupWithEmailAndPassword,
+  loginWithEmailAndPassword,
+  signInWithGoogle,
+  handleAuthStateChange
+};
