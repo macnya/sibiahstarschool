@@ -1,42 +1,39 @@
+
 "use client";
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/lib/firebase'; // Assuming firebase.ts is in lib directory
+import { useAuth } from '@/contexts/auth-provider';
+import { Loader2 } from 'lucide-react';
 
 const AdminPage = () => {
-  const [user, loading] = useAuthState(auth);
+  const { user, initialLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      // If not logged in, redirect to login page
-      router.push('/login'); // Or your main login page path
-    } else if (!loading && user) {
-      // Placeholder for ch
-      ecking admin privileges
-      // Replace with your actual admin check logic
-      const isAdmin = false; // <-- Replace with actual check (e.g., database lookup, custom claim)
-
-      if (!isAdmin) {
-        // If not an admin, redirect to a different page (e.g., dashboard)
-        router.push('/dashboard'); // Or another appropriate page
+    if (!initialLoading) {
+      if (!user) {
+        router.push('/admin/login');
+      } else {
+        // For now, any logged-in user is redirected to admin dashboard.
+        // Real admin role check (e.g., custom claims) would happen here.
+        router.push('/admin/dashboard');
       }
     }
-  }, [user, loading, router]);
+  }, [user, initialLoading, router]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (initialLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
   }
 
-  // Once authenticated and admin status is confirmed (replace placeholder)
-  // You would render the actual admin panel content here
+  // This content will likely not be seen due to redirects, but acts as a fallback.
   return (
-    <div>
-      <h1>Admin Panel</h1>
-      <p>Welcome, Admin!</p>
-      {/* Add admin panel content here */}
+    <div className="flex items-center justify-center min-h-screen">
+      <p>Redirecting to admin section...</p>
     </div>
   );
 };

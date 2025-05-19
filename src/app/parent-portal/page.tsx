@@ -5,8 +5,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LogIn, Users, LogOut, Mail, Google } from 'lucide-react';
-// import type { Metadata } from 'next'; // Metadata should be defined in server components or layout for client components
+import { LogIn, Users, LogOut, UserPlus, Mail } from 'lucide-react'; // Added UserPlus
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -21,12 +20,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-provider';
-
 import Link from 'next/link';
-// export const metadata: Metadata = {
-//   title: 'Parent Portal',
-//   description: 'Access the Sibiah Star School Parent Portal.',
-// };
+import { SvgGoogleIcon } from '@/components/shared/icons'; // Assuming you'll create this
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -37,7 +32,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function ParentPortalPage() {
   const { toast } = useToast();
-  const { user, login, logout, signInWithGoogle, loading: authLoading, registerWithEmailAndPassword } = useAuth();
+  const { user, login, logout, signInWithGoogle, loading: authLoading, initialLoading } = useAuth();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -47,20 +42,27 @@ export default function ParentPortalPage() {
     },
   });
 
-  // Differentiate between login and signup based on form submission context (not implemented here, requires separate forms or state)
-  // For simplicity, this onSubmit will handle LOGIN. Registration will be a separate page linked below.
   async function onLogin(values: FormValues) {
-    try {
-      await login(values.email, values.password);
-    } catch (error: any) {
-       toast({ title: "Login Failed", description: error.message, variant: "destructive" });
+    const success = await login(values.email, values.password);
+    if (success) {
+      form.reset();
     }
+  }
+  
+  async function handleGoogleSignIn() {
+    await signInWithGoogle();
+  }
 
-    form.reset(); 
+  if (initialLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
   }
 
   if (user) {
- return (
+    return (
       <div>
         <PageHeader
           title="Parent Portal"
@@ -75,17 +77,13 @@ export default function ParentPortalPage() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="mb-4">View your child's information, announcements, and more.</p>
+              {/* Placeholder for portal content */}
+              <div className="my-6 p-4 border rounded-md bg-secondary/20">
+                <p className="text-muted-foreground">Parent-specific content will appear here.</p>
+              </div>
               <Button onClick={logout} disabled={authLoading} className="w-full bg-destructive hover:bg-destructive/90">
-                {authLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Logging out...
-                  </>
-                ) : (
-                  <>
-                    <LogOut className="mr-2 h-4 w-4" /> Logout
-                  </>
-                )}
+                {authLoading ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogOut className="mr-2 h-4 w-4" /> )}
+                Logout
               </Button>
             </CardContent>
           </Card>
@@ -108,17 +106,16 @@ export default function ParentPortalPage() {
             <CardDescription>Enter your credentials to access the portal.</CardDescription>
           </CardHeader>
           <CardContent>
-            {/* Login Form */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onLogin)} className="space-y-4">
- <FormField
+                <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormLabel htmlFor="emailParent">Email</FormLabel>
                       <FormControl>
-                        <Input id="email" type="email" placeholder="your.email@example.com" {...field} />
+                        <Input id="emailParent" type="email" placeholder="your.email@example.com" {...field} icon={<Mail className="h-4 w-4 text-muted-foreground" />} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -138,16 +135,8 @@ export default function ParentPortalPage() {
                   )}
                 />
                 <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading}>
-                  {authLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Logging in...
-                    </>
-                  ) : (
-                    <>
-                      <LogIn className="mr-2 h-4 w-4" /> Login
-                    </>
-                  )}
+                  {authLoading ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogIn className="mr-2 h-4 w-4" /> )}
+                  Login
                 </Button>
               </form>
             </Form>
@@ -157,28 +146,26 @@ export default function ParentPortalPage() {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">
-                  Or continue with
-                </span>
+                <span className="bg-card px-2 text-muted-foreground"> Or continue with </span>
               </div>
             </div>
 
-            {/* Social and Registration Options */}
-            <div className="space-y-4">
-               <Button variant="outline" className="w-full" onClick={signInWithGoogle} disabled={authLoading}>
-                 <Google className="mr-2 h-4 w-4" /> Google
- </Button>
-               <div className="text-center text-sm text-muted-foreground">
-                 Don&apos;t have an account?{' '}
-                 <Button asChild variant="link" size="sm" className="px-0">
-                   Register Here
-                 </Button>
-               </div>
-
-                  <Button variant="link" size="sm" className="text-accent" onClick={() => toast({ title: "Feature Coming Soon", description: "Password recovery is not yet implemented."})}>
-                    Forgot Password?
-                  </Button>
-                </div>
+            <Button variant="outline" className="w-full mb-4" onClick={handleGoogleSignIn} disabled={authLoading}>
+              {authLoading ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <SvgGoogleIcon className="mr-2 h-5 w-5" /> )}
+              Sign in with Google
+            </Button>
+            
+            <div className="text-center text-sm text-muted-foreground">
+              Don&apos;t have an account?{' '}
+              <Button asChild variant="link" size="sm" className="px-0 text-accent hover:underline">
+                <Link href="/parent-portal/register">Register Here</Link>
+              </Button>
+            </div>
+            <div className="text-center mt-2">
+              <Button variant="link" size="sm" className="text-xs text-muted-foreground hover:text-accent" onClick={() => toast({ title: "Feature Coming Soon", description: "Password recovery is not yet implemented."})}>
+                Forgot Password?
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>

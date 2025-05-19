@@ -45,6 +45,7 @@ export const getUser = onRequest(async (request, response) => {
     logger.error("Error fetching user:", error);
     response.status(500).send("Error fetching user.");
   }
+});
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 

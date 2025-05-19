@@ -5,12 +5,11 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LogIn, UserCircle, LogOut } from 'lucide-react';
-// import type { Metadata } from 'next'; // Metadata should be defined in server components or layout for client components
+import { LogIn, UserCircle, LogOut, UserPlus, Mail } from 'lucide-react'; // Added UserPlus
 import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import{\n
+import {
   Form,
   FormControl,
   FormField,
@@ -22,11 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-provider';
 import Link from 'next/link';
-import { signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';\nimport { auth } from '@/lib/firebase';\n
-// export const metadata: Metadata = {
-//   title: 'Student Portal',
-//   description: 'Access the Sibiah Star School Student Portal.',
-// };
+import { SvgGoogleIcon } from '@/components/shared/icons'; // Assuming you'll create this
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -36,8 +31,8 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export default function StudentPortalPage() {
-  const { toast } = useToast(); // Initialize useToast here
-  const { user, login, logout, loading: authLoading } = useAuth();
+  const { toast } = useToast();
+  const { user, login, logout, signInWithGoogle, loading: authLoading, initialLoading } = useAuth();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -48,8 +43,23 @@ export default function StudentPortalPage() {
   });
   const { isSubmitting } = useFormState({ control: form.control });
 
-  async function onSubmit(values: FormValues) {
-    try {\n      await login(values.email, values.password);\n      form.reset();\n    } catch (error: any) {\n      toast({\n        title: 'Login Failed',\n        description: error.message,\n        variant: 'destructive',\n      });\n    }\n  }\n\n  async function handleGoogleSignIn() {\n    const provider = new GoogleAuthProvider();\n    try {\n      await signInWithPopup(auth, provider);\n      toast({\n        title: 'Login Successful',\n        description: 'You have successfully logged in with Google.',\n      });\n    } catch (error: any) {\n      toast({\n        title: 'Google Sign-In Failed',\n        description: error.message,\n        variant: 'destructive',\n      });\n    }\n
+  async function onLogin(values: FormValues) {
+    const success = await login(values.email, values.password);
+    if (success) {
+      form.reset();
+    }
+  }
+  
+  async function handleGoogleSignIn() {
+    await signInWithGoogle();
+  }
+
+  if (initialLoading) {
+     return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
   }
 
   if (user) {
@@ -68,17 +78,13 @@ export default function StudentPortalPage() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="mb-4">Access your grades, announcements, and resources.</p>
-              <Button onClick={logout} disabled={authLoading} className="w-full bg-destructive hover:bg-destructive/90">
-                {authLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Logging out...
-                  </>
-                ) : (
-                  <>
-                    <LogOut className="mr-2 h-4 w-4" /> Logout
-                  </>
-                )}
+              {/* Placeholder for portal content */}
+              <div className="my-6 p-4 border rounded-md bg-secondary/20">
+                <p className="text-muted-foreground">Student-specific content will appear here.</p>
+              </div>
+              <Button onClick={logout} disabled={authLoading || isSubmitting} className="w-full bg-destructive hover:bg-destructive/90">
+                {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogOut className="mr-2 h-4 w-4" /> )}
+                Logout
               </Button>
             </CardContent>
           </Card>
@@ -102,15 +108,15 @@ export default function StudentPortalPage() {
           </CardHeader>
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onLogin)} className="space-y-6">
                  <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormLabel htmlFor="emailStudent">Email</FormLabel>
                       <FormControl>
-                        <Input id="email" type="email" placeholder="your.email@example.com" {...field} />
+                        <Input id="emailStudent" type="email" placeholder="your.email@example.com" {...field} icon={<Mail className="h-4 w-4 text-muted-foreground" />} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -129,37 +135,37 @@ export default function StudentPortalPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isSubmitting || authLoading}>
-                    {isSubmitting || authLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Logging in...
-                    </>
-                  ) : (
-                    <>
-                      <LogIn className="mr-2 h-4 w-4" /> Login
-                    </>
-                  )}
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading || isSubmitting}>
+                    {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogIn className="mr-2 h-4 w-4" /> )}
+                  Login
                 </Button>
-                <div className="text-center">
-
-                  {/* Google Sign-In Button (Placeholder) */}
-                  <Button variant="outline" className="w-full mb-4">
-                    Sign in with Google
-                  </Button>
-
-                  {/* Forgot Password (Placeholder) */}
-                  <Button variant="link" size="sm" className="text-accent" onClick={() => toast({ title: "Feature Coming Soon", description: "Password recovery is not yet implemented."})}>
-                    Forgot Password?
-                  </Button>
-                </div>
               </form>
             </Form>
-            <div className="mt-6 text-center">
-               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don't have an account?{' '}
-                <Link href="/student-portal/register" className="text-primary hover:underline">Sign Up</Link>
-               </p>
+            
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground"> Or continue with </span>
+              </div>
+            </div>
+
+            <Button variant="outline" className="w-full mb-4" onClick={handleGoogleSignIn} disabled={authLoading || isSubmitting}>
+              {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <SvgGoogleIcon className="mr-2 h-5 w-5" /> )}
+              Sign in with Google
+            </Button>
+
+            <div className="text-center text-sm text-muted-foreground">
+               Don&apos;t have an account?{' '}
+               <Button asChild variant="link" size="sm" className="px-0 text-accent hover:underline">
+                 <Link href="/student-portal/register">Register Here</Link>
+               </Button>
+            </div>
+            <div className="text-center mt-2">
+              <Button variant="link" size="sm" className="text-xs text-muted-foreground hover:text-accent" onClick={() => toast({ title: "Feature Coming Soon", description: "Password recovery is not yet implemented."})}>
+                Forgot Password?
+              </Button>
             </div>
           </CardContent>
         </Card>

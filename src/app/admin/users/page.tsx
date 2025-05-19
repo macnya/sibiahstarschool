@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
-import { httpsCallable } from 'firebase/functions';
 // Assume you have a function to check admin status
 import { checkAdminStatus } from '@/lib/admin'; // You'll need to create this file
 
@@ -29,7 +29,7 @@ export default function AdminUsersPage() {
         router.push('/'); // Redirect to home if not admin
       } else {
         await fetchUsers(); // Fetch users if admin
- set setLoading(false);
+        setLoading(false);
       }
     };
     verifyAdmin();
