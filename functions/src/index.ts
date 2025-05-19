@@ -18,7 +18,7 @@ export const listUsers = async (request: any, response: any) => {
     const listUsersResult = await admin.auth().listUsers();
     response.status(200).json(listUsersResult.users);
   } catch (error) {
-    console.error("Error listing users:", error); // Using console.error as logger was removed
+    console.error("Error listing users:", error); // Using console.error
     response.status(500).send("Error listing users.");
   }
 };
@@ -47,9 +47,9 @@ export const getUser = async (request: any, response: any) => {
   }
 };
 
-// Note: The Firebase Functions Quickstart for TypeScript uses onRequest, 
+// Note: The Firebase Functions Quickstart for TypeScript uses onRequest,
 // but these example functions are structured more like callable functions or basic HTTP requests.
-// If these are intended to be actual HTTP-triggered functions deployable via Firebase, 
+// If these are intended to be actual HTTP-triggered functions deployable via Firebase,
 // they should be wrapped with `onRequest`. For now, to fix the build, I'm assuming direct export
 // for potential use with Express or similar, or that `onRequest` was a leftover import.
 // The `logger` calls have been replaced with `console.error`.
