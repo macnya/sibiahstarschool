@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-// import { getUser } from '../../../../../../functions/src'; // Problematic direct import
+// import { getUser } from '../../../../../../functions/src'; // Problematic direct import - REMOVED
 
 interface UserData {
   uid: string;
@@ -24,35 +24,34 @@ export default function EditUserPage() {
   const [formData, setFormData] = useState<Partial<UserData>>({});
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      setLoading(true);
-      try {
-        // const result = await getUser({ data: { uid: userId } }); // This needs to be an API call to a deployed function
-        // const dummyUser: UserData = result.data as UserData; 
-        // setUser(dummyUser);
-        // setFormData(dummyUser);
-        console.warn("User data fetching needs to be implemented via an API call to a deployed Cloud Function.");
-        // Placeholder for now:
-        if (userId) {
-          const placeholderUser: UserData = { uid: userId, email: "loading..." };
-          setUser(placeholderUser);
-          setFormData(placeholderUser);
-        }
-      } catch (error) {
-        console.error('Error fetching user data (placeholder):', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // const fetchUserData = async () => {
+    //   setLoading(true);
+    //   try {
+    //     // const result = await getUser({ data: { uid: userId } }); // This needs to be an API call to a deployed function
+    //     // const dummyUser: UserData = result.data as UserData; 
+    //     // setUser(dummyUser);
+    //     // setFormData(dummyUser);
+    //     console.warn("User data fetching needs to be implemented via an API call to a deployed Cloud Function.");
+    //     // Placeholder for now:
+    //     if (userId) {
+    //       const placeholderUser: UserData = { uid: userId, email: "loading..." };
+    //       setUser(placeholderUser);
+    //       setFormData(placeholderUser);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching user data (placeholder):', error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
 
     if (userId) {
       // fetchUserData(); // Temporarily disable direct function call
-      console.log("Placeholder: fetchUserData call commented out for build. User ID:", userId);
+      console.log("Placeholder: fetchUserData call commented out. User ID:", userId);
       const placeholderUser: UserData = { uid: userId, email: "user@example.com (placeholder)" };
       setUser(placeholderUser);
       setFormData(placeholderUser);
       setLoading(false);
-
     }
   }, [userId]);
 

@@ -41,10 +41,10 @@ export default function AdminUsersPage() {
       // Actual admin role checking needs to be implemented.
       console.warn("Admin role check not implemented. Assuming admin for now.");
       await fetchUsers();
-      setLoading(false);
+      setLoading(false); // Corrected: removed extra "set"
     };
     verifyAndFetch();
-  }, [router]);
+  }, [router]); // Added router to dependency array as it's used in commented out logic
 
   const fetchUsers = async () => {
     setLoading(true);

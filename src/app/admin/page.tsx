@@ -16,7 +16,6 @@ const AdminPage = () => {
         router.push('/admin/login');
       } else {
         // Placeholder for checking admin privileges
-        // For now, any logged-in user is redirected to admin dashboard.
         // Real admin role check (e.g., custom claims) would happen here.
         router.push('/admin/dashboard');
       }
