@@ -16,7 +16,7 @@ const AdminPage = () => {
         router.push('/admin/login');
       } else {
         // Placeholder for checking admin privileges
-        // Real admin role check (e.g., custom claims) would happen here.
+        // In a real app, you would verify user.customClaims.isAdmin or similar
         router.push('/admin/dashboard');
       }
     }

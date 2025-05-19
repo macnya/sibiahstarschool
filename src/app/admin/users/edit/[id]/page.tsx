@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-// import { getUser } from '../../../../../../functions/src'; // Problematic direct import - REMOVED
+// DO NOT import from functions/src directly in Next.js app
 
 interface UserData {
   uid: string;
@@ -27,10 +27,14 @@ export default function EditUserPage() {
     // const fetchUserData = async () => {
     //   setLoading(true);
     //   try {
-    //     // const result = await getUser({ data: { uid: userId } }); // This needs to be an API call to a deployed function
-    //     // const dummyUser: UserData = result.data as UserData; 
-    //     // setUser(dummyUser);
-    //     // setFormData(dummyUser);
+    //     // This section would need to call a deployed Cloud Function
+    //     // (e.g., using Firebase SDK's httpsCallable)
+    //     // For example:
+    //     // const getUserFunction = httpsCallable(functions, 'getUserRecord'); // Assuming 'getUserRecord' is the callable function name
+    //     // const result = await getUserFunction({ uid: userId });
+    //     // const fetchedUser = result.data as UserData;
+    //     // setUser(fetchedUser);
+    //     // setFormData(fetchedUser);
     //     console.warn("User data fetching needs to be implemented via an API call to a deployed Cloud Function.");
     //     // Placeholder for now:
     //     if (userId) {
@@ -46,8 +50,8 @@ export default function EditUserPage() {
     // };
 
     if (userId) {
-      // fetchUserData(); // Temporarily disable direct function call
-      console.log("Placeholder: fetchUserData call commented out. User ID:", userId);
+      // fetchUserData(); // Call this once the above is implemented
+      console.log("Placeholder: User data fetching logic needs actual implementation. User ID:", userId);
       const placeholderUser: UserData = { uid: userId, email: "user@example.com (placeholder)" };
       setUser(placeholderUser);
       setFormData(placeholderUser);

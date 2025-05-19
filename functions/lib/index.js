@@ -1,12 +1,4 @@
 "use strict";
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -41,56 +33,56 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.deleteUser = exports.listUsers = void 0;
+exports.updateUserProfile = exports.setUserDisabledStatus = exports.getUserRecord = void 0;
 const admin = __importStar(require("firebase-admin"));
-// import {onRequest} from "firebase-functions/v2/https";
-// import * as logger from "firebase-functions/logger";
+const functions = __importStar(require("firebase-functions/v2"));
 admin.initializeApp();
-const listUsers = async (request, response) => {
-    try {
-        const listUsersResult = await admin.auth().listUsers();
-        response.status(200).json(listUsersResult.users);
+// Example: Get user record by UID
+exports.getUserRecord = functions.https.onCall(async (request, response) => {
+    const data = request.data;
+    const uid = data.uid;
+    if (!uid) {
+        throw new functions.https.HttpsError("invalid-argument", "The function must be called with a uid.");
     }
-    catch (error) {
-        console.error("Error listing users:", error); // Using console.error as logger was removed
-        response.status(500).send("Error listing users.");
-    }
-};
-exports.listUsers = listUsers;
-const deleteUser = async (request, response) => {
-    const uid = request.body.uid;
-    try {
-        await admin.auth().deleteUser(uid);
-        response.status(200).send(`Successfully deleted user ${uid}`);
-    }
-    catch (error) {
-        console.error("Error deleting user:", error); // Using console.error
-        response.status(500).send("Error deleting user.");
-    }
-};
-exports.deleteUser = deleteUser;
-const getUser = async (request, response) => {
-    const uid = request.body.uid;
     try {
         const userRecord = await admin.auth().getUser(uid);
-        response.status(200).json(userRecord);
+        return userRecord;
     }
     catch (error) {
-        console.error("Error fetching user:", error); // Using console.error
-        response.status(500).send("Error fetching user.");
+        throw new functions.https.HttpsError("internal", "Failed to fetch user record", error);
     }
-};
-exports.getUser = getUser;
-// Note: The Firebase Functions Quickstart for TypeScript uses onRequest, 
-// but these example functions are structured more like callable functions or basic HTTP requests.
-// If these are intended to be actual HTTP-triggered functions deployable via Firebase, 
-// they should be wrapped with `onRequest`. For now, to fix the build, I'm assuming direct export
-// for potential use with Express or similar, or that `onRequest` was a leftover import.
-// The `logger` calls have been replaced with `console.error`.
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+});
+// Example: Disable or enable user account
+exports.setUserDisabledStatus = functions.https.onCall(async (request, response) => {
+    const data = request.data;
+    const { uid, disabled } = data;
+    if (!uid || disabled === undefined) {
+        throw new functions.https.HttpsError("invalid-argument", "The function must be called with uid and disabled status.");
+    }
+    try {
+        await admin.auth().updateUser(uid, { disabled });
+        return { message: `User ${uid} disabled status set to ${disabled}` };
+    }
+    catch (error) {
+        throw new functions.https.HttpsError("internal", "Failed to update user disabled status", error);
+    }
+});
+// Example: Update user profile
+exports.updateUserProfile = functions.https.onCall(async (request, response) => {
+    const data = request.data;
+    const { uid, displayName, email } = data;
+    if (!uid) {
+        throw new functions.https.HttpsError("invalid-argument", "The function must be called with uid.");
+    }
+    try {
+        const updatedUser = await admin.auth().updateUser(uid, {
+            displayName,
+            email,
+        });
+        return updatedUser;
+    }
+    catch (error) {
+        throw new functions.https.HttpsError("internal", "Failed to update user profile", error);
+    }
+});
 //# sourceMappingURL=index.js.map

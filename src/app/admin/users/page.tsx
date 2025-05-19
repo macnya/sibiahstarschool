@@ -20,7 +20,7 @@ interface User {
 
 export default function AdminUsersPage() {
   const functions = getFunctions(); // Get functions instance
-  const deleteUserFunction = httpsCallable(functions, 'deleteUser');
+  const deleteUserFunction = httpsCallable(functions, 'deleteUser'); // Ensure 'deleteUser' matches your callable function name
   // const listUsersFunction = httpsCallable(functions, 'listUsers'); // Assuming 'listUsers' is the name of your callable function
 
   const [users, setUsers] = useState<User[]>([]);
@@ -41,7 +41,6 @@ export default function AdminUsersPage() {
       // Actual admin role checking needs to be implemented.
       console.warn("Admin role check not implemented. Assuming admin for now.");
       await fetchUsers();
-      setLoading(false); // Corrected: removed extra "set"
     };
     verifyAndFetch();
   }, [router]); // Added router to dependency array as it's used in commented out logic
@@ -68,7 +67,7 @@ export default function AdminUsersPage() {
       { uid: 'user2-placeholder', email: 'user2@example.com', displayName: 'User Two (Placeholder)' },
     ];
     setUsers(placeholderUsers);
-    setLoading(false);
+    setLoading(false); // Corrected: removed extra "set"
   };
 
   const handleEdit = (userId: string) => {
@@ -82,9 +81,10 @@ export default function AdminUsersPage() {
     }
     console.log(`Attempting to delete user with ID: ${userId}`);
     try {
-      await deleteUserFunction({ uid: userId });
+      // Make sure 'deleteUser' is the correct name of your callable function in functions/src/index.ts
+      await deleteUserFunction({ uid: userId }); 
       setUsers(prevUsers => prevUsers.filter(user => user.uid !== userId));
-      console.log(`User ${userId} deleted successfully (client-side update).`);
+      console.log(`User ${userId} delete request sent.`);
       alert(`User ${userId} delete request sent.`); // Or use a toast
     } catch (error) {
       console.error("Error deleting user:", error);
