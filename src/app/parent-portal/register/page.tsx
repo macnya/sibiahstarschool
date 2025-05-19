@@ -22,6 +22,7 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { SvgGoogleIcon } from '@/components/shared/icons';
+import { useEffect } from 'react'; // Added useEffect import
 
 const registerFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -164,4 +165,3 @@ export default function ParentRegisterPage() {
     </div>
   );
 }
-
