@@ -1,6 +1,6 @@
 # Base User type for all roles
 type User @table(name: "users") {
-  userId: String! @pk # This should be the Firebase Auth UID
+  userId: String! @primaryKey # This should be the Firebase Auth UID
   email: String! @unique
   firstName: String
   lastName: String
@@ -10,18 +10,19 @@ type User @table(name: "users") {
 
   # Relationships to specific profiles or links
   # A user might have one student profile (if they are a student)
-  studentProfile: StudentProfile @relationship(principalField: "userId", foreignField: "userId")
+  studentProfile: StudentProfile @relationship(principalFields: ["userId"], foreignFields: ["userId"]) # User.userId -> StudentProfile.userId
   # A user might have many parent-student links (if they are a parent)
-  parentLinksAsParent: [ParentStudentLink!] @relationship(principalField: "userId", foreignField: "parentId")
+  parentLinksAsParent: [ParentStudentLink!] @relationship(principalFields: ["userId"], foreignFields: ["parentId"])
   # A user might have many parent-student links (if they are a student linked to parents)
-  parentLinksAsStudent: [ParentStudentLink!] @relationship(principalField: "userId", foreignField: "studentId")
+  parentLinksAsStudent: [ParentStudentLink!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
   # A user might be assigned to teach many classes (if they are a teacher)
-  teacherAssignments: [TeacherClassAssignment!] @relationship(principalField: "userId", foreignField: "teacherId")
+  teacherAssignments: [TeacherClassAssignment!] @relationship(principalFields: ["userId"], foreignFields: ["teacherId"])
   # A user might have enrolled in many classes (if they are a student)
-  enrollments: [Enrollment!] @relationship(principalField: "userId", foreignField: "studentId")
-  # Grades recorded by this user (if teacher) or for this user (if student)
-  gradesAsStudent: [Grade!] @relationship(principalField: "userId", foreignField: "studentId")
-  gradesRecordedByTeacher: [Grade!] @relationship(principalField: "userId", foreignField: "recordedById")
+  enrollments: [Enrollment!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  # Grades for this user (if student)
+  gradesAsStudent: [Grade!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  # Grades recorded by this user (if teacher)
+  gradesRecordedByTeacher: [Grade!] @relationship(principalFields: ["userId"], foreignFields: ["recordedById"])
 }
 
 enum UserRole {
@@ -33,8 +34,8 @@ enum UserRole {
 
 # Specific profile for students
 type StudentProfile @table(name: "student_profiles") {
-  studentProfileId: String! @pk # Should be the same as User.userId for students
-  user: User! @relationship(principalField: "studentProfileId", foreignField: "userId", onDelete: CASCADE)
+  userId: String! @primaryKey # This is the PK for StudentProfile AND the FK to User.userId
+  user: User! @relationship(principalFields: ["userId"], foreignFields: ["userId"]) # Links StudentProfile.userId to User.userId
   dateOfBirth: Date
   admissionDate: Date
   currentGradeLevel: String # e.g., "Grade 5", "PP1"
@@ -43,12 +44,12 @@ type StudentProfile @table(name: "student_profiles") {
 
 # Linking table for Parent-Student relationships (Many-to-Many through this link table)
 type ParentStudentLink @table(name: "parent_student_links", unique: [["parentId", "studentId"]]) {
-  linkId: String! @pk @default(expression: "gen_random_uuid()") # Auto-generated UUID
+  linkId: String! @primaryKey @default(expression: "gen_random_uuid()") # Auto-generated UUID
   parentId: String! # FK to User table (User.userId where role is PARENT)
   studentId: String! # FK to User table (User.userId where role is STUDENT)
   relationshipType: String # e.g., "Mother", "Father", "Guardian"
 
   # Define relationships to the User table for parent and student
-  parent: User! @relationship(principalField: "parentId", foreignField: "userId")
-  student: User! @relationship(principalField: "studentId", foreignField: "userId")
+  parent: User! @relationship(principalFields: ["parentId"], foreignFields: ["userId"])
+  student: User! @relationship(principalFields: ["studentId"], foreignFields: ["userId"])
 }
