@@ -3,11 +3,14 @@
 
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { User, AuthError, UserCredential } from 'firebase/auth'; // Added UserCredential
+import type { User, AuthError, UserCredential } from 'firebase/auth';
+import {
+  getAdditionalUserInfo // Import the helper function
+} from 'firebase/auth';
 import {
   auth,
-  createUserWithEmailPassword as firebaseCreateUserWithEmailPassword, // Renamed to avoid conflict
-  signInWithEmailPassword as firebaseSignInWithEmailPassword, // Renamed to avoid conflict
+  createUserWithEmailPassword as firebaseCreateUserWithEmailPassword,
+  signInWithEmailPassword as firebaseSignInWithEmailPassword,
   signInWithGoogle as firebaseSignInWithGoogle,
   signOut as firebaseSignOut,
   handleAuthStateChange
@@ -17,9 +20,9 @@ import { Loader2 } from 'lucide-react';
 
 interface AuthContextType {
   user: User | null;
-  isAdmin: boolean; 
-  loading: boolean; 
-  initialLoading: boolean; 
+  isAdmin: boolean;
+  loading: boolean;
+  initialLoading: boolean;
   login: (email: string, pass: string) => Promise<boolean>;
   registerWithEmailAndPassword: (email: string, pass: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<boolean>;
@@ -30,7 +33,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false); 
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [authActionLoading, setAuthActionLoading] = useState(false);
   const { toast } = useToast();
@@ -40,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(currentUser);
       if (currentUser) {
         try {
-          const idTokenResult = await currentUser.getIdTokenResult(true);
+          const idTokenResult = await currentUser.getIdTokenResult(true); // Force refresh for latest claims
           setIsAdmin(idTokenResult.claims.isAdmin === true);
         } catch (error) {
           console.error("Error fetching custom claims:", error);
@@ -61,9 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (userCredential.user) {
         const idTokenResult = await userCredential.user.getIdTokenResult(true);
         setIsAdmin(idTokenResult.claims.isAdmin === true);
+        toast({ title: 'Login Successful', description: 'Welcome back!', variant: 'default' });
+        return true;
       }
-      toast({ title: 'Login Successful', description: 'Welcome back!', variant: 'default' });
-      return true;
+      // This case should ideally not be reached if signInWithEmailAndPassword resolves without error
+      setIsAdmin(false);
+      return false;
     } catch (error) {
       const authError = error as AuthError;
       console.error('Login error:', authError);
@@ -78,9 +84,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const registerWithEmailAndPassword = async (email: string, pass: string): Promise<boolean> => {
     setAuthActionLoading(true);
     try {
-      await firebaseCreateUserWithEmailPassword(email, pass);
-      toast({ title: 'Registration Successful', description: 'Welcome! Your account has been created.', variant: 'default' });
-      return true;
+      const userCredential = await firebaseCreateUserWithEmailPassword(email, pass);
+      // Firebase auto-signs in the user, onAuthStateChanged will pick it up.
+      // We can set isAdmin to false initially, it will be updated by onAuthStateChanged if claims exist.
+      if (userCredential.user) {
+        setIsAdmin(false); // New users won't have admin claims yet
+        toast({ title: 'Registration Successful', description: 'Welcome! Your account has been created.', variant: 'default' });
+        return true;
+      }
+      return false;
     } catch (error) {
       const authError = error as AuthError;
       console.error('Registration error:', authError);
@@ -96,7 +108,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       const userCredential: UserCredential = await firebaseSignInWithGoogle();
-      const isNewUser = userCredential.additionalUserInfo?.isNewUser;
+      const additionalInfo = getAdditionalUserInfo(userCredential); // Correctly get additional user info
+      const isNewUser = additionalInfo?.isNewUser;
 
       if (isNewUser) {
         toast({
@@ -112,6 +125,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       }
       // onAuthStateChanged will handle setting the user and admin state after token refresh
+      // but we can try to set admin status here if user object is available
+      if (userCredential.user) {
+        const idTokenResult = await userCredential.user.getIdTokenResult(true);
+        setIsAdmin(idTokenResult.claims.isAdmin === true);
+      }
       return true;
     } catch (error) {
       const authError = error as AuthError;
@@ -138,7 +156,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       await firebaseSignOut();
-      setIsAdmin(false); 
+      setIsAdmin(false);
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.', variant: 'default' });
     } catch (error) {
       const authError = error as AuthError;
