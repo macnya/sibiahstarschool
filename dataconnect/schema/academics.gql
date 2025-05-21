@@ -1,15 +1,17 @@
-
 type Subject @fdc.table(name: "subjects") {
   subjectId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   subjectName: String! @fdc.unique
   description: String
 }
 
-type Class @fdc.table(name: "classes") {
+type Class @fdc.table(
+  name: "classes",
+  uniqueConstraints: [{ name: "unique_class_name_per_year_grade", fields: ["className", "academicYear", "gradeLevel"] }]
+) {
   classId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
-  className: String! # e.g., "Grade 5A Mathematics", "PP1 Blue Art"
-  gradeLevel: String! # e.g., "Grade 5", "PP1"
-  academicYear: String! # e.g., "2024-2025"
+  className: String!
+  gradeLevel: String!
+  academicYear: String!
 
   enrollments: [Enrollment!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
   teacherAssignments: [TeacherClassAssignment!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
@@ -18,9 +20,9 @@ type Class @fdc.table(name: "classes") {
 }
 
 type Enrollment @fdc.table(
-    name: "enrollments",
-    uniqueConstraints: [{ name: "unique_student_class_enrollment", fields: ["studentId", "classId"] }]
-  ) {
+  name: "enrollments",
+  uniqueConstraints: [{ name: "unique_student_class_enrollment", fields: ["studentId", "classId"] }]
+) {
   enrollmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   studentId: String! # FK to User table (student's userId)
   classId: String!   # FK to Class table
@@ -31,9 +33,9 @@ type Enrollment @fdc.table(
 }
 
 type TeacherClassAssignment @fdc.table(
-    name: "teacher_class_assignments",
-    uniqueConstraints: [{ name: "unique_teacher_class_assignment", fields: ["teacherId", "classId"] }]
-  ) {
+  name: "teacher_class_assignments",
+  uniqueConstraints: [{ name: "unique_teacher_class_assignment", fields: ["teacherId", "classId"] }] # Assuming a teacher is assigned once to a class, specific subjects might be part of class name or another model
+) {
   assignmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   teacherId: String!    # FK to User table (teacher's userId)
   classId: String!      # FK to Class table
@@ -63,7 +65,7 @@ type Exam @fdc.table(name: "exams") {
   examId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   examName: String!
   subjectId: String!
-  classId: String!       # FK to Class table, exam is for this class
+  classId: String       # FK to Class table, exam is for this class
   examDate: Date!
   details: String
 

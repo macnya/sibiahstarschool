@@ -1,4 +1,3 @@
-
 # Base User type for all roles
 type User @fdc.table(name: "users") {
   userId: String! @fdc.primaryKey # This should be the Firebase Auth UID
@@ -9,12 +8,11 @@ type User @fdc.table(name: "users") {
   createdAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP")
   updatedAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP") @fdc.onUpdate(expression: "CURRENT_TIMESTAMP")
 
-  # Relationships to specific profiles or links
   studentProfile: StudentProfile @fdc.relationship(principalFields: ["userId"], foreignFields: ["userId"])
   parentLinksAsParent: [ParentStudentLink!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["parentId"])
   parentLinksAsStudent: [ParentStudentLink!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
   teacherAssignments: [TeacherClassAssignment!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["teacherId"])
-  enrollments: [Enrollment!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  enrollmentsAsStudent: [Enrollment!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"]) # Renamed to avoid conflict with Class.enrollments
   gradesAsStudent: [Grade!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
   gradesRecordedByTeacher: [Grade!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["recordedById"])
 }
@@ -37,9 +35,9 @@ type StudentProfile @fdc.table(name: "student_profiles") {
 
 # Linking table for Parent-Student relationships
 type ParentStudentLink @fdc.table(
-    name: "parent_student_links",
-    uniqueConstraints: [{ name: "unique_parent_student", fields: ["parentId", "studentId"] }]
-  ) {
+  name: "parent_student_links",
+  uniqueConstraints: [{ name: "unique_parent_student_pair", fields: ["parentId", "studentId"] }]
+) {
   linkId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   parentId: String! # FK to User table (User.userId where role is PARENT)
   studentId: String! # FK to User table (User.userId where role is STUDENT)
