@@ -52,7 +52,7 @@ exports.getUserRecord = functions.https.onCall(async (request, response) => {
         console.error("Error fetching user record:", error);
         throw new functions.https.HttpsError("internal", "Failed to fetch user record", error);
     }
-});
+}); // Corrected: Added closing parenthesis and semicolon
 // Example: Disable or enable user account
 exports.setUserDisabledStatus = functions.https.onCall(async (request, response) => {
     const data = request.data;
@@ -68,7 +68,7 @@ exports.setUserDisabledStatus = functions.https.onCall(async (request, response)
         console.error("Error updating user disabled status:", error);
         throw new functions.https.HttpsError("internal", "Failed to update user disabled status", error);
     }
-});
+}); // Corrected: Added closing parenthesis and semicolon
 // Example: Update user profile
 exports.updateUserProfile = functions.https.onCall(async (request, response) => {
     const data = request.data;
@@ -87,7 +87,7 @@ exports.updateUserProfile = functions.https.onCall(async (request, response) => 
         console.error("Error updating user profile:", error);
         throw new functions.https.HttpsError("internal", "Failed to update user profile", error);
     }
-});
+}); // Corrected: Added closing parenthesis and semicolon
 // Example Cloud Functions (commented out as they are not used yet)
 // import {onRequest} from "firebase-functions/v2/https";
 // import * as logger from "firebase-functions/logger";

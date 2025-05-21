@@ -2,20 +2,26 @@
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
   minInstances: 0
-  # maxInstances: 100
+  maxInstances: 10 # Adjusted to meet quota (allowed: 10)
   # concurrency: 80
-  # cpu: 1
+  cpu: 1 # Adjusted to meet CPU quota (10 instances * 1 CPU = 10,000 millicpu, allowed: 40,000)
   # memoryMiB: 512
 
 # Environment variables and secrets.
-# env:
+env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
-  # - variable: MESSAGE
-  #   value: Hello world!
-  #   availability:
-  #     - BUILD
-  #     - RUNTIME
+  - variable: FIREBASE_CONFIG
+    value: '{"databaseURL":"https://sibiah-star-connect-default-rtdb.firebaseio.com","projectId":"sibiah-star-connect","storageBucket":"sibiah-star-connect.appspot.com"}' # Note: using .appspot.com for storageBucket as it's common for SDKs
+    availability:
+      - BUILD
+      - RUNTIME
+  - variable: FIREBASE_WEBAPP_CONFIG
+    value: '{"apiKey":"AIzaSyBixet57qs3qrq0c41HZrisn_919rCZlrI","appId":"1:972116494680:web:81803994e9a1ad70223d2d","authDomain":"sibiah-star-connect.firebaseapp.com","databaseURL":"https://sibiah-star-connect-default-rtdb.firebaseio.com","messagingSenderId":"972116494680","projectId":"sibiah-star-connect","storageBucket":"sibiah-star-connect.appspot.com"}' # Note: using .appspot.com for storageBucket
+    availability:
+      - BUILD # Made available at build time as well
+      - RUNTIME
+
 
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
