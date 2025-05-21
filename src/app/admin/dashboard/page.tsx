@@ -7,25 +7,31 @@ import { useAuth } from '@/contexts/auth-provider';
 import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutDashboard, LogOut, Users, Settings, Loader2 } from 'lucide-react';
+import { LogOut, Users, Settings, Loader2, ShieldAlert } from 'lucide-react'; // Added ShieldAlert
 import Link from 'next/link';
 
 export default function AdminDashboardPage() {
-  const { user, logout, loading: authLoading, initialLoading } = useAuth();
+  const { user, isAdmin, logout, loading: authLoading, initialLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!initialLoading && !user) {
-      router.push('/admin/login');
+    if (!initialLoading) {
+      if (!user) {
+        router.push('/admin/login');
+      } else if (!isAdmin) {
+        // If logged in but not an admin, redirect away from dashboard
+        console.warn("Access to admin dashboard denied. User is not an admin.");
+        router.push('/'); // Or a specific '/access-denied' page
+      }
     }
-    // Add admin role check here in a real application
-    // For example, if (!user.customClaims.isAdmin) router.push('/');
-  }, [user, initialLoading, router]);
+  }, [user, isAdmin, initialLoading, router]);
 
-  if (initialLoading || !user) {
+  if (initialLoading || !user || !isAdmin) {
+    // Show loader until auth state is confirmed and admin status is verified
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-2">Loading dashboard or verifying admin status...</p>
       </div>
     );
   }
@@ -34,7 +40,12 @@ export default function AdminDashboardPage() {
     <div>
       <PageHeader
         title="Admin Dashboard"
-        subtitle={`Welcome, ${user.displayName || user.email}!`}
+        subtitle={
+          <div className="flex items-center justify-center space-x-2">
+            <ShieldAlert className="h-6 w-6 text-accent" />
+            <span>Welcome, Admin {user.displayName || user.email}!</span>
+          </div>
+        }
       />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -66,15 +77,15 @@ export default function AdminDashboardPage() {
               </p>
             </CardContent>
           </Card>
-          
+
           {/* Add more admin cards/widgets here */}
         </div>
 
         <div className="mt-12 text-center">
-            <Button onClick={logout} disabled={authLoading} variant="destructive">
-                {authLoading ? (<Loader2 className="mr-2 h-4 w-4 animate-spin" />) : (<LogOut className="mr-2 h-4 w-4" />)}
-                Logout from Admin
-            </Button>
+          <Button onClick={logout} disabled={authLoading} variant="destructive">
+            {authLoading ? (<Loader2 className="mr-2 h-4 w-4 animate-spin" />) : (<LogOut className="mr-2 h-4 w-4" />)}
+            Logout from Admin
+          </Button>
         </div>
       </div>
     </div>

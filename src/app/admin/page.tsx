@@ -7,30 +7,32 @@ import { useAuth } from '@/contexts/auth-provider';
 import { Loader2 } from 'lucide-react';
 
 const AdminPage = () => {
-  const { user, initialLoading } = useAuth(); // Changed loading to initialLoading
+  const { user, isAdmin, initialLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!initialLoading) { // Changed loading to initialLoading
+    if (!initialLoading) {
       if (!user) {
         router.push('/admin/login');
-      } else {
-        // Placeholder for checking admin privileges
-        // In a real app, you would verify user.customClaims.isAdmin or similar
+      } else if (user && !isAdmin) {
+        // If user is logged in but not an admin, redirect to home or an access denied page
+        console.warn("User is not an admin. Redirecting from /admin main page.");
+        router.push('/'); // Or a specific '/access-denied' page
+      } else if (user && isAdmin) {
         router.push('/admin/dashboard');
       }
     }
-  }, [user, initialLoading, router]); // Changed loading to initialLoading
+  }, [user, isAdmin, initialLoading, router]);
 
-  if (initialLoading) { // Changed loading to initialLoading
+  if (initialLoading || (user && !isAdmin && !initialLoading)) { // Show loader while checking or if redirecting non-admin
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <p className="ml-2">Checking authorization...</p>
       </div>
     );
   }
-
-  // This content will likely not be seen due to redirects, but acts as a fallback.
+  // Fallback content, though redirects should usually handle it
   return (
     <div className="flex items-center justify-center min-h-screen">
       <p>Redirecting to admin section...</p>
