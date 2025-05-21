@@ -1,0 +1,54 @@
+# Base User type for all roles
+type User @table(name: "users") {
+  userId: String! @pk # This should be the Firebase Auth UID
+  email: String! @unique
+  firstName: String
+  lastName: String
+  role: UserRole! # Enum to define the type of user
+  createdAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP") @onUpdate(expression: "CURRENT_TIMESTAMP")
+
+  # Relationships to specific profiles or links
+  # A user might have one student profile (if they are a student)
+  studentProfile: StudentProfile @relationship(principalField: "userId", foreignField: "userId")
+  # A user might have many parent-student links (if they are a parent)
+  parentLinksAsParent: [ParentStudentLink!] @relationship(principalField: "userId", foreignField: "parentId")
+  # A user might have many parent-student links (if they are a student linked to parents)
+  parentLinksAsStudent: [ParentStudentLink!] @relationship(principalField: "userId", foreignField: "studentId")
+  # A user might be assigned to teach many classes (if they are a teacher)
+  teacherAssignments: [TeacherClassAssignment!] @relationship(principalField: "userId", foreignField: "teacherId")
+  # A user might have enrolled in many classes (if they are a student)
+  enrollments: [Enrollment!] @relationship(principalField: "userId", foreignField: "studentId")
+  # Grades recorded by this user (if teacher) or for this user (if student)
+  gradesAsStudent: [Grade!] @relationship(principalField: "userId", foreignField: "studentId")
+  gradesRecordedByTeacher: [Grade!] @relationship(principalField: "userId", foreignField: "recordedById")
+}
+
+enum UserRole {
+  STUDENT
+  PARENT
+  TEACHER
+  ADMIN
+}
+
+# Specific profile for students
+type StudentProfile @table(name: "student_profiles") {
+  studentProfileId: String! @pk # Should be the same as User.userId for students
+  user: User! @relationship(principalField: "studentProfileId", foreignField: "userId", onDelete: CASCADE)
+  dateOfBirth: Date
+  admissionDate: Date
+  currentGradeLevel: String # e.g., "Grade 5", "PP1"
+  # Add other student-specific fields like emergency contact, allergies etc.
+}
+
+# Linking table for Parent-Student relationships (Many-to-Many through this link table)
+type ParentStudentLink @table(name: "parent_student_links", unique: [["parentId", "studentId"]]) {
+  linkId: String! @pk @default(expression: "gen_random_uuid()") # Auto-generated UUID
+  parentId: String! # FK to User table (User.userId where role is PARENT)
+  studentId: String! # FK to User table (User.userId where role is STUDENT)
+  relationshipType: String # e.g., "Mother", "Father", "Guardian"
+
+  # Define relationships to the User table for parent and student
+  parent: User! @relationship(principalField: "parentId", foreignField: "userId")
+  student: User! @relationship(principalField: "studentId", foreignField: "userId")
+}

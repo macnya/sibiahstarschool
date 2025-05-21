@@ -1,0 +1,50 @@
+# Get classes assigned to a teacher
+query GetTeacherClasses($teacherId: String!) {
+  usersCollection(filter: { userId: { eq: $teacherId }, role: { eq: TEACHER } }) {
+    edges {
+      node {
+        userId
+        firstName
+        lastName
+        teacherAssignments {
+          edges {
+            node {
+              class {
+                classId
+                className
+                gradeLevel
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+# Get students enrolled in a specific class
+query GetStudentsInClass($classId: String!) {
+  classesCollection(filter: { classId: { eq: $classId } }) {
+    edges {
+      node {
+        classId
+        className
+        enrollments {
+          edges {
+            node {
+              student { # This is the User object for the student
+                userId
+                firstName
+                lastName
+                # You can fetch their current grade in this class for this subject if needed
+                # gradesAsStudent(filter: { classId: { eq: $classId }, subjectId: {eq: "relevantSubjectId"} }, limit: 1) {
+                #   edges { node { score }}
+                # }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

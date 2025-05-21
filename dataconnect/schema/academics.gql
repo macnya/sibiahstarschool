@@ -1,0 +1,72 @@
+type Subject @table(name: "subjects") {
+  subjectId: String! @pk @default(expression: "gen_random_uuid()")
+  subjectName: String! @unique
+  description: String
+}
+
+type Class @table(name: "classes") {
+  classId: String! @pk @default(expression: "gen_random_uuid()")
+  className: String! # e.g., "Grade 5A Mathematics", "PP1 Blue Art"
+  gradeLevel: String! # e.g., "Grade 5", "PP1"
+  academicYear: String! # e.g., "2024-2025"
+  # Optional: link to a primary subject if a class is subject-specific
+  # subjectId: String
+  # subject: Subject @relationship(principalField: "subjectId", foreignField: "subjectId")
+
+  # Relationships
+  enrollments: [Enrollment!] @relationship(principalField: "classId", foreignField: "classId")
+  teacherAssignments: [TeacherClassAssignment!] @relationship(principalField: "classId", foreignField: "classId")
+  grades: [Grade!] @relationship(principalField: "classId", foreignField: "classId")
+  exams: [Exam!] @relationship(principalField: "classId", foreignField: "classId")
+}
+
+# Students enrolled in classes
+type Enrollment @table(name: "enrollments", unique: [["studentId", "classId"]]) {
+  enrollmentId: String! @pk @default(expression: "gen_random_uuid()")
+  studentId: String! # FK to User table (student's userId)
+  classId: String!   # FK to Class table
+  enrollmentDate: Date! @default(expression: "CURRENT_DATE")
+
+  student: User! @relationship(principalField: "studentId", foreignField: "userId")
+  class: Class! @relationship(principalField: "classId", foreignField: "classId")
+}
+
+# Teachers assigned to classes
+type TeacherClassAssignment @table(name: "teacher_class_assignments", unique: [["teacherId", "classId"]]) {
+  assignmentId: String! @pk @default(expression: "gen_random_uuid()")
+  teacherId: String!    # FK to User table (teacher's userId)
+  classId: String!      # FK to Class table
+  # subjectTaught: String # Removed, assuming class is already subject-specific or handled by class name
+
+  teacher: User! @relationship(principalField: "teacherId", foreignField: "userId")
+  class: Class! @relationship(principalField: "classId", foreignField: "classId")
+}
+
+type Grade @table(name: "grades") {
+  gradeId: String! @pk @default(expression: "gen_random_uuid()")
+  studentId: String!   # FK to User table (student's userId)
+  classId: String!     # FK to Class table (context of the grade)
+  subjectId: String!   # FK to Subject table
+  term: String!        # e.g., "Term 1", "Mid-Term", "Final Assignment"
+  score: String        # e.g., "A", "85%", or numeric score as string for flexibility
+  comments: String
+  recordedById: String! # FK to User table (teacher's userId who recorded it)
+  recordedAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP")
+
+  student: User! @relationship(principalField: "studentId", foreignField: "userId")
+  class: Class! @relationship(principalField: "classId", foreignField: "classId")
+  subject: Subject! @relationship(principalField: "subjectId", foreignField: "subjectId")
+  recordedBy: User! @relationship(principalField: "recordedById", foreignField: "userId")
+}
+
+type Exam @table(name: "exams") {
+  examId: String! @pk @default(expression: "gen_random_uuid()")
+  examName: String!
+  subjectId: String!
+  classId: String       # FK to Class table, exam is for this class
+  examDate: Date!
+  details: String
+
+  subject: Subject! @relationship(principalField: "subjectId", foreignField: "subjectId")
+  class: Class! @relationship(principalField: "classId", foreignField: "classId")
+}
