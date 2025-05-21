@@ -3,11 +3,11 @@
 
 import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { User, AuthError } from 'firebase/auth';
+import type { User, AuthError, UserCredential } from 'firebase/auth'; // Added UserCredential
 import {
   auth,
-  createUserWithEmailPassword,
-  signInWithEmailPassword,
+  createUserWithEmailPassword as firebaseCreateUserWithEmailPassword, // Renamed to avoid conflict
+  signInWithEmailPassword as firebaseSignInWithEmailPassword, // Renamed to avoid conflict
   signInWithGoogle as firebaseSignInWithGoogle,
   signOut as firebaseSignOut,
   handleAuthStateChange
@@ -17,9 +17,9 @@ import { Loader2 } from 'lucide-react';
 
 interface AuthContextType {
   user: User | null;
-  isAdmin: boolean; // New: to store admin status
-  loading: boolean; // True during async auth operations (login, signup, google sign-in, logout)
-  initialLoading: boolean; // True while checking initial auth state
+  isAdmin: boolean; 
+  loading: boolean; 
+  initialLoading: boolean; 
   login: (email: string, pass: string) => Promise<boolean>;
   registerWithEmailAndPassword: (email: string, pass: string) => Promise<boolean>;
   signInWithGoogle: () => Promise<boolean>;
@@ -30,7 +30,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false); // New: admin state
+  const [isAdmin, setIsAdmin] = useState<boolean>(false); 
   const [initialLoading, setInitialLoading] = useState(true);
   const [authActionLoading, setAuthActionLoading] = useState(false);
   const { toast } = useToast();
@@ -40,7 +40,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setUser(currentUser);
       if (currentUser) {
         try {
-          // Force refresh of the token to get latest custom claims
           const idTokenResult = await currentUser.getIdTokenResult(true);
           setIsAdmin(idTokenResult.claims.isAdmin === true);
         } catch (error) {
@@ -58,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, pass: string): Promise<boolean> => {
     setAuthActionLoading(true);
     try {
-      const userCredential = await signInWithEmailPassword(email, pass);
+      const userCredential = await firebaseSignInWithEmailPassword(email, pass);
       if (userCredential.user) {
         const idTokenResult = await userCredential.user.getIdTokenResult(true);
         setIsAdmin(idTokenResult.claims.isAdmin === true);
@@ -79,11 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const registerWithEmailAndPassword = async (email: string, pass: string): Promise<boolean> => {
     setAuthActionLoading(true);
     try {
-      // Firebase automatically signs in the user upon successful registration.
-      // The onAuthStateChanged listener will then pick up the new user and claims.
-      await createUserWithEmailPassword(email, pass);
-      toast({ title: 'Registration Successful', description: 'Welcome! You are now logged in.', variant: 'default' });
-      // Note: setIsAdmin will be handled by onAuthStateChanged
+      await firebaseCreateUserWithEmailPassword(email, pass);
+      toast({ title: 'Registration Successful', description: 'Welcome! Your account has been created.', variant: 'default' });
       return true;
     } catch (error) {
       const authError = error as AuthError;
@@ -99,15 +95,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signInWithGoogle = async (): Promise<boolean> => {
     setAuthActionLoading(true);
     try {
-      // Similar to registration, onAuthStateChanged will handle user and claims.
-      await firebaseSignInWithGoogle();
-      toast({ title: 'Google Sign-In Successful', description: 'Welcome!', variant: 'default' });
+      const userCredential: UserCredential = await firebaseSignInWithGoogle();
+      const isNewUser = userCredential.additionalUserInfo?.isNewUser;
+
+      if (isNewUser) {
+        toast({
+          title: 'Google Sign-Up Successful!',
+          description: 'Welcome! Your account has been created.',
+          variant: 'default',
+        });
+      } else {
+        toast({
+          title: 'Google Sign-In Successful!',
+          description: 'Welcome back!',
+          variant: 'default',
+        });
+      }
+      // onAuthStateChanged will handle setting the user and admin state after token refresh
       return true;
     } catch (error) {
       const authError = error as AuthError;
       console.error('Google Sign-In error:', authError);
+      let description = authError.message || 'Could not sign in with Google. Please try again.';
+      if (authError.code === 'auth/popup-closed-by-user') {
+        description = 'Sign-in process was cancelled. Please try again.';
+      } else if (authError.code === 'auth/account-exists-with-different-credential') {
+        description = 'An account already exists with this email address using a different sign-in method. Please sign in using that method.';
+      }
+      toast({
+        title: 'Google Sign-In Failed',
+        description,
+        variant: 'destructive',
+      });
       setIsAdmin(false);
-      toast({ title: 'Google Sign-In Failed', description: authError.message || 'Could not sign in with Google. Please try again.', variant: 'destructive' });
       return false;
     } finally {
       setAuthActionLoading(false);
@@ -118,7 +138,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       await firebaseSignOut();
-      setIsAdmin(false); // Clear admin status on logout
+      setIsAdmin(false); 
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.', variant: 'default' });
     } catch (error) {
       const authError = error as AuthError;
