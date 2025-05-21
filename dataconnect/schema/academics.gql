@@ -1,45 +1,49 @@
-type Subject @table(name: "subjects") {
-  subjectId: String! @primaryKey @default(expression: "gen_random_uuid()")
-  subjectName: String! @unique
+
+type Subject @fdc.table(name: "subjects") {
+  subjectId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
+  subjectName: String! @fdc.unique
   description: String
 }
 
-type Class @table(name: "classes") {
-  classId: String! @primaryKey @default(expression: "gen_random_uuid()")
+type Class @fdc.table(name: "classes") {
+  classId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   className: String! # e.g., "Grade 5A Mathematics", "PP1 Blue Art"
   gradeLevel: String! # e.g., "Grade 5", "PP1"
   academicYear: String! # e.g., "2024-2025"
 
-  # Relationships
-  enrollments: [Enrollment!] @relationship(principalFields: ["classId"], foreignFields: ["classId"])
-  teacherAssignments: [TeacherClassAssignment!] @relationship(principalFields: ["classId"], foreignFields: ["classId"])
-  grades: [Grade!] @relationship(principalFields: ["classId"], foreignFields: ["classId"])
-  exams: [Exam!] @relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  enrollments: [Enrollment!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  teacherAssignments: [TeacherClassAssignment!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  grades: [Grade!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  exams: [Exam!] @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
 }
 
-# Students enrolled in classes
-type Enrollment @table(name: "enrollments", unique: [["studentId", "classId"]]) {
-  enrollmentId: String! @primaryKey @default(expression: "gen_random_uuid()")
+type Enrollment @fdc.table(
+    name: "enrollments",
+    uniqueConstraints: [{ name: "unique_student_class_enrollment", fields: ["studentId", "classId"] }]
+  ) {
+  enrollmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   studentId: String! # FK to User table (student's userId)
   classId: String!   # FK to Class table
-  enrollmentDate: Date! @default(expression: "CURRENT_DATE")
+  enrollmentDate: Date! @fdc.default(expression: "CURRENT_DATE")
 
-  student: User! @relationship(principalFields: ["studentId"], foreignFields: ["userId"])
-  class: Class! @relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  student: User! @fdc.relationship(principalFields: ["studentId"], foreignFields: ["userId"])
+  class: Class! @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
 }
 
-# Teachers assigned to classes
-type TeacherClassAssignment @table(name: "teacher_class_assignments", unique: [["teacherId", "classId"]]) {
-  assignmentId: String! @primaryKey @default(expression: "gen_random_uuid()")
+type TeacherClassAssignment @fdc.table(
+    name: "teacher_class_assignments",
+    uniqueConstraints: [{ name: "unique_teacher_class_assignment", fields: ["teacherId", "classId"] }]
+  ) {
+  assignmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   teacherId: String!    # FK to User table (teacher's userId)
   classId: String!      # FK to Class table
 
-  teacher: User! @relationship(principalFields: ["teacherId"], foreignFields: ["userId"])
-  class: Class! @relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  teacher: User! @fdc.relationship(principalFields: ["teacherId"], foreignFields: ["userId"])
+  class: Class! @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
 }
 
-type Grade @table(name: "grades") {
-  gradeId: String! @primaryKey @default(expression: "gen_random_uuid()")
+type Grade @fdc.table(name: "grades") {
+  gradeId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   studentId: String!   # FK to User table (student's userId)
   classId: String!     # FK to Class table (context of the grade)
   subjectId: String!   # FK to Subject table
@@ -47,22 +51,22 @@ type Grade @table(name: "grades") {
   score: String        # e.g., "A", "85%", or numeric score as string for flexibility
   comments: String
   recordedById: String! # FK to User table (teacher's userId who recorded it)
-  recordedAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP")
+  recordedAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP")
 
-  student: User! @relationship(principalFields: ["studentId"], foreignFields: ["userId"])
-  class: Class! @relationship(principalFields: ["classId"], foreignFields: ["classId"])
-  subject: Subject! @relationship(principalFields: ["subjectId"], foreignFields: ["subjectId"])
-  recordedBy: User! @relationship(principalFields: ["recordedById"], foreignFields: ["userId"])
+  student: User! @fdc.relationship(principalFields: ["studentId"], foreignFields: ["userId"])
+  class: Class! @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  subject: Subject! @fdc.relationship(principalFields: ["subjectId"], foreignFields: ["subjectId"])
+  recordedBy: User! @fdc.relationship(principalFields: ["recordedById"], foreignFields: ["userId"])
 }
 
-type Exam @table(name: "exams") {
-  examId: String! @primaryKey @default(expression: "gen_random_uuid()")
+type Exam @fdc.table(name: "exams") {
+  examId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   examName: String!
   subjectId: String!
-  classId: String       # FK to Class table, exam is for this class
+  classId: String!       # FK to Class table, exam is for this class
   examDate: Date!
   details: String
 
-  subject: Subject! @relationship(principalFields: ["subjectId"], foreignFields: ["subjectId"])
-  class: Class! @relationship(principalFields: ["classId"], foreignFields: ["classId"])
+  subject: Subject! @fdc.relationship(principalFields: ["subjectId"], foreignFields: ["subjectId"])
+  class: Class! @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
 }

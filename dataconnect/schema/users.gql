@@ -1,28 +1,22 @@
+
 # Base User type for all roles
-type User @table(name: "users") {
-  userId: String! @primaryKey # This should be the Firebase Auth UID
-  email: String! @unique
+type User @fdc.table(name: "users") {
+  userId: String! @fdc.primaryKey # This should be the Firebase Auth UID
+  email: String! @fdc.unique
   firstName: String
   lastName: String
   role: UserRole! # Enum to define the type of user
-  createdAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP")
-  updatedAt: Timestamp! @default(expression: "CURRENT_TIMESTAMP") @onUpdate(expression: "CURRENT_TIMESTAMP")
+  createdAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP")
+  updatedAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP") @fdc.onUpdate(expression: "CURRENT_TIMESTAMP")
 
   # Relationships to specific profiles or links
-  # A user might have one student profile (if they are a student)
-  studentProfile: StudentProfile @relationship(principalFields: ["userId"], foreignFields: ["userId"]) # User.userId -> StudentProfile.userId
-  # A user might have many parent-student links (if they are a parent)
-  parentLinksAsParent: [ParentStudentLink!] @relationship(principalFields: ["userId"], foreignFields: ["parentId"])
-  # A user might have many parent-student links (if they are a student linked to parents)
-  parentLinksAsStudent: [ParentStudentLink!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
-  # A user might be assigned to teach many classes (if they are a teacher)
-  teacherAssignments: [TeacherClassAssignment!] @relationship(principalFields: ["userId"], foreignFields: ["teacherId"])
-  # A user might have enrolled in many classes (if they are a student)
-  enrollments: [Enrollment!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
-  # Grades for this user (if student)
-  gradesAsStudent: [Grade!] @relationship(principalFields: ["userId"], foreignFields: ["studentId"])
-  # Grades recorded by this user (if teacher)
-  gradesRecordedByTeacher: [Grade!] @relationship(principalFields: ["userId"], foreignFields: ["recordedById"])
+  studentProfile: StudentProfile @fdc.relationship(principalFields: ["userId"], foreignFields: ["userId"])
+  parentLinksAsParent: [ParentStudentLink!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["parentId"])
+  parentLinksAsStudent: [ParentStudentLink!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  teacherAssignments: [TeacherClassAssignment!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["teacherId"])
+  enrollments: [Enrollment!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  gradesAsStudent: [Grade!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["studentId"])
+  gradesRecordedByTeacher: [Grade!] @fdc.relationship(principalFields: ["userId"], foreignFields: ["recordedById"])
 }
 
 enum UserRole {
@@ -33,23 +27,24 @@ enum UserRole {
 }
 
 # Specific profile for students
-type StudentProfile @table(name: "student_profiles") {
-  userId: String! @primaryKey # This is the PK for StudentProfile AND the FK to User.userId
-  user: User! @relationship(principalFields: ["userId"], foreignFields: ["userId"]) # Links StudentProfile.userId to User.userId
+type StudentProfile @fdc.table(name: "student_profiles") {
+  userId: String! @fdc.primaryKey # Should be the same as User.userId for students
+  user: User! @fdc.relationship(principalFields: ["userId"], foreignFields: ["userId"], onDelete: CASCADE)
   dateOfBirth: Date
   admissionDate: Date
   currentGradeLevel: String # e.g., "Grade 5", "PP1"
-  # Add other student-specific fields like emergency contact, allergies etc.
 }
 
-# Linking table for Parent-Student relationships (Many-to-Many through this link table)
-type ParentStudentLink @table(name: "parent_student_links", unique: [["parentId", "studentId"]]) {
-  linkId: String! @primaryKey @default(expression: "gen_random_uuid()") # Auto-generated UUID
+# Linking table for Parent-Student relationships
+type ParentStudentLink @fdc.table(
+    name: "parent_student_links",
+    uniqueConstraints: [{ name: "unique_parent_student", fields: ["parentId", "studentId"] }]
+  ) {
+  linkId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   parentId: String! # FK to User table (User.userId where role is PARENT)
   studentId: String! # FK to User table (User.userId where role is STUDENT)
   relationshipType: String # e.g., "Mother", "Father", "Guardian"
 
-  # Define relationships to the User table for parent and student
-  parent: User! @relationship(principalFields: ["parentId"], foreignFields: ["userId"])
-  student: User! @relationship(principalFields: ["studentId"], foreignFields: ["userId"])
+  parent: User! @fdc.relationship(principalFields: ["parentId"], foreignFields: ["userId"])
+  student: User! @fdc.relationship(principalFields: ["studentId"], foreignFields: ["userId"])
 }
