@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, LogIn, CalendarDays, Newspaper, ShieldAlert } from 'lucide-react';
+import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, LogIn, CalendarDays, Newspaper, ShieldAlert, UserCheck } from 'lucide-react'; // Added UserCheck for Teacher
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
@@ -21,6 +21,7 @@ const navLinks = [
   { href: '/contact', label: 'Contact Us', icon: Mail },
   { href: '/parent-portal', label: 'Parent Portal', icon: LogIn, portal: true },
   { href: '/student-portal', label: 'Student Portal', icon: LogIn, portal: true },
+  { href: '/teacher-portal', label: 'Teacher Portal', icon: UserCheck, portal: true }, // Added Teacher Portal
   { href: '/admin', label: 'Admin Portal', icon: ShieldAlert, portal: true },
 ];
 
@@ -34,7 +35,7 @@ export function Navbar() {
   }, []);
   
   if (!isMounted) {
-    return null; // Avoid rendering on server to prevent hydration mismatch for mobile menu state
+    return null; 
   }
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -66,7 +67,7 @@ export function Navbar() {
               {navLinks.filter(link => link.portal).map((link) => (
                 <Button key={link.href} variant="ghost" size="sm" asChild className={cn(
                   "text-sm font-medium transition-colors",
-                  pathname === link.href ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary',
+                  pathname.startsWith(link.href) ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary', // Use startsWith for portal links
                 )}>
                   <Link href={link.href}>
                     <link.icon className="mr-2 h-4 w-4" />
@@ -101,7 +102,7 @@ export function Navbar() {
                           href={link.href}
                           className={cn(
                             "flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors",
-                            pathname === link.href ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary',
+                            pathname.startsWith(link.href) ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary',
                           )}
                         >
                           <link.icon className="mr-3 h-5 w-5" />
@@ -117,7 +118,7 @@ export function Navbar() {
                            href={link.href}
                             className={cn(
                             "flex items-center px-3 py-2 rounded-md text-base font-medium transition-colors mt-2",
-                            pathname === link.href ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary',
+                            pathname.startsWith(link.href) ? 'bg-accent text-accent-foreground' : 'hover:bg-primary-foreground hover:text-primary',
                           )}
                          >
                            <link.icon className="mr-3 h-5 w-5" />

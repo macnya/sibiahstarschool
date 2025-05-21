@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LogIn, UserCircle, LogOut, UserPlus, Mail } from 'lucide-react';
-import { useForm, useFormState } from 'react-hook-form';
+import { useForm } from 'react-hook-form'; // Corrected: useFormState removed as it's part of useForm
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import {
@@ -16,12 +16,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'; // Corrected import syntax
+} from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-provider';
 import Link from 'next/link';
-import { SvgGoogleIcon } from '@/components/shared/icons'; 
+import { SvgGoogleIcon } from '@/components/shared/icons';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),
@@ -32,7 +34,8 @@ type FormValues = z.infer<typeof formSchema>;
 
 export default function StudentPortalPage() {
   const { toast } = useToast();
-  const { user, login, logout, signInWithGoogle, loading: authLoading, initialLoading } = useAuth();
+  const { user, login, signInWithGoogle, loading: authLoading, initialLoading } = useAuth();
+  const router = useRouter();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -41,54 +44,31 @@ export default function StudentPortalPage() {
       password: '',
     },
   });
-  const { isSubmitting } = useFormState({ control: form.control });
+
+  useEffect(() => {
+    if (!initialLoading && user) {
+      router.push('/student-portal/dashboard');
+    }
+  }, [user, initialLoading, router]);
+
 
   async function onLogin(values: FormValues) {
     const success = await login(values.email, values.password);
     if (success) {
       form.reset();
+      // router.push('/student-portal/dashboard'); // AuthProvider useEffect will handle this
     }
   }
   
   async function handleGoogleSignIn() {
     await signInWithGoogle();
+    // AuthProvider useEffect will handle redirect if successful
   }
 
-  if (initialLoading) {
+  if (initialLoading || (!initialLoading && user)) {
      return (
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (user) {
-    return (
-      <div>
-        <PageHeader
-          title="Student Portal"
-          subtitle={`Welcome, ${user.displayName || user.email}!`}
-        />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
-          <Card className="max-w-md mx-auto shadow-xl">
-            <CardHeader className="text-center">
-              <UserCircle className="h-16 w-16 mx-auto text-primary mb-4" />
-              <CardTitle className="text-2xl font-bold text-primary">Welcome!</CardTitle>
-              <CardDescription>You are now logged in to the Student Portal.</CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="mb-4">Access your grades, announcements, and resources.</p>
-              {/* Placeholder for portal content */}
-              <div className="my-6 p-4 border rounded-md bg-secondary/20">
-                <p className="text-muted-foreground">Student-specific content will appear here.</p>
-              </div>
-              <Button onClick={logout} disabled={authLoading || isSubmitting} className="w-full bg-destructive hover:bg-destructive/90">
-                {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogOut className="mr-2 h-4 w-4" /> )}
-                Logout
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
       </div>
     );
   }
@@ -135,8 +115,8 @@ export default function StudentPortalPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading || isSubmitting}>
-                    {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogIn className="mr-2 h-4 w-4" /> )}
+                <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={authLoading}>
+                    {authLoading ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <LogIn className="mr-2 h-4 w-4" /> )}
                   Login
                 </Button>
               </form>
@@ -151,8 +131,8 @@ export default function StudentPortalPage() {
               </div>
             </div>
 
-            <Button variant="outline" className="w-full mb-4" onClick={handleGoogleSignIn} disabled={authLoading || isSubmitting}>
-              {authLoading || isSubmitting ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <SvgGoogleIcon className="mr-2 h-5 w-5" /> )}
+            <Button variant="outline" className="w-full mb-4" onClick={handleGoogleSignIn} disabled={authLoading}>
+              {authLoading ? ( <Loader2 className="mr-2 h-4 w-4 animate-spin" /> ) : ( <SvgGoogleIcon className="mr-2 h-5 w-5" /> )}
               Sign in with Google
             </Button>
 
