@@ -24,16 +24,14 @@ const config: NextConfig = {
       },
     ],
   },
-  // This allows the Next.js development server (running on port 3000)
-  // to accept HMR WebSocket connections from these origins.
-  // This is primarily for local development proxying scenarios.
-  // For production rollouts, this setting is less relevant.
-  allowedDevOrigins: [
-     `https://${cloudWorkstationHost_3000}`,
-     cloudWorkstationHost_3000, // Without scheme
-    //  `https://${cloudWorkstationHost_4000}`, // If Firebase Emulator UI needs to connect for HMR (unlikely for main app HMR)
-    //  cloudWorkstationHost_4000,
-  ],
+  // allowedDevOrigins was commented out to simplify production build config.
+  // For local development, if cross-origin issues reappear with HMR,
+  // you might need to re-add or adjust this, but it's unlikely to be the
+  // cause of "Cannot find module" errors related to build artifacts.
+  // allowedDevOrigins: [
+  //    `https://${cloudWorkstationHost_3000}`,
+  //    cloudWorkstationHost_3000, // Without scheme
+  // ],
 };
 
 export default config;
