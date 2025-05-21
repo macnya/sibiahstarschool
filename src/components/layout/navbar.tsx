@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, LogIn, CalendarDays, Newspaper } from 'lucide-react';
+import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, LogIn, CalendarDays, Newspaper, ShieldAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
@@ -21,6 +21,7 @@ const navLinks = [
   { href: '/contact', label: 'Contact Us', icon: Mail },
   { href: '/parent-portal', label: 'Parent Portal', icon: LogIn, portal: true },
   { href: '/student-portal', label: 'Student Portal', icon: LogIn, portal: true },
+  { href: '/admin', label: 'Admin Portal', icon: ShieldAlert, portal: true },
 ];
 
 export function Navbar() {
