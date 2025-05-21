@@ -1,16 +1,18 @@
 
-'use client';
 import * as admin from "firebase-admin";
-import * as functions from "firebase-functions/v2";
+// import * as functions from "firebase-functions/v2"; // Commented out if not used
 
 // Initialize Firebase Admin SDK if not already initialized
+// Ensure this is called only once
 if (admin.apps.length === 0) {
   admin.initializeApp();
 }
 
+// All auth-related functions are commented out as per user request.
+
 // Example: Get user record by UID (Illustrative, not directly used in current admin setup)
+/*
 export const getUserRecord = functions.https.onCall(async (request) => {
-  // const data = request.data as { uid: string }; // Using request.data for callable
   const uid = request.data.uid;
 
   if (!uid) {
@@ -28,22 +30,21 @@ export const getUserRecord = functions.https.onCall(async (request) => {
       displayName: userRecord.displayName,
       disabled: userRecord.disabled,
       customClaims: userRecord.customClaims,
-      // Add other properties you want to return
     };
   } catch (error) {
     console.error("Error fetching user record:", error);
     throw new functions.https.HttpsError(
       "internal",
-      "Failed to fetch user record",
-      // error // Avoid sending raw error object to client
+      "Failed to fetch user record"
     );
   }
 });
+*/
 
 // Example: Disable or enable user account (Illustrative)
+/*
 export const setUserDisabledStatus = functions.https.onCall(
   async (request) => {
-    // const data = request.data as { uid: string; disabled: boolean };
     const { uid, disabled } = request.data;
 
     if (!uid || disabled === undefined) {
@@ -52,15 +53,7 @@ export const setUserDisabledStatus = functions.https.onCall(
         "The function must be called with uid and disabled status."
       );
     }
-
     // TODO: Add check to ensure only admins can call this function
-    // if (!request.auth?.token?.isAdmin) {
-    //   throw new functions.https.HttpsError(
-    //     "permission-denied",
-    //     "Caller is not an administrator."
-    //   );
-    // }
-
     try {
       await admin.auth().updateUser(uid, { disabled });
       return { message: `User ${uid} disabled status set to ${disabled}` };
@@ -68,21 +61,17 @@ export const setUserDisabledStatus = functions.https.onCall(
       console.error("Error updating user disabled status:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to update user disabled status",
-        // error
+        "Failed to update user disabled status"
       );
     }
   }
 );
+*/
 
 // Example: Update user profile (Illustrative)
+/*
 export const updateUserProfile = functions.https.onCall(
   async (request) => {
-    // const data = request.data as {
-    //   uid: string;
-    //   displayName?: string;
-    //   email?: string;
-    // };
     const { uid, displayName, email } = request.data;
 
     if (!uid) {
@@ -91,15 +80,7 @@ export const updateUserProfile = functions.https.onCall(
         "The function must be called with uid."
       );
     }
-
-    // TODO: Add check to ensure only admins can call this function or user is updating their own profile
-    // if (!request.auth?.token?.isAdmin && request.auth?.uid !== uid) {
-    //   throw new functions.https.HttpsError(
-    //     "permission-denied",
-    //     "Caller is not authorized to perform this action."
-    //   );
-    // }
-
+    // TODO: Add check
     try {
       const updatedUser = await admin.auth().updateUser(uid, {
         displayName,
@@ -114,20 +95,28 @@ export const updateUserProfile = functions.https.onCall(
       console.error("Error updating user profile:", error);
       throw new functions.https.HttpsError(
         "internal",
-        "Failed to update user profile",
-        // error
+        "Failed to update user profile"
       );
     }
   }
 );
-
+*/
 
 /**
  * Sets a custom claim { isAdmin: true } for a user.
  * This function should be secured to only allow existing admins to call it.
  * For initial setup, you might call this manually or from a trusted environment.
  */
+/*
 export const setAdminClaim = functions.https.onCall(async (request) => {
+  const email = request.data.email;
+  if (!email) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'The function must be called with an "email" argument.'
+    );
+  }
+
   // IMPORTANT: In a production app, you MUST secure this function.
   // For example, check if the caller is already an admin:
   // if (request.auth?.token?.isAdmin !== true) {
@@ -136,14 +125,6 @@ export const setAdminClaim = functions.https.onCall(async (request) => {
   //     'Only an admin can set admin claims.'
   //   );
   // }
-
-  const email = request.data.email;
-  if (!email) {
-    throw new functions.https.HttpsError(
-      'invalid-argument',
-      'The function must be called with an "email" argument.'
-    );
-  }
 
   try {
     const user = await admin.auth().getUserByEmail(email);
@@ -157,16 +138,7 @@ export const setAdminClaim = functions.https.onCall(async (request) => {
     throw new functions.https.HttpsError('internal', 'Failed to set admin claim.');
   }
 });
+*/
 
-
-// Example Cloud Functions (commented out as they are not used yet)
-// import {onRequest} from "firebase-functions/v2/https";
-// import * as logger from "firebase-functions/logger";
-
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   // logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+// Placeholder for any future non-auth related functions
+// export const myNonAuthFunction = functions.https.onRequest((req, res) => { ... });

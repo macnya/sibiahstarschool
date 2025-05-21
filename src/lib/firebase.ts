@@ -1,26 +1,16 @@
 
 import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
-import {
-  getAuth,
-  type Auth,
-  type UserCredential,
-  createUserWithEmailAndPassword as fbCreateUserWithEmailAndPassword,
-  signInWithEmailAndPassword as fbSignInWithEmailPassword,
-  GoogleAuthProvider,
-  signInWithPopup as fbSignInWithPopup,
-  signOut as fbSignOut,
-  onAuthStateChanged,
-  getAdditionalUserInfo
-} from 'firebase/auth';
+// Auth related imports are removed as auth functionality is being removed.
+// import { getAuth, type Auth } from 'firebase/auth';
 
 let app: FirebaseApp | undefined = undefined;
-let auth: Auth | undefined = undefined;
+// let auth: Auth | undefined = undefined; // Auth object no longer needed
 let firebaseConfigUsed: any = null;
 
 console.log("firebase.ts: Module loaded.");
 
 if (typeof window === 'undefined') {
-  // SERVER-SIDE (e.g., App Hosting runtime, Next.js server components/routes)
+  // SERVER-SIDE
   console.log("firebase.ts: Running on server.");
   const serverEnvConfig = process.env.FIREBASE_WEBAPP_CONFIG;
 
@@ -28,23 +18,20 @@ if (typeof window === 'undefined') {
     console.log("SERVER RUNTIME: FIREBASE_WEBAPP_CONFIG found, attempting to parse.");
     try {
       firebaseConfigUsed = JSON.parse(serverEnvConfig);
-      console.log("SERVER RUNTIME: FIREBASE_WEBAPP_CONFIG parsed successfully. API Key present:", !!firebaseConfigUsed.apiKey);
-      if (!firebaseConfigUsed.apiKey) {
-        console.error("SERVER RUNTIME CRITICAL: FIREBASE_WEBAPP_CONFIG parsed but apiKey is missing. Config:", JSON.stringify(firebaseConfigUsed));
-        firebaseConfigUsed = null; // Invalidate if API key is missing
+      if (!firebaseConfigUsed.apiKey || firebaseConfigUsed.apiKey.trim() === "") {
+        console.error("SERVER RUNTIME CRITICAL: FIREBASE_WEBAPP_CONFIG parsed but apiKey is missing or empty. Config:", JSON.stringify(firebaseConfigUsed));
+        firebaseConfigUsed = null; 
+      } else {
+        console.log("SERVER RUNTIME: FIREBASE_WEBAPP_CONFIG parsed successfully. API Key present:", !!firebaseConfigUsed.apiKey);
       }
     } catch (e: any) {
       console.error("SERVER RUNTIME CRITICAL: Failed to parse FIREBASE_WEBAPP_CONFIG. Error:", e.message, "Received value:", serverEnvConfig);
-      firebaseConfigUsed = null; // Invalidate on parse error
+      firebaseConfigUsed = null; 
     }
   } else {
-    console.warn("SERVER RUNTIME WARNING: FIREBASE_WEBAPP_CONFIG environment variable is not set or is empty. Firebase client SDK might not initialize correctly on the server for certain use cases (e.g. if you were intending to use it for server-side auth with client SDK).");
-    // For server-side Firebase Admin SDK usage (e.g., in Cloud Functions), FIREBASE_CONFIG is used, not FIREBASE_WEBAPP_CONFIG.
-    // This path is more relevant if trying to use client SDK for server-side auth, which is less common.
-    firebaseConfigUsed = null;
+    console.warn("SERVER RUNTIME WARNING: FIREBASE_WEBAPP_CONFIG environment variable is not set or is empty.");
   }
-  // Fallback if FIREBASE_WEBAPP_CONFIG was not used or failed (e.g. for local SSR dev where it might not be set)
-  // However, for App Hosting, FIREBASE_WEBAPP_CONFIG should be the primary source.
+  
   if (!firebaseConfigUsed) {
     console.log("SERVER RUNTIME (Fallback or Local Dev): Attempting to use NEXT_PUBLIC_ variables for Firebase initialization.");
      firebaseConfigUsed = {
@@ -76,7 +63,7 @@ if (typeof window === 'undefined') {
 
 // Initialize Firebase if config is valid
 if (firebaseConfigUsed && firebaseConfigUsed.apiKey && firebaseConfigUsed.apiKey.trim() !== "") {
-  console.log("Firebase config seems valid, attempting initialization with config. API Key snippet:", firebaseConfigUsed.apiKey ? firebaseConfigUsed.apiKey.substring(0, 10) + "..." : "MISSING/EMPTY");
+  console.log("Firebase config seems valid, attempting initialization with apiKey snippet:", firebaseConfigUsed.apiKey ? firebaseConfigUsed.apiKey.substring(0, 10) + "..." : "MISSING/EMPTY");
   try {
     if (!getApps().length) {
       app = initializeApp(firebaseConfigUsed);
@@ -85,89 +72,32 @@ if (firebaseConfigUsed && firebaseConfigUsed.apiKey && firebaseConfigUsed.apiKey
       app = getApp();
       console.log("Firebase app already initialized, getting existing app via getApp(). App instance:", app ? "defined" : "undefined");
     }
-  } catch (error) {
-    console.error("CRITICAL: Firebase initializeApp() failed:", error);
+  } catch (error: any) {
+    console.error("CRITICAL: Firebase initializeApp() failed:", error.message ? error.message : error);
     app = undefined;
   }
 
-  if (app) {
-    try {
-      auth = getAuth(app);
-      console.log("Firebase Auth initialized successfully. Auth instance:", auth ? "defined" : "undefined");
-    } catch (error) {
-      console.error("CRITICAL: Firebase getAuth() failed:", error);
-      auth = undefined;
-    }
-  } else {
-    console.error("CRITICAL: Firebase app object is undefined after initialization attempt. Firebase Auth cannot be initialized.");
-    auth = undefined;
-  }
+  // Auth initialization is removed as auth features are being removed.
+  // if (app) {
+  //   try {
+  //     auth = getAuth(app);
+  //     console.log("Firebase Auth initialized successfully. Auth instance:", auth ? "defined" : "undefined");
+  //   } catch (error: any) {
+  //     console.error("CRITICAL: Firebase getAuth() failed:", error.message ? error.message : error);
+  //     auth = undefined;
+  //   }
+  // } else {
+  //   console.error("CRITICAL: Firebase app object is undefined after initialization attempt. Firebase Auth cannot be initialized.");
+  //   auth = undefined;
+  // }
 } else {
-  console.error("CRITICAL: Firebase configuration is missing or API key is undefined/empty. Firebase cannot be initialized. API Key from config used:", firebaseConfigUsed?.apiKey);
+  console.error("CRITICAL: Firebase configuration is missing or API key is undefined/empty. Firebase cannot be initialized. Config used:", firebaseConfigUsed);
   app = undefined;
-  auth = undefined;
+  // auth = undefined;
 }
 
-const googleProvider = new GoogleAuthProvider();
+// Auth specific functions are removed.
+// const googleProvider = new GoogleAuthProvider();
+// export { createUserWithEmailPassword, signInWithEmailPassword, signInWithGoogle, signOut, handleAuthStateChange, GoogleAuthProvider, type UserCredential, getAdditionalUserInfo };
 
-const createUserWithEmailPassword = (email: string, pass: string): Promise<UserCredential> => {
-  console.log("createUserWithEmailPassword called. App defined?", !!app, "Auth defined?", !!auth);
-  if (!auth) {
-    console.error("Auth is not initialized (createUserWithEmailPassword). Config used at init:", firebaseConfigUsed);
-    return Promise.reject(new Error("Authentication service not available. Firebase Auth may not have initialized correctly."));
-  }
-  return fbCreateUserWithEmailAndPassword(auth, email, pass);
-};
-
-const signInWithEmailPassword = (email: string, pass: string): Promise<UserCredential> => {
-  console.log("signInWithEmailPassword called. App defined?", !!app, "Auth defined?", !!auth);
-  if (!auth) {
-    console.error("Auth is not initialized (signInWithEmailPassword). Config used at init:", firebaseConfigUsed);
-    return Promise.reject(new Error("Authentication service not available. Firebase Auth may not have initialized correctly."));
-  }
-  return fbSignInWithEmailAndPassword(auth, email, pass);
-};
-
-const signInWithGoogle = (): Promise<UserCredential> => {
-  console.log("signInWithGoogle called. App defined?", !!app, "Auth defined?", !!auth);
-  if (!auth) {
-    console.error("Auth is not initialized (signInWithGoogle). Config used at init:", firebaseConfigUsed);
-    return Promise.reject(new Error("Authentication service not available. Firebase Auth may not have initialized correctly."));
-  }
-  return fbSignInWithPopup(auth, googleProvider);
-};
-
-const signOut = (): Promise<void> => {
-  console.log("signOut called. App defined?", !!app, "Auth defined?", !!auth);
-  if (!auth) {
-    console.error("Auth is not initialized (signOut). Config used at init:", firebaseConfigUsed);
-    return Promise.reject(new Error("Authentication service not available. Firebase Auth may not have initialized correctly."));
-  }
-  return fbSignOut(auth);
-};
-
-const handleAuthStateChange = (callback: (user: any) => void) => {
-  console.log("handleAuthStateChange setup. App defined?", !!app, "Auth defined?", !!auth);
-  if (!auth) {
-    console.warn("Auth is not initialized for handleAuthStateChange. Calling callback with null. Config used at init:", firebaseConfigUsed);
-    if (typeof callback === 'function') {
-      callback(null);
-    }
-    // Return a no-op unsubscribe function
-    return () => { console.warn("Unsubscribe called on uninitialized auth for handleAuthStateChange."); };
-  }
-  return onAuthStateChanged(auth, callback);
-};
-
-export {
-  app,
-  auth,
-  createUserWithEmailPassword,
-  signInWithEmailPassword,
-  signInWithGoogle,
-  signOut,
-  handleAuthStateChange,
-  GoogleAuthProvider,
-  type UserCredential,
-  getAdditionalUserInfo
-};
+export { app }; // Export only the app instance if needed for other Firebase services.
