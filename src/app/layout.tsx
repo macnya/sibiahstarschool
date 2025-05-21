@@ -5,7 +5,7 @@ import './globals.css';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
-import { ChatbotWidget } from '@/components/shared/chatbot-widget';
+// import { ChatbotWidget } from '@/components/shared/chatbot-widget';
 
 console.log("RootLayout: Attempting to render RootLayout (src/app/layout.tsx)"); // Debug log
 
@@ -41,7 +41,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <Toaster />
-          <ChatbotWidget />
+          {/* <ChatbotWidget /> */}
       </body>
     </html>
   );
