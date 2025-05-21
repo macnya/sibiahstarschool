@@ -6,7 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-// DO NOT import from functions/src directly in Next.js app
+// DO NOT import directly from functions/src in a Next.js app.
+// Communication should happen via deployed HTTPS callable functions.
 
 interface UserData {
   uid: string;
@@ -28,11 +29,12 @@ export default function EditUserPage() {
     //   setLoading(true);
     //   try {
     //     // This section would need to call a deployed Cloud Function
-    //     // (e.g., using Firebase SDK's httpsCallable)
+    //     // (e.g., using Firebase SDK's httpsCallable to a function like 'getUserRecord')
     //     // For example:
-    //     // const getUserFunction = httpsCallable(functions, 'getUserRecord'); // Assuming 'getUserRecord' is the callable function name
+    //     // const functions = getFunctions(); // from 'firebase/functions'
+    //     // const getUserFunction = httpsCallable(functions, 'getUserRecord');
     //     // const result = await getUserFunction({ uid: userId });
-    //     // const fetchedUser = result.data as UserData;
+    //     // const fetchedUser = result.data as UserData; // Ensure result.data matches UserData structure
     //     // setUser(fetchedUser);
     //     // setFormData(fetchedUser);
     //     console.warn("User data fetching needs to be implemented via an API call to a deployed Cloud Function.");

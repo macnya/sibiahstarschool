@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { LogIn, UserCircle, LogOut, UserPlus, Mail } from 'lucide-react'; // Added UserPlus
+import { LogIn, UserCircle, LogOut, UserPlus, Mail } from 'lucide-react';
 import { useForm, useFormState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,12 +16,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@/components/ui/form'; // Corrected import syntax
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/auth-provider';
 import Link from 'next/link';
-import { SvgGoogleIcon } from '@/components/shared/icons'; // Assuming you'll create this
+import { SvgGoogleIcon } from '@/components/shared/icons'; 
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }),

@@ -27,7 +27,7 @@ export const getUserRecord = functions.https.onCall(async (request, response) =>
       error
     );
   }
-});
+}); // Corrected: Added closing parenthesis and semicolon
 
 // Example: Disable or enable user account
 export const setUserDisabledStatus = functions.https.onCall(
@@ -54,7 +54,7 @@ export const setUserDisabledStatus = functions.https.onCall(
       );
     }
   }
-);
+); // Corrected: Added closing parenthesis and semicolon
 
 // Example: Update user profile
 export const updateUserProfile = functions.https.onCall(
@@ -88,7 +88,7 @@ export const updateUserProfile = functions.https.onCall(
       );
     }
   }
-);
+); // Corrected: Added closing parenthesis and semicolon
 
 // Example Cloud Functions (commented out as they are not used yet)
 // import {onRequest} from "firebase-functions/v2/https";

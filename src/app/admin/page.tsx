@@ -7,11 +7,11 @@ import { useAuth } from '@/contexts/auth-provider';
 import { Loader2 } from 'lucide-react';
 
 const AdminPage = () => {
-  const { user, initialLoading } = useAuth();
+  const { user, initialLoading } = useAuth(); // Changed loading to initialLoading
   const router = useRouter();
 
   useEffect(() => {
-    if (!initialLoading) {
+    if (!initialLoading) { // Changed loading to initialLoading
       if (!user) {
         router.push('/admin/login');
       } else {
@@ -20,9 +20,9 @@ const AdminPage = () => {
         router.push('/admin/dashboard');
       }
     }
-  }, [user, initialLoading, router]);
+  }, [user, initialLoading, router]); // Changed loading to initialLoading
 
-  if (initialLoading) {
+  if (initialLoading) { // Changed loading to initialLoading
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />

@@ -4,23 +4,23 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { Button } from '@/components/ui/button'; // Added Button import
-import { PageHeader } from '@/components/shared/page-header'; // Added PageHeader import
-import { Loader2, Edit, Trash2 } from 'lucide-react'; // Added icons
+import { Button } from '@/components/ui/button'; 
+import { PageHeader } from '@/components/shared/page-header'; 
+import { Loader2, Edit, Trash2 } from 'lucide-react'; 
 
 // Assume you have a function to check admin status
 // import { checkAdminStatus } from '@/lib/admin'; // This file/function does not exist
 
 interface User {
-  uid: string; // Changed id to uid to match Firebase
+  uid: string; 
   email: string | null;
   displayName: string | null;
   // Add other user properties you want to display
 }
 
 export default function AdminUsersPage() {
-  const functions = getFunctions(); // Get functions instance
-  const deleteUserFunction = httpsCallable(functions, 'deleteUser'); // Ensure 'deleteUser' matches your callable function name
+  const functions = getFunctions(); 
+  // const deleteUserFunction = httpsCallable(functions, 'deleteUser'); // Ensure 'deleteUser' matches your callable function name
   // const listUsersFunction = httpsCallable(functions, 'listUsers'); // Assuming 'listUsers' is the name of your callable function
 
   const [users, setUsers] = useState<User[]>([]);
@@ -43,7 +43,7 @@ export default function AdminUsersPage() {
       await fetchUsers();
     };
     verifyAndFetch();
-  }, [router]); // Added router to dependency array as it's used in commented out logic
+  }, [router]); 
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -82,17 +82,16 @@ export default function AdminUsersPage() {
     console.log(`Attempting to delete user with ID: ${userId}`);
     try {
       // Make sure 'deleteUser' is the correct name of your callable function in functions/src/index.ts
-      await deleteUserFunction({ uid: userId }); 
-      setUsers(prevUsers => prevUsers.filter(user => user.uid !== userId));
-      console.log(`User ${userId} delete request sent.`);
-      alert(`User ${userId} delete request sent.`); // Or use a toast
+      // await deleteUserFunction({ uid: userId }); 
+      alert(`User ${userId} delete functionality is a placeholder.`);
+      // setUsers(prevUsers => prevUsers.filter(user => user.uid !== userId));
+      console.log(`User ${userId} delete request sent (placeholder).`);
     } catch (error) {
-      console.error("Error deleting user:", error);
-      alert(`Error deleting user: ${(error as Error).message}`); // Or use a toast
+      console.error("Error deleting user (placeholder):", error);
+      alert(`Error deleting user (placeholder): ${(error as Error).message}`); 
     }
   };
 
-  // if (loading || !isAdmin) { // Adjusted logic as isAdmin is not being set properly
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
