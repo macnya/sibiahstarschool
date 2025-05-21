@@ -4,10 +4,7 @@ type Subject @fdc.table(name: "subjects") {
   description: String
 }
 
-type Class @fdc.table(
-  name: "classes",
-  uniqueConstraints: [{ name: "unique_class_name_per_year_grade", fields: ["className", "academicYear", "gradeLevel"] }]
-) {
+type Class @fdc.table(name: "classes") {
   classId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   className: String!
   gradeLevel: String!
@@ -24,8 +21,8 @@ type Enrollment @fdc.table(
   uniqueConstraints: [{ name: "unique_student_class_enrollment", fields: ["studentId", "classId"] }]
 ) {
   enrollmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
-  studentId: String! # FK to User table (student's userId)
-  classId: String!   # FK to Class table
+  studentId: String!
+  classId: String!
   enrollmentDate: Date! @fdc.default(expression: "CURRENT_DATE")
 
   student: User! @fdc.relationship(principalFields: ["studentId"], foreignFields: ["userId"])
@@ -34,11 +31,11 @@ type Enrollment @fdc.table(
 
 type TeacherClassAssignment @fdc.table(
   name: "teacher_class_assignments",
-  uniqueConstraints: [{ name: "unique_teacher_class_assignment", fields: ["teacherId", "classId"] }] # Assuming a teacher is assigned once to a class, specific subjects might be part of class name or another model
+  uniqueConstraints: [{ name: "unique_teacher_class_assignment", fields: ["teacherId", "classId"] }]
 ) {
   assignmentId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
-  teacherId: String!    # FK to User table (teacher's userId)
-  classId: String!      # FK to Class table
+  teacherId: String!
+  classId: String!
 
   teacher: User! @fdc.relationship(principalFields: ["teacherId"], foreignFields: ["userId"])
   class: Class! @fdc.relationship(principalFields: ["classId"], foreignFields: ["classId"])
@@ -46,13 +43,13 @@ type TeacherClassAssignment @fdc.table(
 
 type Grade @fdc.table(name: "grades") {
   gradeId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
-  studentId: String!   # FK to User table (student's userId)
-  classId: String!     # FK to Class table (context of the grade)
-  subjectId: String!   # FK to Subject table
-  term: String!        # e.g., "Term 1", "Mid-Term", "Final Assignment"
-  score: String        # e.g., "A", "85%", or numeric score as string for flexibility
+  studentId: String!
+  classId: String!
+  subjectId: String!
+  term: String!
+  score: String
   comments: String
-  recordedById: String! # FK to User table (teacher's userId who recorded it)
+  recordedById: String!
   recordedAt: Timestamp! @fdc.default(expression: "CURRENT_TIMESTAMP")
 
   student: User! @fdc.relationship(principalFields: ["studentId"], foreignFields: ["userId"])
@@ -65,7 +62,7 @@ type Exam @fdc.table(name: "exams") {
   examId: String! @fdc.primaryKey @fdc.default(expression: "gen_random_uuid()")
   examName: String!
   subjectId: String!
-  classId: String       # FK to Class table, exam is for this class
+  classId: String!
   examDate: Date!
   details: String
 
