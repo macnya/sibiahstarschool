@@ -49,6 +49,7 @@ exports.getUserRecord = functions.https.onCall(async (request, response) => {
         return userRecord;
     }
     catch (error) {
+        console.error("Error fetching user record:", error);
         throw new functions.https.HttpsError("internal", "Failed to fetch user record", error);
     }
 });
@@ -64,6 +65,7 @@ exports.setUserDisabledStatus = functions.https.onCall(async (request, response)
         return { message: `User ${uid} disabled status set to ${disabled}` };
     }
     catch (error) {
+        console.error("Error updating user disabled status:", error);
         throw new functions.https.HttpsError("internal", "Failed to update user disabled status", error);
     }
 });
@@ -82,7 +84,17 @@ exports.updateUserProfile = functions.https.onCall(async (request, response) => 
         return updatedUser;
     }
     catch (error) {
+        console.error("Error updating user profile:", error);
         throw new functions.https.HttpsError("internal", "Failed to update user profile", error);
     }
 });
+// Example Cloud Functions (commented out as they are not used yet)
+// import {onRequest} from "firebase-functions/v2/https";
+// import * as logger from "firebase-functions/logger";
+// Start writing functions
+// https://firebase.google.com/docs/functions/typescript
+// export const helloWorld = onRequest((request, response) => {
+//   logger.info("Hello logs!", {structuredData: true});
+//   response.send("Hello from Firebase!");
+// });
 //# sourceMappingURL=index.js.map
