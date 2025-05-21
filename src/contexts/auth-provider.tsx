@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import type { User, AuthError, UserCredential } from 'firebase/auth';
 import {
-  getAdditionalUserInfo // Import the helper function
+  getAdditionalUserInfo
 } from 'firebase/auth';
 import {
   auth,
@@ -17,6 +17,9 @@ import {
 } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+
+// Define the specific admin email
+const HARDCODED_ADMIN_EMAIL = "macb1738@gmail.com";
 
 interface AuthContextType {
   user: User | null;
@@ -38,20 +41,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authActionLoading, setAuthActionLoading] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    const unsubscribe = handleAuthStateChange(async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
+  const setAdminStatus = async (currentUser: User | null) => {
+    if (currentUser) {
+      if (currentUser.email === HARDCODED_ADMIN_EMAIL) {
+        console.warn(`AuthProvider: User ${HARDCODED_ADMIN_EMAIL} detected, granting client-side admin status. This is for development/testing only and is NOT secure for production.`);
+        setIsAdmin(true);
+      } else {
         try {
           const idTokenResult = await currentUser.getIdTokenResult(true); // Force refresh for latest claims
           setIsAdmin(idTokenResult.claims.isAdmin === true);
         } catch (error) {
-          console.error("Error fetching custom claims:", error);
+          console.error("Error fetching custom claims for user:", currentUser.email, error);
           setIsAdmin(false);
         }
-      } else {
-        setIsAdmin(false);
       }
+    } else {
+      setIsAdmin(false);
+    }
+  };
+
+  useEffect(() => {
+    const unsubscribe = handleAuthStateChange(async (currentUser) => {
+      setUser(currentUser);
+      await setAdminStatus(currentUser);
       setInitialLoading(false);
     });
     return () => unsubscribe();
@@ -62,13 +74,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const userCredential = await firebaseSignInWithEmailPassword(email, pass);
       if (userCredential.user) {
-        const idTokenResult = await userCredential.user.getIdTokenResult(true);
-        setIsAdmin(idTokenResult.claims.isAdmin === true);
+        await setAdminStatus(userCredential.user); // Check admin status after login
         toast({ title: 'Login Successful', description: 'Welcome back!', variant: 'default' });
         return true;
       }
-      // This case should ideally not be reached if signInWithEmailAndPassword resolves without error
-      setIsAdmin(false);
+      setIsAdmin(false); // Should not be reached if successful
       return false;
     } catch (error) {
       const authError = error as AuthError;
@@ -85,10 +95,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       const userCredential = await firebaseCreateUserWithEmailPassword(email, pass);
-      // Firebase auto-signs in the user, onAuthStateChanged will pick it up.
-      // We can set isAdmin to false initially, it will be updated by onAuthStateChanged if claims exist.
       if (userCredential.user) {
-        setIsAdmin(false); // New users won't have admin claims yet
+        await setAdminStatus(userCredential.user); // Check admin status after registration
         toast({ title: 'Registration Successful', description: 'Welcome! Your account has been created.', variant: 'default' });
         return true;
       }
@@ -108,8 +116,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       const userCredential: UserCredential = await firebaseSignInWithGoogle();
-      const additionalInfo = getAdditionalUserInfo(userCredential); // Correctly get additional user info
+      const additionalInfo = getAdditionalUserInfo(userCredential);
       const isNewUser = additionalInfo?.isNewUser;
+
+      if (userCredential.user) {
+        await setAdminStatus(userCredential.user); // Check admin status after Google sign-in
+      }
 
       if (isNewUser) {
         toast({
@@ -123,12 +135,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           description: 'Welcome back!',
           variant: 'default',
         });
-      }
-      // onAuthStateChanged will handle setting the user and admin state after token refresh
-      // but we can try to set admin status here if user object is available
-      if (userCredential.user) {
-        const idTokenResult = await userCredential.user.getIdTokenResult(true);
-        setIsAdmin(idTokenResult.claims.isAdmin === true);
       }
       return true;
     } catch (error) {
@@ -156,7 +162,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthActionLoading(true);
     try {
       await firebaseSignOut();
-      setIsAdmin(false);
+      setUser(null); // Explicitly set user to null
+      setIsAdmin(false); // Reset admin status on logout
       toast({ title: 'Logged Out', description: 'You have been successfully logged out.', variant: 'default' });
     } catch (error) {
       const authError = error as AuthError;
