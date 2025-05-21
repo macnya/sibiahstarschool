@@ -8,6 +8,8 @@ import { Toaster } from '@/components/ui/toaster';
 import { ChatbotWidget } from '@/components/shared/chatbot-widget';
 import { AuthProvider } from '@/contexts/auth-provider';
 
+console.log("RootLayout: Attempting to render RootLayout (src/app/layout.tsx)"); // Debug log
+
 const openSans = Open_Sans({
   subsets: ['latin'],
   variable: '--font-sans',
@@ -32,6 +34,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("RootLayout: Inside RootLayout component render function."); // Debug log
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${openSans.variable} font-sans antialiased flex flex-col min-h-screen`} suppressHydrationWarning={true}>
