@@ -16,8 +16,8 @@ const config: NextConfig = {
       // Placeholder host used by the current sample content.
       // Remove once real images are served from Supabase Storage.
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
-      // Supabase Storage public bucket. Replace <project-ref> with yours.
-      // { protocol: 'https', hostname: '<project-ref>.supabase.co', pathname: '/storage/v1/object/public/**' },
+      // Supabase Storage public bucket.
+      { protocol: 'https', hostname: 'zssukotccfkketryembq.supabase.co', pathname: '/storage/v1/object/public/**' },
     ],
   },
 };

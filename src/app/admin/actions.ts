@@ -26,7 +26,7 @@ async function requireEditor() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('*')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -230,7 +230,7 @@ export async function deleteGalleryImage(formData: FormData) {
   // deleted photos accumulate in storage and count against your quota.
   const { data: row } = await supabase
     .from('gallery_images')
-    .select('image_url')
+    .select('*')
     .eq('id', id)
     .maybeSingle();
 

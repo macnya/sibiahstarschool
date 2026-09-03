@@ -36,7 +36,7 @@ export async function signIn(
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('*')
     .eq('id', user!.id)
     .maybeSingle();
 

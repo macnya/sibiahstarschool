@@ -1,5 +1,4 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-import type { Database } from './types';
 
 /**
  * Anonymous client for public content reads.
@@ -13,7 +12,7 @@ import type { Database } from './types';
  * Only ever use this for reading published, non-personalised content.
  */
 export function createPublicClient() {
-  return createSupabaseClient<Database>(
+  return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { auth: { persistSession: false, autoRefreshToken: false } }

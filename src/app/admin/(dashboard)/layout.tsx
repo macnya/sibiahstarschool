@@ -33,7 +33,7 @@ export default async function AdminLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, role')
+    .select('*')
     .eq('id', user.id)
     .maybeSingle();
 
