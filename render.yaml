@@ -1,0 +1,26 @@
+# Render Blueprint. Commit this to the repo root, then in Render:
+# New > Blueprint > pick this repository.
+#
+# Env vars marked `sync: false` are NOT stored here — Render prompts you
+# for them once in the dashboard. Keep secrets out of git.
+services:
+  - type: web
+    name: sibiahstarschool
+    runtime: node
+    plan: starter # 'free' sleeps after 15 min idle -> 30-60s cold starts
+    region: frankfurt # closest of Render's regions to Kenya; also: oregon, ohio, virginia, singapore
+    branch: main
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

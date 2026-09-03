@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# Next.js
+.next/
+out/
+build/
+next-env.d.ts.timestamp
+*.tsbuildinfo
+
+# Environment — never commit real secrets
+.env
+.env.local
+.env*.local
+.env.production
+
+# IDE & OS
+.vscode/
+.idea/
+.idx/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Turbopack
+.turbo/
+
+# Coverage
+coverage/
+
+# Certs
+*.pem
