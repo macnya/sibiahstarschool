@@ -4,8 +4,31 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/shared/info-card';
 import { Award, BookOpen, Bus, Lightbulb, Users, ShieldCheck, Music, Globe, CalendarDays, Newspaper } from 'lucide-react';
+import { getPageContent } from '@/lib/site-content/queries';
 
-export default function HomePage() {
+// Icons/links for the repeatable cards below are structural and stay
+// fixed in code; admins edit the title/description text via
+// /admin/content/home.
+const LEVEL_LINKS = ['/curriculum#preschool', '/curriculum#primary', '/curriculum#junior-secondary'];
+const LEVEL_ICONS = [
+  <Users key="preschool" className="h-8 w-8" />,
+  <BookOpen key="primary" className="h-8 w-8" />,
+  <Award key="junior" className="h-8 w-8" />,
+];
+const HIGHLIGHT_ICONS = [
+  <Lightbulb key="facilities" className="h-12 w-12 text-accent mb-4" />,
+  <Bus key="transport" className="h-12 w-12 text-accent mb-4" />,
+  <Award key="academics" className="h-12 w-12 text-accent mb-4" />,
+  <ShieldCheck key="character" className="h-12 w-12 text-accent mb-4" />,
+];
+const COCURRICULAR_ICONS = [
+  <Music key="music" className="h-8 w-8" />,
+  <Globe key="scout" className="h-8 w-8" />,
+];
+
+export default async function HomePage() {
+  const content = await getPageContent('home');
+
   return (
     <div className="bg-background">
       {/* Hero Section */}
@@ -23,10 +46,10 @@ export default function HomePage() {
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
-            Welcome to <span className="text-accent">Sibiah Star</span> School
+            {content.hero.title} <span className="text-accent">{content.hero.highlight}</span> School
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-lg sm:text-xl">
-            Nurturing potential, inspiring futures. Discover a vibrant learning community for Pre-school, Primary, and Junior Secondary students.
+            {content.hero.subtitle}
           </p>
           <div className="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Button size="lg" asChild className="bg-accent text-accent-foreground hover:bg-accent/90">
@@ -42,26 +65,17 @@ export default function HomePage() {
       {/* School Levels Section */}
       <section className="py-16 md:py-24 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">Our Educational Journey</h2>
+          <h2 className="text-3xl font-bold text-center text-primary mb-12">{content.levelsHeading}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <InfoCard
-              title="Pre-school (Playgroup, PP1, PP2)"
-              description="A nurturing start to education, fostering curiosity and foundational skills through play-based learning."
-              icon={<Users className="h-8 w-8" />}
-              linkHref="/curriculum#preschool"
-            />
-            <InfoCard
-              title="Primary (Grade 1 - 6)"
-              description="Building strong academic foundations and character development in a supportive environment."
-              icon={<BookOpen className="h-8 w-8" />}
-              linkHref="/curriculum#primary"
-            />
-            <InfoCard
-              title="Junior Secondary (Grade 7 - 9)"
-              description="Preparing students for higher education and future success with a comprehensive and challenging curriculum."
-              icon={<Award className="h-8 w-8" />}
-              linkHref="/curriculum#junior-secondary"
-            />
+            {content.levels.map((level, i) => (
+              <InfoCard
+                key={level.title}
+                title={level.title}
+                description={level.description}
+                icon={LEVEL_ICONS[i] ?? LEVEL_ICONS[0]}
+                linkHref={LEVEL_LINKS[i] ?? '/curriculum'}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -69,28 +83,15 @@ export default function HomePage() {
       {/* Highlights Section */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">Why Choose Sibiah Star?</h2>
+          <h2 className="text-3xl font-bold text-center text-primary mb-12">{content.highlightsHeading}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
-              <Lightbulb className="h-12 w-12 text-accent mb-4" />
-              <h3 className="text-xl font-semibold text-primary mb-2">Modern Facilities</h3>
-              <p className="text-foreground/80 text-sm">State-of-the-art classrooms, labs, and learning spaces.</p>
-            </div>
-            <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
-              <Bus className="h-12 w-12 text-accent mb-4" />
-              <h3 className="text-xl font-semibold text-primary mb-2">Transport Services</h3>
-              <p className="text-foreground/80 text-sm">Safe and reliable transportation covering the entire area.</p>
-            </div>
-            <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
-              <Award className="h-12 w-12 text-accent mb-4" />
-              <h3 className="text-xl font-semibold text-primary mb-2">Excellent Academics</h3>
-              <p className="text-foreground/80 text-sm">Proven track record of academic excellence and student achievement.</p>
-            </div>
-            <div className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
-              <ShieldCheck className="h-12 w-12 text-accent mb-4" />
-              <h3 className="text-xl font-semibold text-primary mb-2">Character Development</h3>
-              <p className="text-foreground/80 text-sm">Fostering values, discipline, and leadership skills.</p>
-            </div>
+            {content.highlights.map((item, i) => (
+              <div key={item.title} className="flex flex-col items-center text-center p-6 bg-card rounded-lg shadow-md">
+                {HIGHLIGHT_ICONS[i] ?? HIGHLIGHT_ICONS[0]}
+                <h3 className="text-xl font-semibold text-primary mb-2">{item.title}</h3>
+                <p className="text-foreground/80 text-sm">{item.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -98,20 +99,17 @@ export default function HomePage() {
       {/* Co-curricular Activities */}
       <section className="py-16 md:py-24 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-primary mb-12">Beyond the Classroom</h2>
+          <h2 className="text-3xl font-bold text-center text-primary mb-12">{content.cocurricularHeading}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-             <InfoCard
-              title="Music Program"
-              description="Explore creativity and talent with our diverse music classes and ensembles."
-              icon={<Music className="h-8 w-8" />}
-              linkHref="/curriculum#extracurricular"
-            />
-             <InfoCard
-              title="Scout Program"
-              description="Developing leadership, teamwork, and outdoor skills through engaging scout activities."
-              icon={<Globe className="h-8 w-8" />}
-              linkHref="/curriculum#extracurricular"
-            />
+            {content.cocurricular.map((item, i) => (
+              <InfoCard
+                key={item.title}
+                title={item.title}
+                description={item.description}
+                icon={COCURRICULAR_ICONS[i] ?? COCURRICULAR_ICONS[0]}
+                linkHref="/curriculum#extracurricular"
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -119,9 +117,9 @@ export default function HomePage() {
       {/* Call to Action / Quick Links */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-primary mb-6">Get Involved</h2>
+          <h2 className="text-3xl font-bold text-primary mb-6">{content.getInvolvedHeading}</h2>
           <p className="text-lg text-foreground/80 mb-8 max-w-xl mx-auto">
-            Join our community, attend an event, or read our latest news.
+            {content.getInvolvedText}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>

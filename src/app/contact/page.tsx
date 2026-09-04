@@ -2,13 +2,16 @@ import { PageHeader } from '@/components/shared/page-header';
 import { ContactForm } from '@/components/shared/contact-form';
 import { Phone, Mail, MapPin, Clock } from 'lucide-react';
 import type { Metadata } from 'next';
+import { getPageContent } from '@/lib/site-content/queries';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
   description: 'Get in touch with Sibiah Star School. Find our address, contact details, and send us a message.',
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getPageContent('contact');
+
   return (
     <div>
       <PageHeader
@@ -34,30 +37,30 @@ export default function ContactPage() {
                     <MapPin className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Address</h3>
-                      <p className="text-foreground/80">Sibiah Star School, Baraka Mowlem, Behind Kinyago Secondary School, Nairobi.</p>
+                      <p className="text-foreground/80">{content.address}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Phone className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Phone</h3>
-                      <a href="tel:+1234567890" className="text-foreground/80 hover:text-accent">(123) 456-7890</a>
+                      <a href={`tel:${content.phoneHref}`} className="text-foreground/80 hover:text-accent">{content.phoneDisplay}</a>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Mail className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Email</h3>
-                      <a href="mailto:info@sibiahstar.edu" className="text-foreground/80 hover:text-accent">sibiahstarschool@gmail.com</a>
+                      <a href={`mailto:${content.email}`} className="text-foreground/80 hover:text-accent">{content.email}</a>
                     </div>
                   </div>
                    <div className="flex items-start">
                     <Clock className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
                       <h3 className="font-semibold text-primary">Office Hours</h3>
-                      <p className="text-foreground/80">Monday - Friday: 8:00 AM - 4:00 PM</p>
-                      <p className="text-foreground/80">Saturday: 9:00 AM - 12:00 PM (Admissions Office Only)</p>
-                      <p className="text-foreground/80">Sunday: Closed</p>
+                      <p className="text-foreground/80">{content.officeHours.weekday}</p>
+                      <p className="text-foreground/80">{content.officeHours.saturday}</p>
+                      <p className="text-foreground/80">{content.officeHours.sunday}</p>
                     </div>
                   </div>
                 </div>

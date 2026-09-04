@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
+import { SITE_CONTENT_PAGES, type SiteContentPage } from '@/lib/site-content/defaults';
 
 /**
  * Content CRUD.
@@ -266,4 +267,40 @@ export async function deleteMessage(formData: FormData) {
     .delete()
     .eq('id', String(formData.get('id')));
   revalidatePath('/admin/messages');
+}
+
+// --- site content -------------------------------------------------------
+//
+// Unlike the forms above, the content editor works with a nested JSON
+// object (headings, paragraphs, repeatable lists) rather than flat form
+// fields, so this is a plain server action the client calls directly with
+// a JS object instead of a <form action> + FormData. Next.js server
+// actions support both.
+
+const PUBLIC_PATH_BY_PAGE: Record<SiteContentPage, string> = {
+  home: '/',
+  about: '/about',
+  facilities: '/facilities',
+  curriculum: '/curriculum',
+  contact: '/contact',
+};
+
+export async function updateSiteContent(
+  page: SiteContentPage,
+  content: Record<string, unknown>
+): Promise<ActionState> {
+  if (!SITE_CONTENT_PAGES.includes(page)) {
+    return { error: 'Unknown page.' };
+  }
+
+  const supabase = await requireEditor();
+  const { error } = await supabase
+    .from('site_content')
+    .upsert({ page, content });
+
+  if (error) return { error: error.message };
+
+  revalidatePath(PUBLIC_PATH_BY_PAGE[page]);
+  revalidatePath(`/admin/content/${page}`);
+  return { error: null, ok: true };
 }

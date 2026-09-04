@@ -16,6 +16,14 @@
 
 export type UserRole = 'admin' | 'editor' | 'teacher' | 'student' | 'parent';
 
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json }
+  | Json[];
+
 export type ProfileRow = {
   id: string;
   full_name: string | null;
@@ -74,6 +82,12 @@ export type ContactMessageRow = {
   created_at: string;
 }
 
+export type SiteContentRow = {
+  page: string;
+  content: Json;
+  updated_at: string;
+}
+
 /** Columns the database fills in itself, so they are optional on insert. */
 type Generated = 'id' | 'created_at' | 'updated_at';
 
@@ -111,6 +125,12 @@ export type Database = {
         Row: ContactMessageRow;
         Insert: Insertable<ContactMessageRow>;
         Update: Partial<ContactMessageRow>;
+        Relationships: [];
+      };
+      site_content: {
+        Row: SiteContentRow;
+        Insert: Partial<SiteContentRow> & Pick<SiteContentRow, 'page'>;
+        Update: Partial<SiteContentRow>;
         Relationships: [];
       };
     };

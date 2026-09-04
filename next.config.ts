@@ -1,23 +1,18 @@
 import type { NextConfig } from 'next';
 
 const config: NextConfig = {
-  // NOTE: 'output: standalone' was removed. Render's Web Service runs
-  // `npm start` (i.e. `next start`), which needs the standard .next build.
-  // Standalone mode would require manually copying public/ and .next/static
-  // into .next/standalone, which is unnecessary here.
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
+  // REQUIRED for cPanel/Passenger. Produces .next/standalone/server.js,
+  // a self-contained Node server with only the dependencies it needs.
+  output: 'standalone',
+
+  typescript: { ignoreBuildErrors: false },
+  eslint: { ignoreDuringBuilds: false },
+
   images: {
     remotePatterns: [
-      // Placeholder host used by the current sample content.
-      // Remove once real images are served from Supabase Storage.
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },
-      // Supabase Storage public bucket.
-      { protocol: 'https', hostname: 'zssukotccfkketryembq.supabase.co', pathname: '/storage/v1/object/public/**' },
+      { protocol: 'https', hostname: 'zssukotccfkketryembq.supabase.co',
+        pathname: '/storage/v1/object/public/**' },
     ],
   },
 };
