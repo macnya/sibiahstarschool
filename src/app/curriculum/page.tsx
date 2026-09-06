@@ -6,6 +6,11 @@ import type { Metadata } from 'next';
 import { getPageContent } from '@/lib/site-content/queries';
 import type { CurriculumLevel } from '@/lib/site-content/defaults';
 
+// Content on this page is admin-editable via /admin/content/curriculum
+// and stored in Supabase, so it must be fetched fresh on every request
+// rather than baked into a static build-time page.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Curriculum',
   description: 'Explore the comprehensive curriculum at Sibiah Star School, from Pre-school to Junior Secondary, including our enriching extracurricular activities.',

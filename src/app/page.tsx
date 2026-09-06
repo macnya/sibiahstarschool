@@ -3,6 +3,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/shared/info-card';
+
+// Content on this page is admin-editable via /admin/content/home and
+// stored in Supabase, so it must be fetched fresh on every request
+// rather than baked into a static build-time page.
+export const dynamic = 'force-dynamic';
 import { Award, BookOpen, Bus, Lightbulb, Users, ShieldCheck, Music, Globe, CalendarDays, Newspaper } from 'lucide-react';
 import { getPageContent } from '@/lib/site-content/queries';
 

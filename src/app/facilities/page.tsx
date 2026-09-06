@@ -4,6 +4,11 @@ import { BookOpen, FlaskConical, MonitorPlay, Bus, ShieldCheck, Wifi, Trees, Sho
 import type { Metadata } from 'next';
 import { getPageContent } from '@/lib/site-content/queries';
 
+// Content on this page is admin-editable via /admin/content/facilities
+// and stored in Supabase, so it must be fetched fresh on every request
+// rather than baked into a static build-time page.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Facilities',
   description: 'Discover the modern facilities at Sibiah Star School, including classrooms, labs, library, sports areas, and our comprehensive transport service.',

@@ -4,6 +4,11 @@ import { Target, Eye, Heart } from 'lucide-react';
 import type { Metadata } from 'next';
 import { getPageContent } from '@/lib/site-content/queries';
 
+// Content on this page is admin-editable via /admin/content/about and
+// stored in Supabase, so it must be fetched fresh on every request
+// rather than baked into a static build-time page.
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about Sibiah Star School\'s history, mission, vision, values, and our dedicated team.',
