@@ -15,6 +15,7 @@
 export const SITE_CONTENT_PAGES = [
   'home',
   'about',
+  'admissions',
   'facilities',
   'curriculum',
   'contact',
@@ -137,6 +138,58 @@ export const DEFAULT_ABOUT_CONTENT: AboutContent = {
       { name: 'Tr. Sam', role: 'Head of Clubs & Co-curriculum' },
     ],
   },
+};
+
+// --- Admissions -------------------------------------------------------------
+
+export type AdmissionsContent = {
+  header: { eyebrow: string; title: string; subtitle: string };
+  processHeading: string;
+  steps: { title: string; description: string }[];
+  requirementsHeading: string;
+  requirements: { level: string; items: string[] }[];
+  aiGuide: { heading: string; text: string; buttonLabel: string };
+  formsHeading: string;
+  formsText: string;
+  downloadButtonLabel: string;
+  downloadUrl: string;
+  formsNote: string;
+  questionsHeading: string;
+  questionsText: string;
+};
+
+export const DEFAULT_ADMISSIONS_CONTENT: AdmissionsContent = {
+  header: {
+    eyebrow: 'Admissions open for 2026',
+    title: 'Admissions at Sibiah Star',
+    subtitle: 'Join our vibrant learning community. We are excited to guide you through our admission process.',
+  },
+  processHeading: 'Our Admission Process',
+  steps: [
+    { title: 'Inquiry & Information', description: 'Contact us or visit our website to learn more about our programs and admission criteria. Attend an open house if available.' },
+    { title: 'Application Submission', description: 'Complete and submit the online application form along with required documents and application fee.' },
+    { title: 'Assessment/Interview', description: 'Prospective students may be required to undergo an age-appropriate assessment or interview.' },
+    { title: 'Offer of Admission', description: 'Successful candidates will receive an offer of admission. Parents accept the offer and complete enrollment formalities.' },
+    { title: 'Welcome to Sibiah Star!', description: 'Once enrollment is complete, your child becomes a part of the Sibiah Star family!' },
+  ],
+  requirementsHeading: 'Admission Requirements',
+  requirements: [
+    { level: 'Pre-school (Playgroup, PP1, PP2)', items: ['Birth Certificate copy', 'Passport-size photos (2)', 'Completed Application Form', 'Immunization Records'] },
+    { level: 'Primary (Grade 1 - 6)', items: ['Birth Certificate copy', 'Previous School Report Cards (if applicable)', 'Transfer Certificate (if applicable)', 'Passport-size photos (2)'] },
+    { level: 'Junior Secondary (Grade 7 - 9)', items: ['Birth Certificate copy', 'Previous School Report Cards', 'Transfer Certificate', 'Passport-size photos (2)', 'Recommendation Letter (optional)'] },
+  ],
+  aiGuide: {
+    heading: 'AI Admission Guide',
+    text: "Preparing for admissions? Our AI-powered tool helps you tailor questions for your child's specific needs based on their age and learning considerations.",
+    buttonLabel: 'Launch AI Guide',
+  },
+  formsHeading: 'Application Forms',
+  formsText: 'Download the necessary application forms here. Please ensure all sections are completed accurately.',
+  downloadButtonLabel: 'Download Admission Form (All Levels)',
+  downloadUrl: 'https://drive.google.com/file/d/1JSusZZDhgqaj2uG7VZ8-lqxD7wx_5_dE/view?usp=sharing',
+  formsNote: 'Note: Online application portal coming soon!',
+  questionsHeading: 'Have Questions?',
+  questionsText: 'Our admissions team is here to help. Feel free to reach out with any queries.',
 };
 
 // --- Facilities -------------------------------------------------------------
@@ -288,6 +341,7 @@ export const DEFAULT_CONTACT_CONTENT: ContactContent = {
 export type ContentByPage = {
   home: HomeContent;
   about: AboutContent;
+  admissions: AdmissionsContent;
   facilities: FacilitiesContent;
   curriculum: CurriculumContent;
   contact: ContactContent;
@@ -296,6 +350,7 @@ export type ContentByPage = {
 export const DEFAULTS_BY_PAGE: ContentByPage = {
   home: DEFAULT_HOME_CONTENT,
   about: DEFAULT_ABOUT_CONTENT,
+  admissions: DEFAULT_ADMISSIONS_CONTENT,
   facilities: DEFAULT_FACILITIES_CONTENT,
   curriculum: DEFAULT_CURRICULUM_CONTENT,
   contact: DEFAULT_CONTACT_CONTENT,

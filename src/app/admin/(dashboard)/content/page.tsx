@@ -7,6 +7,7 @@ export const dynamic = 'force-dynamic';
 const LABELS: Record<string, { title: string; description: string }> = {
   home: { title: 'Home page', description: 'Hero text, highlights, and section headings.' },
   about: { title: 'About page', description: "Our story, mission, vision, values, director's message, team." },
+  admissions: { title: 'Admissions page', description: 'Admission steps, requirements by level, AI guide callout, and application forms.' },
   facilities: { title: 'Facilities page', description: 'Facility list, transport details, and amenities.' },
   curriculum: { title: 'Curriculum page', description: 'Level descriptions, key areas, and extracurriculars.' },
   contact: { title: 'Contact info', description: 'Address, phone, email, and office hours shown on the Contact page.' },

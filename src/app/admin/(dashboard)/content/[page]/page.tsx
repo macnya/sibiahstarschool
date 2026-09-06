@@ -5,6 +5,7 @@ import { SITE_CONTENT_PAGES, type SiteContentPage } from '@/lib/site-content/def
 import { getPageContent } from '@/lib/site-content/queries';
 import { HomeContentForm } from '@/components/admin/content/home-content-form';
 import { AboutContentForm } from '@/components/admin/content/about-content-form';
+import { AdmissionsContentForm } from '@/components/admin/content/admissions-content-form';
 import { FacilitiesContentForm } from '@/components/admin/content/facilities-content-form';
 import { CurriculumContentForm } from '@/components/admin/content/curriculum-content-form';
 import { ContactContentForm } from '@/components/admin/content/contact-content-form';
@@ -14,6 +15,7 @@ export const dynamic = 'force-dynamic';
 const TITLES: Record<SiteContentPage, string> = {
   home: 'Home page content',
   about: 'About page content',
+  admissions: 'Admissions page content',
   facilities: 'Facilities page content',
   curriculum: 'Curriculum page content',
   contact: 'Contact info',
@@ -57,6 +59,10 @@ async function ContentForm({ page }: { page: SiteContentPage }) {
     case 'about': {
       const content = await getPageContent('about');
       return <AboutContentForm initial={content} />;
+    }
+    case 'admissions': {
+      const content = await getPageContent('admissions');
+      return <AdmissionsContentForm initial={content} />;
     }
     case 'facilities': {
       const content = await getPageContent('facilities');

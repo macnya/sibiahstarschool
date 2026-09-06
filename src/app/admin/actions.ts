@@ -280,6 +280,7 @@ export async function deleteMessage(formData: FormData) {
 const PUBLIC_PATH_BY_PAGE: Record<SiteContentPage, string> = {
   home: '/',
   about: '/about',
+  admissions: '/admissions',
   facilities: '/facilities',
   curriculum: '/curriculum',
   contact: '/contact',
