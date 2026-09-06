@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import { Navbar } from '@/components/layout/navbar';
+import { QuickLinksBar } from '@/components/layout/quick-links-bar';
 import { Footer } from '@/components/layout/footer';
 import { Toaster } from '@/components/ui/toaster';
 // import { ChatbotWidget } from '@/components/shared/chatbot-widget';
@@ -36,6 +37,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${openSans.variable} font-sans antialiased flex flex-col min-h-screen`} suppressHydrationWarning={true}>
           <Navbar />
+          <QuickLinksBar />
           <main className="flex-grow">
             {children}
           </main>

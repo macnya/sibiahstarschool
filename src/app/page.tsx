@@ -3,23 +3,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { InfoCard } from '@/components/shared/info-card';
+import { EducationTimeline } from '@/components/shared/education-timeline';
 
 // Content on this page is admin-editable via /admin/content/home and
 // stored in Supabase, so it must be fetched fresh on every request
 // rather than baked into a static build-time page.
 export const dynamic = 'force-dynamic';
-import { Award, BookOpen, Bus, Lightbulb, Users, ShieldCheck, Music, Globe, CalendarDays, Newspaper } from 'lucide-react';
+import { Lightbulb, Bus, Award, ShieldCheck, Music, Globe, CalendarDays, Newspaper } from 'lucide-react';
 import { getPageContent } from '@/lib/site-content/queries';
 
-// Icons/links for the repeatable cards below are structural and stay
+// Links/icons for the repeatable sections below are structural and stay
 // fixed in code; admins edit the title/description text via
 // /admin/content/home.
 const LEVEL_LINKS = ['/curriculum#preschool', '/curriculum#primary', '/curriculum#junior-secondary'];
-const LEVEL_ICONS = [
-  <Users key="preschool" className="h-8 w-8" />,
-  <BookOpen key="primary" className="h-8 w-8" />,
-  <Award key="junior" className="h-8 w-8" />,
-];
 const HIGHLIGHT_ICONS = [
   <Lightbulb key="facilities" className="h-12 w-12 text-accent mb-4" />,
   <Bus key="transport" className="h-12 w-12 text-accent mb-4" />,
@@ -50,6 +46,9 @@ export default async function HomePage() {
             />
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+          <p className="text-accent font-semibold text-sm tracking-wide mb-4">
+            {content.heroEyebrow}
+          </p>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
             {content.hero.title} <span className="text-accent">{content.hero.highlight}</span> School
           </h1>
@@ -71,17 +70,7 @@ export default async function HomePage() {
       <section className="py-16 md:py-24 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-primary mb-12">{content.levelsHeading}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {content.levels.map((level, i) => (
-              <InfoCard
-                key={level.title}
-                title={level.title}
-                description={level.description}
-                icon={LEVEL_ICONS[i] ?? LEVEL_ICONS[0]}
-                linkHref={LEVEL_LINKS[i] ?? '/curriculum'}
-              />
-            ))}
-          </div>
+          <EducationTimeline stages={content.levels} links={LEVEL_LINKS} />
         </div>
       </section>
 

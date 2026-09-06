@@ -16,6 +16,29 @@ export function Footer() {
             <p className="text-sm">
               Nurturing young minds for a bright future. Serving Pre-school, Primary, and Junior Secondary levels.
             </p>
+            <div className="flex gap-3 mt-4">
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-accent hover:text-accent transition-colors text-xs"
+              >
+                FB
+              </a>
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-accent hover:text-accent transition-colors text-xs"
+              >
+                IG
+              </a>
+              <a
+                href="#"
+                aria-label="YouTube"
+                className="w-9 h-9 rounded-full border border-gray-600 flex items-center justify-center hover:border-accent hover:text-accent transition-colors text-xs"
+              >
+                YT
+              </a>
+            </div>
           </div>
 
           <div>
@@ -47,8 +70,12 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm">
+        <div className="mt-8 pt-8 border-t border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm">
           <p>&copy; {currentYear} Sibiah Star Pre-school, Primary & Junior School. All Rights Reserved.</p>
+          <div className="flex gap-4">
+            <Link href="/privacy-policy" className="hover:text-accent transition-colors">Privacy Policy</Link>
+            <Link href="/site-map" className="hover:text-accent transition-colors">Site Map</Link>
+          </div>
         </div>
       </div>
     </footer>

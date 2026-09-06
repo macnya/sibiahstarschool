@@ -26,6 +26,11 @@ export function HomeContentForm({ initial }: { initial: HomeContent }) {
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Hero</h2>
         <TextField
+          label="Eyebrow text (small line above the headline)"
+          value={content.heroEyebrow}
+          onChange={(v) => setContent({ ...content, heroEyebrow: v })}
+        />
+        <TextField
           label="Title (before the highlighted name)"
           value={content.hero.title}
           onChange={(v) => setContent({ ...content, hero: { ...content.hero, title: v } })}

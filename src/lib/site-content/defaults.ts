@@ -26,6 +26,7 @@ export type SiteContentPage = (typeof SITE_CONTENT_PAGES)[number];
 
 export type HomeContent = {
   hero: { title: string; highlight: string; subtitle: string };
+  heroEyebrow: string;
   levelsHeading: string;
   levels: { title: string; description: string }[];
   highlightsHeading: string;
@@ -43,6 +44,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
     subtitle:
       'Nurturing potential, inspiring futures. Discover a vibrant learning community for Pre-school, Primary, and Junior Secondary students.',
   },
+  heroEyebrow: 'Admissions open — Playgroup through Grade 9',
   levelsHeading: 'Our Educational Journey',
   levels: [
     {
