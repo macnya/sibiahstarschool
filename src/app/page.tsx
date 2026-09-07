@@ -36,13 +36,12 @@ export default async function HomePage() {
       <section className="relative bg-gradient-to-r from-primary to-blue-700 text-primary-foreground py-20 md:py-32">
         <div className="absolute inset-0">
             <Image 
-              src="https://placehold.co/1920x1080.png" 
+              src={content.heroImage.url} 
               alt="School campus background" 
               fill
               style={{ objectFit: "cover" }}
               className="opacity-20"
               priority // Good to add for LCP images
-              data-ai-hint="school campus"
             />
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">

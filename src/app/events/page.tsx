@@ -18,6 +18,7 @@ export default async function EventsPage() {
   return (
     <div>
       <PageHeader
+        eyebrow="Mark your calendar"
         title="School Events"
         subtitle="Find out about upcoming events, important dates, and celebrations at Sibiah Star School."
       />

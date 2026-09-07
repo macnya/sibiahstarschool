@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { updateSiteContent } from '@/app/admin/actions';
 import type { AboutContent } from '@/lib/site-content/defaults';
 import { TextField, TextAreaField, StringListEditor, ObjectListEditor, SaveBar } from './fields';
+import { ImageUploadField } from './image-upload-field';
 
 export function AboutContentForm({ initial }: { initial: AboutContent }) {
   const [content, setContent] = useState(initial);
@@ -25,6 +26,11 @@ export function AboutContentForm({ initial }: { initial: AboutContent }) {
     <div className="max-w-2xl space-y-8 pb-4">
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Page header</h2>
+        <TextField
+          label="Eyebrow text (small line above the title)"
+          value={content.header.eyebrow}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, eyebrow: v } })}
+        />
         <TextField
           label="Title"
           value={content.header.title}
@@ -55,6 +61,11 @@ export function AboutContentForm({ initial }: { initial: AboutContent }) {
           rows={4}
           value={content.story.paragraph2}
           onChange={(v) => setContent({ ...content, story: { ...content.story, paragraph2: v } })}
+        />
+        <ImageUploadField
+          label="Photo"
+          value={content.story.imageUrl}
+          onChange={(url) => setContent({ ...content, story: { ...content.story, imageUrl: url } })}
         />
       </section>
 
@@ -120,6 +131,12 @@ export function AboutContentForm({ initial }: { initial: AboutContent }) {
             onChange={(v) => setContent({ ...content, director: { ...content.director, title: v } })}
           />
         </div>
+        <ImageUploadField
+          label="Photo"
+          value={content.director.imageUrl}
+          onChange={(url) => setContent({ ...content, director: { ...content.director, imageUrl: url } })}
+          previewClassName="h-32 w-32 rounded-full"
+        />
         <TextAreaField
           label="Quote — paragraph 1"
           rows={4}
@@ -153,6 +170,7 @@ export function AboutContentForm({ initial }: { initial: AboutContent }) {
           fields={[
             { key: 'name', label: 'Name' },
             { key: 'role', label: 'Role' },
+            { key: 'imageUrl', label: 'Photo', image: true, imagePreviewClassName: 'h-24 w-24 rounded-full' },
           ]}
           itemLabel="Member"
         />

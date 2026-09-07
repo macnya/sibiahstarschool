@@ -16,16 +16,16 @@ export const metadata: Metadata = {
   description: 'Explore the comprehensive curriculum at Sibiah Star School, from Pre-school to Junior Secondary, including our enriching extracurricular activities.',
 };
 
-// Icon/image/id are structural (tied to page anchors like #preschool),
-// so they stay fixed in code — only the level's title/description/key
-// areas are admin-editable.
+// Icon/id are structural (id is tied to page anchors like #preschool),
+// so they stay fixed in code — the level's title/description/key areas
+// and photo are admin-editable.
 const LEVEL_VISUALS: Record<
   keyof CurriculumRow,
-  { id: string; icon: React.ReactNode; image: { src: string; hint: string } }
+  { id: string; icon: React.ReactNode }
 > = {
-  preschool: { id: 'preschool', icon: <Users className="h-8 w-8 text-accent" />, image: { src: 'https://placehold.co/600x400.png', hint: 'preschool children' } },
-  primary: { id: 'primary', icon: <BookOpen className="h-8 w-8 text-accent" />, image: { src: 'https://placehold.co/600x400.png', hint: 'primary students' } },
-  juniorSecondary: { id: 'junior-secondary', icon: <Award className="h-8 w-8 text-accent" />, image: { src: 'https://placehold.co/600x400.png', hint: 'secondary students lab' } },
+  preschool: { id: 'preschool', icon: <Users className="h-8 w-8 text-accent" /> },
+  primary: { id: 'primary', icon: <BookOpen className="h-8 w-8 text-accent" /> },
+  juniorSecondary: { id: 'junior-secondary', icon: <Award className="h-8 w-8 text-accent" /> },
 };
 
 type CurriculumRow = { preschool: CurriculumLevel; primary: CurriculumLevel; juniorSecondary: CurriculumLevel };
@@ -45,6 +45,7 @@ export default async function CurriculumPage() {
   return (
     <div>
       <PageHeader
+        eyebrow={content.header.eyebrow}
         title={content.header.title}
         subtitle={content.header.subtitle}
       />
@@ -56,7 +57,7 @@ export default async function CurriculumPage() {
             {levelEntries.map(([key, level]) => {
               const visual = LEVEL_VISUALS[key];
               return (
-                <AccordionItem value={visual.id} key={visual.id} className="mb-4 bg-card rounded-lg shadow-md overflow-hidden">
+                <AccordionItem value={visual.id} key={visual.id} className="mb-4 bg-card border-t-4 border-accent rounded-md overflow-hidden">
                   <AccordionTrigger className="p-6 text-xl font-semibold text-primary hover:bg-secondary/50 transition-colors data-[state=open]:bg-secondary/50">
                     <div className="flex items-center space-x-3">
                       {visual.icon}
@@ -74,12 +75,11 @@ export default async function CurriculumPage() {
                       </div>
                       <div className="mt-4 md:mt-0">
                         <Image
-                          src={visual.image.src}
+                          src={level.imageUrl}
                           alt={level.title}
                           width={500}
                           height={300}
-                          className="rounded-md object-cover shadow-lg"
-                          data-ai-hint={visual.image.hint}
+                          className="rounded-md object-cover"
                         />
                       </div>
                     </div>
@@ -99,8 +99,8 @@ export default async function CurriculumPage() {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {content.extracurricular.map((activity, i) => (
-              <div key={activity.name} className="bg-card p-6 rounded-lg shadow-lg flex flex-col items-start hover:shadow-xl transition-shadow">
-                <div className="p-3 rounded-full bg-accent/20 mb-4">
+              <div key={activity.name} className="bg-card border-t-4 border-accent rounded-md p-6 flex flex-col items-start">
+                <div className="p-3 rounded-full bg-accent/15 mb-4">
                   {EXTRACURRICULAR_ICONS[i % EXTRACURRICULAR_ICONS.length]}
                 </div>
                 <h3 className="text-xl font-semibold text-primary mb-2">{activity.name}</h3>

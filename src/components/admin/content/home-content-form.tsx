@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { updateSiteContent } from '@/app/admin/actions';
 import type { HomeContent } from '@/lib/site-content/defaults';
 import { TextField, TextAreaField, ObjectListEditor, SaveBar } from './fields';
+import { ImageUploadField } from './image-upload-field';
 
 export function HomeContentForm({ initial }: { initial: HomeContent }) {
   const [content, setContent] = useState(initial);
@@ -45,6 +46,12 @@ export function HomeContentForm({ initial }: { initial: HomeContent }) {
           label="Subtitle"
           value={content.hero.subtitle}
           onChange={(v) => setContent({ ...content, hero: { ...content.hero, subtitle: v } })}
+        />
+        <ImageUploadField
+          label="Background image"
+          value={content.heroImage.url}
+          onChange={(url) => setContent({ ...content, heroImage: { ...content.heroImage, url } })}
+          previewClassName="h-40 w-full max-w-lg"
         />
       </section>
 

@@ -16,6 +16,7 @@ export default async function BlogPage() {
   return (
     <div>
       <PageHeader
+        eyebrow="From the school community"
         title="School Blog"
         subtitle="Stay informed with news, insights, and stories from the Sibiah Star School community."
       />

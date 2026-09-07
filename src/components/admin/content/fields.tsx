@@ -5,6 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Plus, Trash2 } from 'lucide-react';
+import { ImageUploadField } from './image-upload-field';
 
 export function TextField({
   label, value, onChange, hint,
@@ -78,7 +79,7 @@ export function ObjectListEditor<T extends Record<string, string>>({
   label: string;
   items: T[];
   onChange: (items: T[]) => void;
-  fields: { key: keyof T; label: string; multiline?: boolean }[];
+  fields: { key: keyof T; label: string; multiline?: boolean; image?: boolean; imagePreviewClassName?: string }[];
   itemLabel?: string;
   minItems?: number;
 }) {
@@ -105,26 +106,41 @@ export function ObjectListEditor<T extends Record<string, string>>({
             </div>
             {fields.map((f) => (
               <div key={String(f.key)} className="space-y-1.5">
-                <Label className="text-xs">{f.label}</Label>
-                {f.multiline ? (
-                  <Textarea
-                    rows={3}
+                {f.image ? (
+                  <ImageUploadField
+                    label={f.label}
                     value={item[f.key] ?? ''}
-                    onChange={(e) => {
+                    onChange={(url) => {
                       const next = [...items];
-                      next[i] = { ...next[i], [f.key]: e.target.value };
+                      next[i] = { ...next[i], [f.key]: url } as T;
                       onChange(next);
                     }}
+                    previewClassName={f.imagePreviewClassName ?? 'h-40 w-full max-w-sm'}
                   />
                 ) : (
-                  <Input
-                    value={item[f.key] ?? ''}
-                    onChange={(e) => {
-                      const next = [...items];
-                      next[i] = { ...next[i], [f.key]: e.target.value };
-                      onChange(next);
-                    }}
-                  />
+                  <>
+                    <Label className="text-xs">{f.label}</Label>
+                    {f.multiline ? (
+                      <Textarea
+                        rows={3}
+                        value={item[f.key] ?? ''}
+                        onChange={(e) => {
+                          const next = [...items];
+                          next[i] = { ...next[i], [f.key]: e.target.value };
+                          onChange(next);
+                        }}
+                      />
+                    ) : (
+                      <Input
+                        value={item[f.key] ?? ''}
+                        onChange={(e) => {
+                          const next = [...items];
+                          next[i] = { ...next[i], [f.key]: e.target.value };
+                          onChange(next);
+                        }}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             ))}

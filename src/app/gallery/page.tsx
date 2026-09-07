@@ -16,6 +16,7 @@ export default async function GalleryPage() {
   return (
     <div>
       <PageHeader
+        eyebrow="Life at Sibiah Star"
         title="School Gallery"
         subtitle="A glimpse into the vibrant life at Sibiah Star School. Capturing moments of learning, joy, and community."
       />
@@ -27,7 +28,7 @@ export default async function GalleryPage() {
               {images.map((image) => (
                 <div
                   key={image.id}
-                  className="group bg-card rounded-lg shadow-lg overflow-hidden transform transition-all duration-300 hover:scale-105"
+                  className="group bg-card border-t-4 border-accent rounded-md overflow-hidden transform transition-transform duration-300 hover:scale-105"
                 >
                   <div className="relative w-full aspect-[3/2]">
                     <Image

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, School } from 'lucide-react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -51,8 +51,12 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <div className="flex min-h-[70vh] items-center justify-center px-4 py-16">
-      <Card className="w-full max-w-sm">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-muted/30 px-4 py-16">
+      <div className="mb-6 flex items-center gap-2">
+        <School className="h-7 w-7 text-primary" />
+        <span className="text-lg font-semibold text-primary">Sibiah Star School</span>
+      </div>
+      <Card className="w-full max-w-sm border-t-4 border-accent shadow-none">
         <CardHeader>
           <CardTitle className="text-primary">Staff sign in</CardTitle>
           <CardDescription>

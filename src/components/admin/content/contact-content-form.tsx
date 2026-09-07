@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { updateSiteContent } from '@/app/admin/actions';
 import type { ContactContent } from '@/lib/site-content/defaults';
-import { TextField, SaveBar } from './fields';
+import { TextField, TextAreaField, SaveBar } from './fields';
 
 export function ContactContentForm({ initial }: { initial: ContactContent }) {
   const [content, setContent] = useState(initial);
@@ -23,6 +23,25 @@ export function ContactContentForm({ initial }: { initial: ContactContent }) {
 
   return (
     <div className="max-w-2xl space-y-8 pb-4">
+      <section className="space-y-4">
+        <h2 className="font-semibold text-primary">Page header</h2>
+        <TextField
+          label="Eyebrow text (small line above the title)"
+          value={content.header.eyebrow}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, eyebrow: v } })}
+        />
+        <TextField
+          label="Title"
+          value={content.header.title}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, title: v } })}
+        />
+        <TextAreaField
+          label="Subtitle"
+          value={content.header.subtitle}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, subtitle: v } })}
+        />
+      </section>
+
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Contact info block</h2>
         <p className="text-xs text-muted-foreground">

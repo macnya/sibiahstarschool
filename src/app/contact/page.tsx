@@ -20,8 +20,9 @@ export default async function ContactPage() {
   return (
     <div>
       <PageHeader
-        title="Contact Us"
-        subtitle="We're here to help and answer any questions you might have. We look forward to hearing from you!"
+        eyebrow={content.header.eyebrow}
+        title={content.header.title}
+        subtitle={content.header.subtitle}
       />
 
       <section className="py-16 md:py-20">
@@ -37,7 +38,7 @@ export default async function ContactPage() {
             <div className="space-y-8">
               <div>
                 <h2 className="text-2xl font-bold text-primary mb-6">Our Contact Information</h2>
-                <div className="bg-card p-6 rounded-lg shadow-lg space-y-4">
+                <div className="bg-card border-t-4 border-accent rounded-md p-6 space-y-4">
                   <div className="flex items-start">
                     <MapPin className="h-6 w-6 mr-3 mt-1 text-accent flex-shrink-0" />
                     <div>
@@ -74,7 +75,7 @@ export default async function ContactPage() {
               {/* Map Placeholder */}
               <div>
                 <h2 className="text-2xl font-bold text-primary mb-6">Find Us On Map</h2>
-                <div className="bg-card rounded-lg shadow-lg overflow-hidden">
+                <div className="bg-card border-t-4 border-accent rounded-md overflow-hidden">
                   {/* Replace with actual map embed code later */}
                   <div className="aspect-[16/9] bg-secondary flex items-center justify-center">
                     <p className="text-muted-foreground">Google Map will be embedded here.</p>

@@ -28,6 +28,7 @@ export type SiteContentPage = (typeof SITE_CONTENT_PAGES)[number];
 export type HomeContent = {
   hero: { title: string; highlight: string; subtitle: string };
   heroEyebrow: string;
+  heroImage: { url: string; hint: string };
   levelsHeading: string;
   levels: { title: string; description: string }[];
   highlightsHeading: string;
@@ -46,6 +47,7 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
       'Nurturing potential, inspiring futures. Discover a vibrant learning community for Pre-school, Primary, and Junior Secondary students.',
   },
   heroEyebrow: 'Admissions open — Playgroup through Grade 9',
+  heroImage: { url: 'https://placehold.co/1920x1080.png', hint: 'school campus' },
   levelsHeading: 'Our Educational Journey',
   levels: [
     {
@@ -83,17 +85,18 @@ export const DEFAULT_HOME_CONTENT: HomeContent = {
 // --- About ----------------------------------------------------------------
 
 export type AboutContent = {
-  header: { title: string; subtitle: string };
-  story: { heading: string; paragraph1: string; paragraph2: string };
+  header: { eyebrow: string; title: string; subtitle: string };
+  story: { heading: string; paragraph1: string; paragraph2: string; imageUrl: string };
   mission: { heading: string; text: string };
   vision: { heading: string; text: string };
   values: { heading: string; items: string[] };
-  director: { heading: string; name: string; title: string; quote1: string; quote2: string };
-  team: { heading: string; intro: string; members: { name: string; role: string }[] };
+  director: { heading: string; name: string; title: string; quote1: string; quote2: string; imageUrl: string };
+  team: { heading: string; intro: string; members: { name: string; role: string; imageUrl: string }[] };
 };
 
 export const DEFAULT_ABOUT_CONTENT: AboutContent = {
   header: {
+    eyebrow: 'Since [Year Founded]',
     title: 'About Sibiah Star School',
     subtitle: 'Dedicated to Excellence in Education and Character Development Since [Year Founded]',
   },
@@ -103,6 +106,7 @@ export const DEFAULT_ABOUT_CONTENT: AboutContent = {
       'Sibiah Star Pre-school, Primary & Junior School was founded with a passion for providing holistic education that nurtures both academic prowess and strong moral character. For over 20 years, we have been committed to creating a supportive and stimulating environment where students can thrive and reach their full potential. Our journey began with a small group of dedicated educators and has grown into a vibrant community recognized for its commitment to excellence.',
     paragraph2:
       'We believe in a balanced approach to education, integrating rigorous academics with enriching co-curricular activities. Our focus extends beyond textbooks to instill values such as integrity, respect, and responsibility in every student.',
+    imageUrl: '/images/SibiahStarposter.jpg',
   },
   mission: {
     heading: 'Our Mission',
@@ -124,18 +128,19 @@ export const DEFAULT_ABOUT_CONTENT: AboutContent = {
       'Welcome to Sibiah Star School! It is my pleasure to lead this wonderful institution where we are deeply committed to fostering an environment of learning, growth, and discovery. Our dedicated team of educators works tirelessly to provide an engaging curriculum that challenges and inspires our students.',
     quote2:
       'We believe that education is a partnership between the school, parents, and the community. Together, we can help our students develop the skills, knowledge, and character necessary to succeed in an ever-changing world. We invite you to explore our website and learn more about the exciting opportunities at Sibiah Star.',
+    imageUrl: 'https://placehold.co/150x150.png',
   },
   team: {
     heading: 'Our Dedicated Team',
     intro:
       'At Sibiah Star, we are proud of our team of experienced and passionate educators and staff who are committed to providing the best possible learning experience for our students. They are the heart of our school community.',
     members: [
-      { name: 'Tr. Raphael Odongo', role: 'Head of Primary' },
-      { name: 'Ms. Moraa Ojiambo', role: 'Head of Administration & Finance' },
-      { name: 'Tr. Martin', role: 'Junior Secondary Coordinator' },
-      { name: 'Ms. Fanne Mwambi', role: 'Administration & Communication' },
-      { name: 'Tr. Emmanuel Odongo', role: 'Transport Coordinator' },
-      { name: 'Tr. Sam', role: 'Head of Clubs & Co-curriculum' },
+      { name: 'Tr. Raphael Odongo', role: 'Head of Primary', imageUrl: 'https://placehold.co/200x200.png' },
+      { name: 'Ms. Moraa Ojiambo', role: 'Head of Administration & Finance', imageUrl: 'https://placehold.co/200x200.png' },
+      { name: 'Tr. Martin', role: 'Junior Secondary Coordinator', imageUrl: 'https://placehold.co/200x200.png' },
+      { name: 'Ms. Fanne Mwambi', role: 'Administration & Communication', imageUrl: 'https://placehold.co/200x200.png' },
+      { name: 'Tr. Emmanuel Odongo', role: 'Transport Coordinator', imageUrl: 'https://placehold.co/200x200.png' },
+      { name: 'Tr. Sam', role: 'Head of Clubs & Co-curriculum', imageUrl: 'https://placehold.co/200x200.png' },
     ],
   },
 };
@@ -195,24 +200,25 @@ export const DEFAULT_ADMISSIONS_CONTENT: AdmissionsContent = {
 // --- Facilities -------------------------------------------------------------
 
 export type FacilitiesContent = {
-  header: { title: string; subtitle: string };
-  facilities: { name: string; description: string }[];
-  transport: { heading: string; paragraph: string; features: string[]; closing: string };
+  header: { eyebrow: string; title: string; subtitle: string };
+  facilities: { name: string; description: string; imageUrl: string }[];
+  transport: { heading: string; paragraph: string; features: string[]; closing: string; imageUrl: string };
   amenitiesHeading: string;
   amenities: { name: string }[];
 };
 
 export const DEFAULT_FACILITIES_CONTENT: FacilitiesContent = {
   header: {
+    eyebrow: 'Built for how children learn',
     title: 'Our Facilities',
     subtitle: 'Explore the modern, safe, and stimulating environment we provide for our students to learn and grow.',
   },
   facilities: [
-    { name: 'Spacious Classrooms', description: 'Bright, airy, and well-equipped classrooms designed to foster an optimal learning environment. Each classroom is fitted with modern teaching aids.' },
-    { name: 'Science Laboratories', description: 'State-of-the-art science labs for Physics, Chemistry, and Biology, allowing students to engage in practical experiments and discovery.' },
-    { name: 'Computer & ICT Lab', description: 'Fully equipped computer lab with internet access and modern software to enhance digital literacy and ICT skills.' },
-    { name: 'Library & Resource Center', description: 'A well-stocked library with a wide range of books, journals, and digital resources to support research and encourage reading habits.' },
-    { name: 'Sports Grounds & Play Areas', description: 'Expansive sports fields for various outdoor games and dedicated play areas for younger children, promoting physical fitness and teamwork.' },
+    { name: 'Spacious Classrooms', description: 'Bright, airy, and well-equipped classrooms designed to foster an optimal learning environment. Each classroom is fitted with modern teaching aids.', imageUrl: 'https://placehold.co/600x400.png' },
+    { name: 'Science Laboratories', description: 'State-of-the-art science labs for Physics, Chemistry, and Biology, allowing students to engage in practical experiments and discovery.', imageUrl: 'https://placehold.co/600x400.png' },
+    { name: 'Computer & ICT Lab', description: 'Fully equipped computer lab with internet access and modern software to enhance digital literacy and ICT skills.', imageUrl: 'https://placehold.co/600x400.png' },
+    { name: 'Library & Resource Center', description: 'A well-stocked library with a wide range of books, journals, and digital resources to support research and encourage reading habits.', imageUrl: 'https://placehold.co/600x400.png' },
+    { name: 'Sports Grounds & Play Areas', description: 'Expansive sports fields for various outdoor games and dedicated play areas for younger children, promoting physical fitness and teamwork.', imageUrl: 'https://placehold.co/600x400.png' },
   ],
   transport: {
     heading: 'Transportation Services',
@@ -227,6 +233,7 @@ export const DEFAULT_FACILITIES_CONTENT: FacilitiesContent = {
     ],
     closing:
       'We strive to make the daily commute safe, convenient, and stress-free for both students and parents. For more details on routes and fees, please contact our administration office.',
+    imageUrl: 'https://placehold.co/600x450.png',
   },
   amenitiesHeading: 'Other Amenities',
   amenities: [
@@ -238,10 +245,10 @@ export const DEFAULT_FACILITIES_CONTENT: FacilitiesContent = {
 
 // --- Curriculum -------------------------------------------------------------
 
-export type CurriculumLevel = { title: string; description: string; keyAreas: string[] };
+export type CurriculumLevel = { title: string; description: string; keyAreas: string[]; imageUrl: string };
 
 export type CurriculumContent = {
-  header: { title: string; subtitle: string };
+  header: { eyebrow: string; title: string; subtitle: string };
   levelsHeading: string;
   levels: {
     preschool: CurriculumLevel;
@@ -257,6 +264,7 @@ export type CurriculumContent = {
 
 export const DEFAULT_CURRICULUM_CONTENT: CurriculumContent = {
   header: {
+    eyebrow: 'Playgroup through Grade 9',
     title: 'Our Curriculum',
     subtitle: "A comprehensive and engaging educational experience designed to unlock every student's potential.",
   },
@@ -273,6 +281,7 @@ export const DEFAULT_CURRICULUM_CONTENT: CurriculumContent = {
         'Creative Arts & Expression',
         'Introduction to Environmental Awareness',
       ],
+      imageUrl: 'https://placehold.co/600x400.png',
     },
     primary: {
       title: 'Primary School (Grade 1 - 6)',
@@ -285,6 +294,7 @@ export const DEFAULT_CURRICULUM_CONTENT: CurriculumContent = {
         'Creative Arts (Music, Art)',
         'Physical Education & Health',
       ],
+      imageUrl: 'https://placehold.co/600x400.png',
     },
     juniorSecondary: {
       title: 'Junior Secondary School (Grade 7 - 9)',
@@ -297,6 +307,7 @@ export const DEFAULT_CURRICULUM_CONTENT: CurriculumContent = {
         'Life Skills Education',
         'Guidance & Counseling',
       ],
+      imageUrl: 'https://placehold.co/600x400.png',
     },
   },
   extracurricularHeading: 'Extracurricular Activities',
@@ -317,6 +328,7 @@ export const DEFAULT_CURRICULUM_CONTENT: CurriculumContent = {
 // --- Contact info block -----------------------------------------------------
 
 export type ContactContent = {
+  header: { eyebrow: string; title: string; subtitle: string };
   address: string;
   phoneDisplay: string;
   phoneHref: string;
@@ -325,9 +337,14 @@ export type ContactContent = {
 };
 
 export const DEFAULT_CONTACT_CONTENT: ContactContent = {
+  header: {
+    eyebrow: "We'd love to hear from you",
+    title: 'Contact Us',
+    subtitle: "We're here to help and answer any questions you might have. We look forward to hearing from you!",
+  },
   address: 'Sibiah Star School, Baraka Mowlem, Behind Kinyago Secondary School, Nairobi.',
-  phoneDisplay: '(123) 456-7890',
-  phoneHref: '+1234567890',
+  phoneDisplay: '(254) 721-412004',
+  phoneHref: '+254721412004',
   email: 'sibiahstarschool@gmail.com',
   officeHours: {
     weekday: 'Monday - Friday: 8:00 AM - 4:00 PM',

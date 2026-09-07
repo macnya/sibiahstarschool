@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { updateSiteContent } from '@/app/admin/actions';
 import type { FacilitiesContent } from '@/lib/site-content/defaults';
 import { TextField, TextAreaField, StringListEditor, ObjectListEditor, SaveBar } from './fields';
+import { ImageUploadField } from './image-upload-field';
 
 export function FacilitiesContentForm({ initial }: { initial: FacilitiesContent }) {
   const [content, setContent] = useState(initial);
@@ -26,6 +27,11 @@ export function FacilitiesContentForm({ initial }: { initial: FacilitiesContent 
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Page header</h2>
         <TextField
+          label="Eyebrow text (small line above the title)"
+          value={content.header.eyebrow}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, eyebrow: v } })}
+        />
+        <TextField
           label="Title"
           value={content.header.title}
           onChange={(v) => setContent({ ...content, header: { ...content.header, title: v } })}
@@ -40,7 +46,7 @@ export function FacilitiesContentForm({ initial }: { initial: FacilitiesContent 
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Facilities</h2>
         <p className="text-xs text-muted-foreground">
-          Photos/icons cycle automatically and aren&apos;t editable here — only the name and description.
+          The icon shown on each card cycles automatically and isn&apos;t editable here.
         </p>
         <ObjectListEditor
           label="Facility list"
@@ -49,6 +55,7 @@ export function FacilitiesContentForm({ initial }: { initial: FacilitiesContent 
           fields={[
             { key: 'name', label: 'Name' },
             { key: 'description', label: 'Description', multiline: true },
+            { key: 'imageUrl', label: 'Photo', image: true },
           ]}
           itemLabel="Facility"
         />
@@ -77,6 +84,11 @@ export function FacilitiesContentForm({ initial }: { initial: FacilitiesContent 
           label="Closing paragraph"
           value={content.transport.closing}
           onChange={(v) => setContent({ ...content, transport: { ...content.transport, closing: v } })}
+        />
+        <ImageUploadField
+          label="Photo (bus / transport)"
+          value={content.transport.imageUrl}
+          onChange={(url) => setContent({ ...content, transport: { ...content.transport, imageUrl: url } })}
         />
       </section>
 

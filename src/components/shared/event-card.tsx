@@ -17,7 +17,7 @@ export interface EventProps {
 
 export const EventCard: FC<EventProps> = ({ title, date, location, description, imageUrl, imageHint, slug }) => {
   return (
-    <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+    <Card className="flex flex-col h-full border-t-4 border-accent rounded-md overflow-hidden">
       <div className="relative w-full h-48">
         <Image
           src={imageUrl}

@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =========================================================================
+ * SIBIAH STAR — LOCKED BRAND PALETTE
+ * -------------------------------------------------------------------------
+ * Deep navy blue + gold is the final, approved color direction for the
+ * site. Every color used anywhere in the app (Tailwind config, components,
+ * the homepage, admissions, and every other page) reads from the CSS
+ * variables below — this file is the single source of truth.
+ *
+ * Do not introduce a different palette on a new page or component. If a
+ * color needs to change, change it here so it updates everywhere at once.
+ *
+ *   --primary  → Deep Navy Blue  (#00308F)  — headers, hero bands, nav
+ *   --accent   → Gold            (#FFD700)  — CTAs, numbered markers, highlights
+ * ========================================================================= */
+
 @layer base {
   :root {
     --background: 210 40% 98%; /* Light Grey-Blue */
@@ -13,7 +28,7 @@
     --popover: 210 40% 96%;
     --popover-foreground: 220 10% 10%;
 
-    --primary: 220 100% 28%; /* Deep Blue (#00308F) */
+    --primary: 220 100% 28%; /* Deep Blue (#00308F) — locked brand color */
     --primary-foreground: 210 40% 98%; /* Light Grey-Blue for text on primary */
 
     --secondary: 195 53% 79%; /* Light Blue (#ADD8E6) */
@@ -22,7 +37,7 @@
     --muted: 195 50% 90%; /* Lighter version of secondary */
     --muted-foreground: 220 10% 40%; /* Softer foreground for muted text */
 
-    --accent: 51 100% 50%; /* Gold (#FFD700) */
+    --accent: 51 100% 50%; /* Gold (#FFD700) — locked brand color */
     --accent-foreground: 220 100% 15%; /* Dark blue text on gold */
 
     --destructive: 0 84.2% 60.2%;

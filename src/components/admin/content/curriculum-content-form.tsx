@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { updateSiteContent } from '@/app/admin/actions';
 import type { CurriculumContent, CurriculumLevel } from '@/lib/site-content/defaults';
 import { TextField, TextAreaField, StringListEditor, ObjectListEditor, SaveBar } from './fields';
+import { ImageUploadField } from './image-upload-field';
 
 const LEVEL_KEYS: { key: keyof CurriculumContent['levels']; label: string }[] = [
   { key: 'preschool', label: 'Pre-school' },
@@ -38,6 +39,11 @@ export function CurriculumContentForm({ initial }: { initial: CurriculumContent 
     <div className="max-w-2xl space-y-8 pb-4">
       <section className="space-y-4">
         <h2 className="font-semibold text-primary">Page header</h2>
+        <TextField
+          label="Eyebrow text (small line above the title)"
+          value={content.header.eyebrow}
+          onChange={(v) => setContent({ ...content, header: { ...content.header, eyebrow: v } })}
+        />
         <TextField
           label="Title"
           value={content.header.title}
@@ -78,6 +84,11 @@ export function CurriculumContentForm({ initial }: { initial: CurriculumContent 
                 items={level.keyAreas}
                 onChange={(keyAreas) => updateLevel(key, { keyAreas })}
                 itemLabel="Area"
+              />
+              <ImageUploadField
+                label="Photo"
+                value={level.imageUrl}
+                onChange={(url) => updateLevel(key, { imageUrl: url })}
               />
             </div>
           );
