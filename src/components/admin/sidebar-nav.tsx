@@ -2,18 +2,31 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import type { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  LayoutDashboard, FilePen, CalendarDays, Newspaper, Images, Mail,
+} from 'lucide-react';
 
-type NavItem = { href: string; label: string; icon: LucideIcon };
+// Defined here, inside the Client Component, rather than passed in as a
+// prop from the server layout. Icon *components* (as opposed to already-
+// rendered JSX) can't be serialized across the server->client boundary —
+// passing them as props from a Server Component throws at render time.
+const NAV = [
+  { href: '/admin',          label: 'Overview', icon: LayoutDashboard },
+  { href: '/admin/content',  label: 'Content',  icon: FilePen },
+  { href: '/admin/events',   label: 'Events',   icon: CalendarDays },
+  { href: '/admin/blog',     label: 'Blog',     icon: Newspaper },
+  { href: '/admin/gallery',  label: 'Gallery',  icon: Images },
+  { href: '/admin/messages', label: 'Messages', icon: Mail },
+];
 
-export function AdminSidebarNav({ items }: { items: NavItem[] }) {
+export function AdminSidebarNav() {
   const pathname = usePathname();
 
   return (
     <nav className="md:w-52 shrink-0">
       <ul className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
-        {items.map(({ href, label, icon: Icon }) => {
+        {NAV.map(({ href, label, icon: Icon }) => {
           // Exact match for the overview link (it's a prefix of every
           // other admin route); startsWith for the rest so a sub-page
           // like /admin/blog/new still highlights "Blog".

@@ -4,21 +4,10 @@ import { createClient } from '@/lib/supabase/server';
 import { signOut } from '../auth-actions';
 import { Button } from '@/components/ui/button';
 import { AdminSidebarNav } from '@/components/admin/sidebar-nav';
-import {
-  LayoutDashboard, CalendarDays, Newspaper, Images, Mail, LogOut, ExternalLink, FileEdit,
-} from 'lucide-react';
+import { LogOut, ExternalLink } from 'lucide-react';
 
 // The admin panel must never be cached or statically rendered.
 export const dynamic = 'force-dynamic';
-
-const NAV = [
-  { href: '/admin',          label: 'Overview', icon: LayoutDashboard },
-  { href: '/admin/content',  label: 'Content',  icon: FileEdit },
-  { href: '/admin/events',   label: 'Events',   icon: CalendarDays },
-  { href: '/admin/blog',     label: 'Blog',     icon: Newspaper },
-  { href: '/admin/gallery',  label: 'Gallery',  icon: Images },
-  { href: '/admin/messages', label: 'Messages', icon: Mail },
-];
 
 export default async function AdminLayout({
   children,
@@ -69,7 +58,7 @@ export default async function AdminLayout({
       </header>
 
       <div className="container mx-auto flex flex-col gap-8 px-4 py-8 md:flex-row">
-        <AdminSidebarNav items={NAV} />
+        <AdminSidebarNav />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>
