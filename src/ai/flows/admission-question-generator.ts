@@ -1,5 +1,3 @@
-// This file is machine-generated - do not edit!
-
 'use server';
 
 /**
@@ -12,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import {SCHOOL_ADMISSION_POLICIES} from '@/ai/school-policies';
 
 const AdmissionQuestionsInputSchema = z.object({
   childAge: z
@@ -44,15 +43,22 @@ const prompt = ai.definePrompt({
   name: 'admissionQuestionGeneratorPrompt',
   input: {schema: AdmissionQuestionsInputSchema},
   output: {schema: AdmissionQuestionsOutputSchema},
-  prompt: `You are an AI assistant designed to help parents prepare for school admission interviews.
+  prompt: `You are an AI assistant designed to help parents prepare for their admission discussion with Sibiah Star Pre-school, Primary & Junior School.
 
-  Based on the child's age and any learning considerations, generate a list of anticipated questions that the parent should ask the admissions office.
+Below is the school's own admission policy text. Use it so your questions are specific to how this school actually operates (its levels, document requirements, fee terms, etc.) rather than generic — but only reference details that are actually in the policy text; where the policy text itself says something needs to be confirmed with the school, that is exactly the kind of thing a parent should be prompted to ask about.
 
-  Child's Age: {{{childAge}}}
-  Learning Considerations: {{{learningConsiderations}}}
+SCHOOL POLICY TEXT:
+"""
+${SCHOOL_ADMISSION_POLICIES}
+"""
 
-  Please provide the questions in a clear, concise list format.
-  `,
+Based on the child's age and any learning considerations below, generate a list of anticipated questions that the parent should ask the admissions office.
+
+Child's Age: {{{childAge}}}
+Learning Considerations: {{{learningConsiderations}}}
+
+Please provide the questions in a clear, concise list format.
+`,
 });
 
 const generateAdmissionQuestionsFlow = ai.defineFlow(
