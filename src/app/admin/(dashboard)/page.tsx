@@ -9,10 +9,13 @@ export default async function AdminOverviewPage() {
   const counts = await getDashboardCounts();
 
   const stats = [
-    { label: 'Events',        value: counts.events,  href: '/admin/events' },
-    { label: 'Blog posts',    value: counts.posts,   href: '/admin/blog' },
-    { label: 'Gallery photos',value: counts.images,  href: '/admin/gallery' },
-    { label: 'New messages',  value: counts.unreadMessages, href: '/admin/messages' },
+    { label: 'Events',              value: counts.events,                    href: '/admin/events' },
+    { label: 'Blog posts',          value: counts.posts,                     href: '/admin/blog' },
+    { label: 'Gallery photos',      value: counts.images,                    href: '/admin/gallery' },
+    { label: 'New messages',        value: counts.unreadMessages,            href: '/admin/messages' },
+    { label: 'Pending scholarship applications', value: counts.pendingScholarshipRequests, href: '/admin/scholarships' },
+    { label: 'Pending sponsor offers',           value: counts.pendingSponsorRequests,     href: '/admin/scholarships' },
+    { label: 'Active scholarships', value: counts.activeScholarships,        href: '/admin/scholarships' },
   ];
 
   return (
@@ -47,6 +50,7 @@ export default async function AdminOverviewPage() {
           <Button asChild size="sm"><Link href="/admin/events/new">Add an event</Link></Button>
           <Button asChild size="sm" variant="secondary"><Link href="/admin/blog/new">Write a post</Link></Button>
           <Button asChild size="sm" variant="secondary"><Link href="/admin/gallery">Upload photos</Link></Button>
+          <Button asChild size="sm" variant="secondary"><Link href="/admin/scholarships">Review scholarships</Link></Button>
         </CardContent>
       </Card>
     </div>

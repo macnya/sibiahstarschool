@@ -269,6 +269,118 @@ export async function deleteMessage(formData: FormData) {
   revalidatePath('/admin/messages');
 }
 
+// --- scholarship requests (parents applying) ---------------------------
+
+export async function updateScholarshipStatus(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('scholarship_requests')
+    .update({ status: String(formData.get('status')) })
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
+export async function deleteScholarshipRequest(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('scholarship_requests')
+    .delete()
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
+// --- sponsor requests (prospective sponsors) ----------------------------
+
+export async function updateSponsorStatus(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('sponsor_requests')
+    .update({ status: String(formData.get('status')) })
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
+export async function deleteSponsorRequest(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('sponsor_requests')
+    .delete()
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
+// --- active scholarships (matched student + sponsor pairs) ---------------
+//
+// Created directly by staff once a match is agreed, so this uses the
+// same plain <form action={fn}> pattern as the toggles above rather than
+// the useActionState-driven forms events/posts/gallery use — there's no
+// separate client form component to keep field-level errors in sync
+// with, since the admin page itself renders this inline.
+
+export async function createActiveScholarship(formData: FormData) {
+  const supabase = await requireEditor();
+
+  const student_name = String(formData.get('student_name') ?? '').trim();
+  const sponsor_name = String(formData.get('sponsor_name') ?? '').trim();
+  const start_date = String(formData.get('start_date') ?? '').trim();
+  if (!student_name || !sponsor_name || !start_date) {
+    // The form fields are marked required, so this only fires on a
+    // direct/malformed submission — nothing useful to show a user here.
+    return;
+  }
+
+  const student_level = String(formData.get('student_level') ?? '').trim() || null;
+  const sponsor_email = String(formData.get('sponsor_email') ?? '').trim() || null;
+  const sponsor_phone = String(formData.get('sponsor_phone') ?? '').trim() || null;
+  const notes = String(formData.get('notes') ?? '').trim() || null;
+  const scholarship_request_id = String(formData.get('scholarship_request_id') ?? '').trim() || null;
+  const sponsor_request_id = String(formData.get('sponsor_request_id') ?? '').trim() || null;
+
+  const { error } = await supabase.from('active_scholarships').insert({
+    student_name,
+    student_level,
+    sponsor_name,
+    sponsor_email,
+    sponsor_phone,
+    notes,
+    start_date,
+    scholarship_request_id,
+    sponsor_request_id,
+  });
+
+  if (error) console.error('createActiveScholarship:', error.message);
+
+  // Matching a request usually means it's no longer "pending" — mark
+  // whichever source requests were linked as matched/approved so they
+  // drop out of the pending queues automatically.
+  if (scholarship_request_id) {
+    await supabase.from('scholarship_requests').update({ status: 'approved' }).eq('id', scholarship_request_id);
+  }
+  if (sponsor_request_id) {
+    await supabase.from('sponsor_requests').update({ status: 'matched' }).eq('id', sponsor_request_id);
+  }
+
+  revalidatePath('/admin/scholarships');
+}
+
+export async function updateActiveScholarshipStatus(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('active_scholarships')
+    .update({ status: String(formData.get('status')) })
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
+export async function deleteActiveScholarship(formData: FormData) {
+  const supabase = await requireEditor();
+  await supabase
+    .from('active_scholarships')
+    .delete()
+    .eq('id', String(formData.get('id')));
+  revalidatePath('/admin/scholarships');
+}
+
 // --- site content -------------------------------------------------------
 //
 // Unlike the forms above, the content editor works with a nested JSON

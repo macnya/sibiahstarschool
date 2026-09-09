@@ -1,9 +1,10 @@
 
+
 "use client";
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, CalendarDays, Newspaper } from 'lucide-react';
+import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, CalendarDays, Newspaper, HeartHandshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
@@ -15,6 +16,7 @@ const navLinks = [
   { href: '/admissions', label: 'Admissions', icon: Users },
   { href: '/curriculum', label: 'Curriculum', icon: BookOpen },
   { href: '/facilities', label: 'Facilities', icon: Building },
+  { href: '/scholarships', label: 'Scholarships', icon: HeartHandshake },
   { href: '/gallery', label: 'Gallery', icon: ImageIcon },
   { href: '/blog', label: 'Blog', icon: Newspaper },
   { href: '/events', label: 'Events', icon: CalendarDays },

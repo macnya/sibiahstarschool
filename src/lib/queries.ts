@@ -7,6 +7,9 @@ import type {
   BlogPostRow,
   GalleryImageRow,
   ContactMessageRow,
+  ScholarshipRequestRow,
+  SponsorRequestRow,
+  ActiveScholarshipRow,
 } from '@/lib/supabase/types';
 
 /**
@@ -162,15 +165,46 @@ export async function getContactMessages(): Promise<ContactMessageRow[]> {
   return data ?? [];
 }
 
+export async function getScholarshipRequests(): Promise<ScholarshipRequestRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('scholarship_requests')
+    .select('*')
+    .order('created_at', { ascending: false });
+  return data ?? [];
+}
+
+export async function getSponsorRequests(): Promise<SponsorRequestRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('sponsor_requests')
+    .select('*')
+    .order('created_at', { ascending: false });
+  return data ?? [];
+}
+
+export async function getActiveScholarships(): Promise<ActiveScholarshipRow[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('active_scholarships')
+    .select('*')
+    .order('status', { ascending: true })
+    .order('start_date', { ascending: false });
+  return data ?? [];
+}
+
 export async function getDashboardCounts() {
   const supabase = await createClient();
   const count = { count: 'exact' as const, head: true };
 
-  const [events, posts, images, unread] = await Promise.all([
+  const [events, posts, images, unread, scholarshipRequests, sponsorRequests, activeScholarships] = await Promise.all([
     supabase.from('events').select('*', count),
     supabase.from('blog_posts').select('*', count),
     supabase.from('gallery_images').select('*', count),
     supabase.from('contact_messages').select('*', count).eq('handled', false),
+    supabase.from('scholarship_requests').select('*', count).eq('status', 'pending'),
+    supabase.from('sponsor_requests').select('*', count).eq('status', 'pending'),
+    supabase.from('active_scholarships').select('*', count).eq('status', 'active'),
   ]);
 
   return {
@@ -178,5 +212,8 @@ export async function getDashboardCounts() {
     posts: posts.count ?? 0,
     images: images.count ?? 0,
     unreadMessages: unread.count ?? 0,
+    pendingScholarshipRequests: scholarshipRequests.count ?? 0,
+    pendingSponsorRequests: sponsorRequests.count ?? 0,
+    activeScholarships: activeScholarships.count ?? 0,
   };
 }

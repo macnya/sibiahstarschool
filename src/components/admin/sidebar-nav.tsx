@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
-  LayoutDashboard, FilePen, CalendarDays, Newspaper, Images, Mail,
+  LayoutDashboard, FilePen, CalendarDays, Newspaper, Images, Mail, HeartHandshake,
 } from 'lucide-react';
 
 // Defined here, inside the Client Component, rather than passed in as a
@@ -12,12 +12,13 @@ import {
 // rendered JSX) can't be serialized across the server->client boundary —
 // passing them as props from a Server Component throws at render time.
 const NAV = [
-  { href: '/admin',          label: 'Overview', icon: LayoutDashboard },
-  { href: '/admin/content',  label: 'Content',  icon: FilePen },
-  { href: '/admin/events',   label: 'Events',   icon: CalendarDays },
-  { href: '/admin/blog',     label: 'Blog',     icon: Newspaper },
-  { href: '/admin/gallery',  label: 'Gallery',  icon: Images },
-  { href: '/admin/messages', label: 'Messages', icon: Mail },
+  { href: '/admin',              label: 'Overview',      icon: LayoutDashboard },
+  { href: '/admin/content',      label: 'Content',       icon: FilePen },
+  { href: '/admin/events',       label: 'Events',        icon: CalendarDays },
+  { href: '/admin/blog',         label: 'Blog',           icon: Newspaper },
+  { href: '/admin/gallery',      label: 'Gallery',        icon: Images },
+  { href: '/admin/scholarships', label: 'Scholarships',   icon: HeartHandshake },
+  { href: '/admin/messages',     label: 'Messages',       icon: Mail },
 ];
 
 export function AdminSidebarNav() {

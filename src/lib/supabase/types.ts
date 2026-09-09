@@ -1,7 +1,8 @@
 /**
  * Database types.
  *
- * Written by hand to match supabase/migrations/0001_init.sql.
+ * Written by hand to match supabase/migrations/0001_init.sql through
+ * 0004_scholarships.sql.
  *
  * The shape below is not arbitrary: supabase-js constrains the schema
  * generic to `GenericSchema`, which requires Tables / Views / Functions /
@@ -16,22 +17,14 @@
 
 export type UserRole = 'admin' | 'editor' | 'teacher' | 'student' | 'parent';
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json }
-  | Json[];
-
-export type ProfileRow = {
+export interface ProfileRow {
   id: string;
   full_name: string | null;
   role: UserRole;
   created_at: string;
 }
 
-export type EventRow = {
+export interface EventRow {
   id: string;
   title: string;
   slug: string;
@@ -45,7 +38,7 @@ export type EventRow = {
   updated_at: string;
 }
 
-export type BlogPostRow = {
+export interface BlogPostRow {
   id: string;
   title: string;
   slug: string;
@@ -60,7 +53,7 @@ export type BlogPostRow = {
   updated_at: string;
 }
 
-export type GalleryImageRow = {
+export interface GalleryImageRow {
   id: string;
   image_url: string;
   alt_text: string;
@@ -71,7 +64,7 @@ export type GalleryImageRow = {
   created_at: string;
 }
 
-export type ContactMessageRow = {
+export interface ContactMessageRow {
   id: string;
   name: string;
   email: string;
@@ -82,9 +75,48 @@ export type ContactMessageRow = {
   created_at: string;
 }
 
-export type SiteContentRow = {
-  page: string;
-  content: Json;
+export type ScholarshipRequestStatus = 'pending' | 'approved' | 'declined';
+
+export interface ScholarshipRequestRow {
+  id: string;
+  parent_name: string;
+  phone: string;
+  email: string;
+  student_name: string;
+  student_level: string;
+  reason: string;
+  status: ScholarshipRequestStatus;
+  created_at: string;
+}
+
+export type SponsorRequestStatus = 'pending' | 'contacted' | 'matched' | 'declined';
+
+export interface SponsorRequestRow {
+  id: string;
+  sponsor_name: string;
+  organization: string | null;
+  phone: string;
+  email: string;
+  message: string | null;
+  status: SponsorRequestStatus;
+  created_at: string;
+}
+
+export type ActiveScholarshipStatus = 'active' | 'completed';
+
+export interface ActiveScholarshipRow {
+  id: string;
+  student_name: string;
+  student_level: string | null;
+  sponsor_name: string;
+  sponsor_email: string | null;
+  sponsor_phone: string | null;
+  notes: string | null;
+  start_date: string;
+  status: ActiveScholarshipStatus;
+  scholarship_request_id: string | null;
+  sponsor_request_id: string | null;
+  created_at: string;
   updated_at: string;
 }
 
@@ -94,7 +126,7 @@ type Generated = 'id' | 'created_at' | 'updated_at';
 type Insertable<Row> = Omit<Row, Generated & keyof Row> &
   Partial<Pick<Row, Generated & keyof Row>>;
 
-export type Database = {
+export interface Database {
   public: {
     Tables: {
       profiles: {
@@ -127,10 +159,22 @@ export type Database = {
         Update: Partial<ContactMessageRow>;
         Relationships: [];
       };
-      site_content: {
-        Row: SiteContentRow;
-        Insert: Partial<SiteContentRow> & Pick<SiteContentRow, 'page'>;
-        Update: Partial<SiteContentRow>;
+      scholarship_requests: {
+        Row: ScholarshipRequestRow;
+        Insert: Insertable<ScholarshipRequestRow>;
+        Update: Partial<ScholarshipRequestRow>;
+        Relationships: [];
+      };
+      sponsor_requests: {
+        Row: SponsorRequestRow;
+        Insert: Insertable<SponsorRequestRow>;
+        Update: Partial<SponsorRequestRow>;
+        Relationships: [];
+      };
+      active_scholarships: {
+        Row: ActiveScholarshipRow;
+        Insert: Insertable<ActiveScholarshipRow>;
+        Update: Partial<ActiveScholarshipRow>;
         Relationships: [];
       };
     };
