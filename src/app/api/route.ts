@@ -13,8 +13,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'not found' }, { status: 404 });
   }
 
-  const geminiKeySet = Boolean(process.env.GEMINI_API_KEY);
-  const googleKeySet = Boolean(process.env.GOOGLE_API_KEY);
+  const anthropicKeySet = Boolean(process.env.ANTHROPIC_API_KEY);
 
   let callResult: { ok: true; answer: string } | { ok: false; message: string };
   try {
@@ -28,8 +27,7 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json({
-    geminiKeySet,
-    googleKeySet,
+    anthropicKeySet,
     nodeVersion: process.version,
     callResult,
   });
