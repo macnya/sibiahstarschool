@@ -6,8 +6,7 @@ const config: NextConfig = {
   output: 'standalone',
 
   typescript: { ignoreBuildErrors: false },
-  eslint: { ignoreDuringBuilds: false },
-
+  
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'placehold.co', pathname: '/**' },

@@ -1,0 +1,92 @@
+
+> sibiahstarschool@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.3.2
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 8.0s
+   Linting and checking validity of types ...
+   Collecting page data ...
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+   Generating static pages (0/21) ...
+RootLayout: Attempting to render RootLayout (src/app/layout.tsx)
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+   Generating static pages (5/21) 
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+RootLayout: Inside RootLayout component render function.
+   Generating static pages (10/21) 
+   Generating static pages (15/21) 
+ Γ£ô Generating static pages (21/21)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS  Revalidate  Expire
+Γöî ╞Æ /                                      187 B         110 kB
+Γö£ Γùï /_not-found                            171 B         101 kB
+Γö£ ╞Æ /about                                 507 B         107 kB
+Γö£ ╞Æ /admin                                 190 B         105 kB
+Γö£ ╞Æ /admin/blog                          2.81 kB         116 kB
+Γö£ ╞Æ /admin/blog/[id]                     1.61 kB         196 kB
+Γö£ ╞Æ /admin/blog/new                      1.61 kB         196 kB
+Γö£ ╞Æ /admin/content                         190 B         105 kB
+Γö£ ╞Æ /admin/content/[page]                7.65 kB         195 kB
+Γö£ ╞Æ /admin/events                        2.81 kB         116 kB
+Γö£ ╞Æ /admin/events/[id]                   1.48 kB         196 kB
+Γö£ ╞Æ /admin/events/new                    1.48 kB         196 kB
+Γö£ ╞Æ /admin/gallery                       2.34 kB         194 kB
+Γö£ Γùï /admin/login                         4.45 kB         115 kB
+Γö£ ╞Æ /admin/messages                      2.79 kB         113 kB
+Γö£ ╞Æ /admin/scholarships                  4.63 kB         122 kB
+Γö£ ╞Æ /admissions                            190 B         105 kB
+Γö£ Γùï /admissions/ai-guide                 7.66 kB         151 kB
+Γö£ ╞Æ /api                                   171 B         101 kB
+Γö£ Γùï /blog                                  190 B         110 kB          1m      1y
+Γö£ ╞Æ /contact                             4.22 kB         173 kB
+Γö£ ╞Æ /curriculum                          3.16 kB         126 kB
+Γö£ Γùï /events                                190 B         110 kB          1m      1y
+Γö£ ╞Æ /facilities                            507 B         107 kB
+Γö£ Γùï /gallery                               507 B         107 kB          1m      1y
+Γö£ Γùï /parent-portal                         171 B         101 kB
+Γö£ Γùï /parent-portal/dashboard               171 B         101 kB
+Γö£ Γùï /parent-portal/register                171 B         101 kB
+Γö£ Γùï /register                              190 B         105 kB
+Γö£ Γùï /scholarships                         7.8 kB         177 kB
+Γö£ Γùï /student-portal                        171 B         101 kB
+Γö£ Γùï /student-portal/dashboard              171 B         101 kB
+Γö£ Γùï /student-portal/register               171 B         101 kB
+Γö£ Γùï /teacher-portal                        171 B         101 kB
+Γö£ Γùï /teacher-portal/dashboard              171 B         101 kB
+Γöö Γùï /teacher-portal/register               171 B         101 kB
++ First Load JS shared by all             101 kB
+  Γö£ chunks/1684-18e155c17e9aef56.js      45.9 kB
+  Γö£ chunks/4bd1b696-1eeb03cfb9ea9fe0.js  53.2 kB
+  Γöö other shared chunks (total)             2 kB
+
+
+╞Æ Middleware                             90.2 kB
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+
