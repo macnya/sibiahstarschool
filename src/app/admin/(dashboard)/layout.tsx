@@ -32,6 +32,15 @@ export default async function AdminLayout({
     redirect('/admin/login');
   }
 
+  // Group admins see everything; an admin attached to a campus only sees
+  // admissions + students for that campus; editors keep their old menu.
+  const scope = profile.role === 'admin' ? (profile.campus_id ? 'campus' : 'group') : 'editor';
+  let campusName: string | null = null;
+  if (profile.campus_id) {
+    const { data: campus } = await supabase.from('campuses').select('name').eq('id', profile.campus_id).maybeSingle();
+    campusName = (campus as { name: string } | null)?.name ?? null;
+  }
+
   return (
     <div className="min-h-screen bg-muted/30">
       <header className="bg-primary text-primary-foreground">
@@ -39,7 +48,7 @@ export default async function AdminLayout({
           <div className="flex items-center gap-3">
             <span className="font-semibold">Sibiah Star admin</span>
             <span className="rounded bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">
-              {profile.role}
+              {profile.role}{campusName ? ` · ${campusName}` : ''}
             </span>
           </div>
           <div className="flex items-center gap-2">
@@ -58,7 +67,7 @@ export default async function AdminLayout({
       </header>
 
       <div className="container mx-auto flex flex-col gap-8 px-4 py-8 md:flex-row">
-        <AdminSidebarNav />
+        <AdminSidebarNav scope={scope} />
         <main className="min-w-0 flex-1">{children}</main>
       </div>
     </div>

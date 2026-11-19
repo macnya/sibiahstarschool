@@ -23,6 +23,19 @@ export default async function AdmissionsPage() {
         subtitle={content.header.subtitle}
       />
 
+      <section className="py-10 bg-accent/10 border-b">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <h2 className="text-xl font-bold text-primary">Ready to apply?</h2>
+            <p className="text-sm text-foreground/70">All applications are made online. It takes about five minutes.</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button asChild size="lg"><Link href="/admissions/apply">Apply online</Link></Button>
+            <Button asChild size="lg" variant="outline"><Link href="/admissions/status">Track my application</Link></Button>
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-12">{content.processHeading}</h2>

@@ -11,6 +11,7 @@ import { EducationTimeline } from '@/components/shared/education-timeline';
 export const dynamic = 'force-dynamic';
 import { Lightbulb, Bus, Award, ShieldCheck, Music, Globe, CalendarDays, Newspaper } from 'lucide-react';
 import { getPageContent } from '@/lib/site-content/queries';
+import { OurSchools } from '@/components/shared/our-schools';
 
 // Links/icons for the repeatable sections below are structural and stay
 // fixed in code; admins edit the title/description text via
@@ -64,6 +65,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <OurSchools />
 
       {/* School Levels Section */}
       <section className="py-16 md:py-24 bg-secondary/30">
