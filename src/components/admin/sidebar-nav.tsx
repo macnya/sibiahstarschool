@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
-  LayoutDashboard, FilePen, CalendarDays, Newspaper, Images, Mail, HeartHandshake, ClipboardList, Users, Building2,
+  LayoutDashboard, FilePen, CalendarDays, Newspaper, Images, Mail, HeartHandshake, ClipboardList, Users, Building2, Wallet,
 } from 'lucide-react';
 
 // Defined here, inside the Client Component, rather than passed in as a
@@ -20,6 +20,7 @@ const NAV: { href: string; label: string; icon: typeof LayoutDashboard; scopes: 
   { href: '/admin',              label: 'Overview',      icon: LayoutDashboard, scopes: ['group', 'campus', 'editor'] },
   { href: '/admin/admissions',   label: 'Admissions',    icon: ClipboardList,   scopes: ['group', 'campus'] },
   { href: '/admin/students',     label: 'Students',      icon: Users,           scopes: ['group', 'campus'] },
+  { href: '/admin/fees',         label: 'Fees',          icon: Wallet,          scopes: ['group', 'campus'] },
   { href: '/admin/campuses',     label: 'Schools',       icon: Building2,       scopes: ['group'] },
   { href: '/admin/content',      label: 'Content',       icon: FilePen,         scopes: ['group', 'editor'] },
   { href: '/admin/events',       label: 'Events',        icon: CalendarDays,    scopes: ['group', 'editor'] },

@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, CalendarDays, Newspaper, HeartHandshake, GraduationCap } from 'lucide-react';
+import { Menu, X, School, Home, Info, Users, BookOpen, Building, Image as ImageIcon, Mail, Wallet, CalendarDays, Newspaper, HeartHandshake, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
@@ -14,6 +14,7 @@ const navLinks = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/about', label: 'About Us', icon: Info },
   { href: '/schools', label: 'Our Schools', icon: GraduationCap },
+  { href: '/pay-fees', label: 'Pay Fees', icon: Wallet },
   { href: '/admissions', label: 'Admissions', icon: Users },
   { href: '/curriculum', label: 'Curriculum', icon: BookOpen },
   { href: '/facilities', label: 'Facilities', icon: Building },

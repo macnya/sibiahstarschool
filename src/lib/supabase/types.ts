@@ -140,6 +140,9 @@ export interface CampusRow {
   website_url: string | null;
   logo_url: string | null;
   image_url: string | null;
+  paybill_number: string | null;
+  till_number: string | null;
+  payment_instructions: string | null;
   admissions_open: boolean;
   is_active: boolean;
   sort_order: number;
@@ -266,6 +269,158 @@ export interface ApplicationStatusResult {
   history: { status: ApplicationStatus; at: string }[];
 }
 
+// ---------------------------------------------------------------------------
+// Fees (0006_fees.sql). All money is in cents (KES x 100).
+// ---------------------------------------------------------------------------
+export interface TermRow {
+  id: string;
+  year: number;
+  number: number;
+  name: string;
+  start_date: string | null;
+  end_date: string | null;
+  due_date: string | null;
+  is_current: boolean;
+}
+
+export type FeeKind = 'tuition' | 'transport' | 'meals' | 'activity' | 'exam' | 'admission' | 'other';
+
+export interface FeeItemRow {
+  id: string;
+  name: string;
+  kind: FeeKind;
+  is_optional: boolean;
+  is_active: boolean;
+  sort_order: number;
+}
+
+export interface FeeStructureRow {
+  id: string;
+  campus_id: string;
+  year: number;
+  grade_id: string;
+  term_number: number;
+  fee_item_id: string;
+  amount_cents: number;
+}
+
+export interface InvoiceRow {
+  id: string;
+  number: string;
+  student_id: string;
+  campus_id: string;
+  year: number;
+  term_number: number;
+  status: 'open' | 'cancelled';
+  total_cents: number;
+  due_date: string | null;
+  notes: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface InvoiceLineRow {
+  id: string;
+  invoice_id: string;
+  fee_item_id: string | null;
+  description: string;
+  amount_cents: number;
+}
+
+export type PaymentMethod = 'mpesa' | 'cash' | 'cheque' | 'bank' | 'other';
+
+export interface PaymentRow {
+  id: string;
+  receipt_number: string;
+  student_id: string;
+  campus_id: string;
+  amount_cents: number;
+  method: PaymentMethod;
+  reference: string | null;
+  payer_name: string | null;
+  payer_phone: string | null;
+  source: 'staff' | 'mpesa_c2b' | 'mpesa_stk';
+  status: 'confirmed' | 'reversed';
+  received_on: string;
+  notes: string | null;
+  recorded_by: string | null;
+  reversed_by: string | null;
+  reversed_at: string | null;
+  reversal_reason: string | null;
+  created_at: string;
+}
+
+export type AdjustmentKind =
+  | 'bursary' | 'discount' | 'waiver' | 'scholarship' | 'penalty' | 'opening_balance' | 'refund' | 'correction';
+
+export interface FeeAdjustmentRow {
+  id: string;
+  student_id: string;
+  campus_id: string;
+  kind: AdjustmentKind;
+  amount_cents: number;
+  description: string;
+  year: number | null;
+  term_number: number | null;
+  created_by: string | null;
+  created_at: string;
+}
+
+export interface MpesaTransactionRow {
+  id: string;
+  trans_id: string;
+  trans_time: string | null;
+  amount_cents: number;
+  msisdn: string | null;
+  bill_ref: string | null;
+  payer_name: string | null;
+  shortcode: string | null;
+  campus_id: string | null;
+  status: 'matched' | 'unmatched' | 'ignored';
+  student_id: string | null;
+  payment_id: string | null;
+  created_at: string;
+}
+
+export interface StudentBalanceRow {
+  student_id: string;
+  campus_id: string;
+  grade_id: string;
+  admission_number: string;
+  first_name: string;
+  middle_name: string | null;
+  last_name: string;
+  guardian_name: string;
+  guardian_phone: string;
+  status: StudentStatus;
+  invoiced: number;
+  adjustments: number;
+  paid: number;
+  balance: number;
+}
+
+export interface FeeAccountEntry {
+  date: string;
+  type: string;
+  description: string;
+  amount_cents: number;
+  balance_cents: number;
+}
+
+/** What a family sees after entering the admission number and phone number. */
+export interface FeeAccount {
+  student_id: string;
+  admission_number: string;
+  student_name: string;
+  campus_name: string;
+  campus_code: string;
+  paybill_number: string | null;
+  till_number: string | null;
+  payment_instructions: string | null;
+  balance_cents: number;
+  entries: FeeAccountEntry[];
+}
+
 /** Columns the database fills in itself, so they are optional on insert. */
 type Generated = 'id' | 'created_at' | 'updated_at';
 
@@ -359,8 +514,24 @@ export interface Database {
         Update: Partial<StudentRow>;
         Relationships: [];
       };
+      terms: { Row: TermRow; Insert: Insertable<TermRow>; Update: Partial<TermRow>; Relationships: [] };
+      fee_items: { Row: FeeItemRow; Insert: Insertable<FeeItemRow>; Update: Partial<FeeItemRow>; Relationships: [] };
+      fee_structures: { Row: FeeStructureRow; Insert: Insertable<FeeStructureRow>; Update: Partial<FeeStructureRow>; Relationships: [] };
+      student_fee_subscriptions: {
+        Row: { student_id: string; fee_item_id: string };
+        Insert: { student_id: string; fee_item_id: string };
+        Update: Partial<{ student_id: string; fee_item_id: string }>;
+        Relationships: [];
+      };
+      invoices: { Row: InvoiceRow; Insert: Insertable<InvoiceRow>; Update: Partial<InvoiceRow>; Relationships: [] };
+      invoice_lines: { Row: InvoiceLineRow; Insert: Insertable<InvoiceLineRow>; Update: Partial<InvoiceLineRow>; Relationships: [] };
+      payments: { Row: PaymentRow; Insert: Insertable<PaymentRow>; Update: Partial<PaymentRow>; Relationships: [] };
+      fee_adjustments: { Row: FeeAdjustmentRow; Insert: Insertable<FeeAdjustmentRow>; Update: Partial<FeeAdjustmentRow>; Relationships: [] };
+      mpesa_transactions: { Row: MpesaTransactionRow; Insert: Insertable<MpesaTransactionRow>; Update: Partial<MpesaTransactionRow>; Relationships: [] };
     };
-    Views: Record<never, never>;
+    Views: {
+      student_balances: { Row: StudentBalanceRow; Relationships: [] };
+    };
     Functions: {
       is_admin: { Args: Record<never, never>; Returns: boolean };
       can_edit_content: { Args: Record<never, never>; Returns: boolean };
@@ -372,6 +543,26 @@ export interface Database {
         Returns: ApplicationStatusResult[];
       };
       enrol_application: { Args: { p_application_id: string }; Returns: string };
+      generate_invoices: {
+        Args: { p_campus: string; p_year: number; p_term: number; p_grade?: string | null };
+        Returns: { created: number; skipped: number };
+      };
+      cancel_invoice: { Args: { p_invoice: string; p_reason: string }; Returns: undefined };
+      record_payment: {
+        Args: {
+          p_student: string; p_amount_cents: number; p_method: string; p_reference?: string | null;
+          p_payer_name?: string | null; p_payer_phone?: string | null; p_received_on?: string | null; p_notes?: string | null;
+        };
+        Returns: string;
+      };
+      reverse_payment: { Args: { p_payment: string; p_reason: string }; Returns: undefined };
+      post_fee_adjustment: {
+        Args: { p_student: string; p_kind: string; p_amount_cents: number; p_description: string; p_year?: number | null; p_term?: number | null };
+        Returns: string;
+      };
+      mpesa_assign_transaction: { Args: { p_transaction: string; p_student: string }; Returns: string };
+      mpesa_ignore_transaction: { Args: { p_transaction: string }; Returns: undefined };
+      get_fee_account: { Args: { p_admission_number: string; p_phone: string }; Returns: FeeAccount | null };
     };
     Enums: {
       user_role: UserRole;

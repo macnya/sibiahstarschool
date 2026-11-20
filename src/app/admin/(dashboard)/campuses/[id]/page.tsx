@@ -56,6 +56,9 @@ export default async function CampusDetailPage({
             <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" maxLength={120} defaultValue={campus.email ?? ''} /></div>
             <div className="space-y-2"><Label htmlFor="website_url">Website</Label><Input id="website_url" name="website_url" maxLength={300} defaultValue={campus.website_url ?? ''} /></div>
             <div className="space-y-2"><Label htmlFor="map_url">Google Maps link</Label><Input id="map_url" name="map_url" maxLength={400} defaultValue={campus.map_url ?? ''} /></div>
+            <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} defaultValue={campus.paybill_number ?? ''} placeholder="e.g. 247247" /></div>
+            <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number <span className="text-muted-foreground">(if no Paybill)</span></Label><Input id="till_number" name="till_number" maxLength={20} defaultValue={campus.till_number ?? ''} /></div>
+            <div className="space-y-2 sm:col-span-2"><Label htmlFor="payment_instructions">Other payment instructions <span className="text-muted-foreground">(bank account, branch…)</span></Label><Textarea id="payment_instructions" name="payment_instructions" rows={3} maxLength={600} defaultValue={campus.payment_instructions ?? ''} /></div>
             <div className="flex flex-wrap gap-6 sm:col-span-2">
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="is_active" defaultChecked={campus.is_active} /> Show this school on the website</label>
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="admissions_open" defaultChecked={campus.admissions_open} /> Accepting online applications</label>

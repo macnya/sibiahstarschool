@@ -78,6 +78,8 @@ export default async function CampusesPage({ searchParams }: { searchParams: Pro
             <div className="space-y-2"><Label htmlFor="website_url">Website</Label><Input id="website_url" name="website_url" maxLength={300} placeholder="https://" /></div>
             <div className="space-y-2"><Label htmlFor="map_url">Google Maps link</Label><Input id="map_url" name="map_url" maxLength={400} placeholder="https://maps.google.com/…" /></div>
 
+            <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} /></div>
+            <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number</Label><Input id="till_number" name="till_number" maxLength={20} /></div>
             <fieldset className="sm:col-span-2">
               <legend className="mb-2 text-sm font-medium">Classes this school offers</legend>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
