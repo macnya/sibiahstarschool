@@ -39,3 +39,26 @@ export function gradeRange(grades: { name: string }[]): string {
   if (grades.length === 1) return grades[0].name;
   return `${grades[0].name} – ${grades[grades.length - 1].name}`;
 }
+
+export interface CampusLink {
+  name: string;
+  slug: string;
+  town: string | null;
+  phone: string | null;
+  email: string | null;
+}
+
+/** Light query for the header and footer: never throws (a database hiccup must not break every page). */
+export async function getCampusLinks(): Promise<CampusLink[]> {
+  try {
+    const { data } = await createPublicClient()
+      .from('campuses')
+      .select('name, slug, town, phone, email')
+      .eq('is_active', true)
+      .order('sort_order')
+      .order('name');
+    return (data ?? []) as CampusLink[];
+  } catch {
+    return [];
+  }
+}

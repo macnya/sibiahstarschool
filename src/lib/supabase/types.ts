@@ -239,7 +239,8 @@ export interface StudentRow {
   first_name: string;
   middle_name: string | null;
   last_name: string;
-  date_of_birth: string;
+  /** Unknown for some pupils imported from an older register. */
+  date_of_birth: string | null;
   gender: 'female' | 'male';
   guardian_name: string;
   guardian_relationship: string | null;
@@ -248,6 +249,8 @@ export interface StudentRow {
   guardian_address: string | null;
   medical_notes: string | null;
   special_needs: string | null;
+  upi_number: string | null;
+  source: 'admission' | 'import';
   status: StudentStatus;
   enrolled_on: string;
   application_id: string | null;
@@ -562,6 +565,13 @@ export interface Database {
       };
       mpesa_assign_transaction: { Args: { p_transaction: string; p_student: string }; Returns: string };
       mpesa_ignore_transaction: { Args: { p_transaction: string }; Returns: undefined };
+      import_students: {
+        Args: { p_campus: string; p_rows: unknown[]; p_commit: boolean };
+        Returns: {
+          committed: boolean; ok: number; duplicates: number; errors: number;
+          rows: { row: number; status: 'ok' | 'duplicate' | 'error'; admission_number: string | null; message: string | null }[];
+        };
+      };
       get_fee_account: { Args: { p_admission_number: string; p_phone: string }; Returns: FeeAccount | null };
     };
     Enums: {

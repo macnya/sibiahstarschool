@@ -12,6 +12,7 @@ export default {
   	extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
+        display: ["var(--font-display)", "Georgia", ...fontFamily.serif],
       },
   		colors: {
   			background: 'hsl(var(--background))',

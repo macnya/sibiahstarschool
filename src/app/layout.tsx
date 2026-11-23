@@ -1,14 +1,18 @@
 
 import type { Metadata } from 'next';
-import { Open_Sans } from 'next/font/google';
+import { Open_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
-import { Navbar } from '@/components/layout/navbar';
-import { QuickLinksBar } from '@/components/layout/quick-links-bar';
-import { Footer } from '@/components/layout/footer';
+import { SiteHeader } from '@/components/site/site-header';
+import { SiteFooter } from '@/components/site/site-footer';
+import { RevealInit } from '@/components/site/reveal';
 import { Toaster } from '@/components/ui/toaster';
 // import { ChatbotWidget } from '@/components/shared/chatbot-widget';
 
-console.log("RootLayout: Attempting to render RootLayout (src/app/layout.tsx)"); // Debug log
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-display',
+  weight: ['500', '600', '700', '800'],
+});
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -32,16 +36,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  console.log("RootLayout: Inside RootLayout component render function."); // Debug log
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${openSans.variable} font-sans antialiased flex flex-col min-h-screen`} suppressHydrationWarning={true}>
-          <Navbar />
-          <QuickLinksBar />
-          <main className="flex-grow">
+      <body className={`${openSans.variable} ${playfair.variable} font-sans antialiased flex flex-col min-h-screen`} suppressHydrationWarning={true}>
+          <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:font-semibold focus:text-accent-foreground">
+            Skip to main content
+          </a>
+          <RevealInit />
+          <SiteHeader />
+          <main id="main" className="flex-grow">
             {children}
           </main>
-          <Footer />
+          <SiteFooter />
           <Toaster />
           {/* <ChatbotWidget /> */}
       </body>

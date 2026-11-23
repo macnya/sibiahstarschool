@@ -18,9 +18,12 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold text-primary">Students</h1>
-        <p className="text-sm text-muted-foreground">Children enrolled through admissions. {students.length} shown.</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-semibold text-primary">Students</h1>
+          <p className="text-sm text-muted-foreground">{students.length} shown.</p>
+        </div>
+        <Button asChild variant="outline"><Link href="/admin/students/import">Import existing pupils</Link></Button>
       </div>
 
       <form className="flex flex-wrap items-end gap-3 rounded-lg border bg-card p-4">
