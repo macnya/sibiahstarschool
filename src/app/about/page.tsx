@@ -27,7 +27,7 @@ export default async function AboutPage() {
 
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-2xl font-bold text-primary mb-4">{content.story.heading}</h2>
               <p className="text-foreground/80 mb-4 leading-relaxed">
@@ -52,7 +52,7 @@ export default async function AboutPage() {
 
       <section className="py-16 md:py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-8 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="p-6">
               <Target className="h-12 w-12 text-accent mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-primary mb-2">{content.mission.heading}</h3>

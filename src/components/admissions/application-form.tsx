@@ -286,7 +286,7 @@ export function ApplicationForm({ campuses, defaultCampusId }: { campuses: Apply
                 <div className="flex items-start gap-3">
                   <FormControl><Checkbox checked={field.value === true} onCheckedChange={(v) => field.onChange(v === true)} /></FormControl>
                   <FormLabel className="font-normal leading-snug">
-                    I confirm the information given is true, and I allow the school to contact me and to keep this information for admissions purposes.
+                    I confirm the information given is true, and I allow the school to contact me and to keep this information for admissions purposes, as explained in the <Link href="/privacy" target="_blank" className="text-primary underline">privacy notice</Link>.
                   </FormLabel>
                 </div>
                 <FormMessage />

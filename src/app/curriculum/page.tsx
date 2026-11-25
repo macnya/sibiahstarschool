@@ -65,7 +65,7 @@ export default async function CurriculumPage() {
                     </div>
                   </AccordionTrigger>
                   <AccordionContent className="p-6 bg-card">
-                    <div className="grid md:grid-cols-2 gap-6 items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                       <div>
                         <p className="text-foreground/80 mb-4 leading-relaxed">{level.description}</p>
                         <h4 className="font-semibold text-primary mb-2">Key Learning Areas:</h4>

@@ -72,7 +72,7 @@ export default async function FacilitiesPage() {
 
       <section id="transport" className="py-16 md:py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <Image
                 src={content.transport.imageUrl}

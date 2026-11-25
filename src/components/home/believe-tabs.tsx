@@ -14,7 +14,7 @@ export function BelieveTabs({ mission, vision, values }: Props) {
           <h2 id="believe-title" className="display-title text-4xl text-primary md:text-5xl">The heart of our school</h2>
         </div>
         <Tabs defaultValue="mission" className="grid gap-8 lg:grid-cols-12">
-          <TabsList className="flex h-auto flex-row gap-2 self-start bg-transparent p-0 lg:col-span-4 lg:flex-col lg:items-stretch">
+          <TabsList className="flex h-auto flex-row flex-wrap gap-2 self-start bg-transparent p-0 lg:col-span-4 lg:flex-col lg:items-stretch">
             {[['mission', 'Our mission'], ['vision', 'Our vision'], ['values', 'Our values']].map(([v, label]) => (
               <TabsTrigger key={v} value={v} className="justify-start rounded-md border border-primary/15 bg-white px-5 py-4 text-left text-base font-semibold text-primary shadow-sm data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 {label}

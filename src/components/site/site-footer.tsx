@@ -2,11 +2,13 @@ import Link from 'next/link';
 import { GraduationCap, Mail, MapPin, Phone } from 'lucide-react';
 import { getCampusLinks } from '@/lib/campuses/queries';
 
+/** Only shown when the link is set (NEXT_PUBLIC_FACEBOOK_URL etc.), so there are never dead buttons. */
 const SOCIAL = [
-  { label: 'Facebook', short: 'FB', href: '#' },
-  { label: 'Instagram', short: 'IG', href: '#' },
-  { label: 'YouTube', short: 'YT', href: '#' },
-];
+  { label: 'Facebook', short: 'FB', href: process.env.NEXT_PUBLIC_FACEBOOK_URL },
+  { label: 'Instagram', short: 'IG', href: process.env.NEXT_PUBLIC_INSTAGRAM_URL },
+  { label: 'YouTube', short: 'YT', href: process.env.NEXT_PUBLIC_YOUTUBE_URL },
+  { label: 'WhatsApp', short: 'WA', href: process.env.NEXT_PUBLIC_WHATSAPP_URL },
+].filter((s): s is { label: string; short: string; href: string } => Boolean(s.href));
 
 /** Contact details shown when a school has not entered its own in Admin → Schools. */
 const FALLBACK = {
@@ -37,7 +39,7 @@ export async function SiteFooter() {
               </p>
               <div className="mt-5 flex gap-3">
                 {SOCIAL.map((s) => (
-                  <a key={s.label} href={s.href} aria-label={s.label} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 text-xs font-semibold transition-colors hover:border-accent hover:text-accent">
+                  <a key={s.label} href={s.href} aria-label={s.label} target="_blank" rel="noopener noreferrer" className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 text-xs font-semibold transition-colors hover:border-accent hover:text-accent">
                     {s.short}
                   </a>
                 ))}
@@ -90,7 +92,7 @@ export async function SiteFooter() {
 
           <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-white/15 pt-6 text-xs text-primary-foreground/65 sm:flex-row">
             <p>&copy; {year} Sibiah Star Pre-school, Primary &amp; Junior School. All rights reserved.</p>
-            <p>We welcome children of every background and ability.</p>
+            <p><Link href="/privacy" className="hover:text-accent">Privacy notice</Link> · We welcome children of every background and ability.</p>
           </div>
         </div>
       </div>

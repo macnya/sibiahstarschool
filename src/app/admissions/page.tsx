@@ -58,7 +58,7 @@ export default async function AdmissionsPage() {
       <section className="py-16 md:py-20 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-primary text-center mb-12">{content.requirementsHeading}</h2>
-          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-8">
             {content.requirements.map((req) => (
               <div key={req.level} className="bg-card border-t-4 border-accent rounded-md p-6">
                 <h3 className="text-primary text-xl font-semibold flex items-center mb-4">

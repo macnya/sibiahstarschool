@@ -56,8 +56,18 @@ export default async function CampusDetailPage({
             <div className="space-y-2"><Label htmlFor="email">Email</Label><Input id="email" name="email" type="email" maxLength={120} defaultValue={campus.email ?? ''} /></div>
             <div className="space-y-2"><Label htmlFor="website_url">Website</Label><Input id="website_url" name="website_url" maxLength={300} defaultValue={campus.website_url ?? ''} /></div>
             <div className="space-y-2"><Label htmlFor="map_url">Google Maps link</Label><Input id="map_url" name="map_url" maxLength={400} defaultValue={campus.map_url ?? ''} /></div>
-            <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} defaultValue={campus.paybill_number ?? ''} placeholder="e.g. 247247" /></div>
-            <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number <span className="text-muted-foreground">(if no Paybill)</span></Label><Input id="till_number" name="till_number" maxLength={20} defaultValue={campus.till_number ?? ''} /></div>
+            <fieldset className="space-y-4 rounded-lg border p-4 sm:col-span-2">
+              <legend className="px-2 text-sm font-semibold text-primary">How parents pay fees</legend>
+              <p className="text-xs text-muted-foreground">Fill in only what this school uses. Parents see exactly these instructions on the fees page and on invoices.</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} defaultValue={campus.paybill_number ?? ''} placeholder="e.g. 247247" /></div>
+                <div className="space-y-2"><Label htmlFor="paybill_account_format">Paybill account number <span className="text-muted-foreground">(a Paybill always asks for one)</span></Label><Input id="paybill_account_format" name="paybill_account_format" maxLength={80} defaultValue={campus.paybill_account_format ?? ''} placeholder="empty = child’s admission number" /><p className="text-xs text-muted-foreground">Use {'{admission}'} for the child’s number, e.g. <code>{'FEES{admission}'}</code>, or type one fixed account for everyone.</p></div>
+                <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number <span className="text-muted-foreground">(Buy Goods, no account number)</span></Label><Input id="till_number" name="till_number" maxLength={20} defaultValue={campus.till_number ?? ''} /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_till_number">KCB Lipa Karo school number</Label><Input id="kcb_till_number" name="kcb_till_number" maxLength={30} defaultValue={campus.kcb_till_number ?? ''} /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_paybill_number">KCB Paybill number</Label><Input id="kcb_paybill_number" name="kcb_paybill_number" maxLength={30} defaultValue={campus.kcb_paybill_number ?? ''} placeholder="e.g. 522522" /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_account_format">KCB account number format</Label><Input id="kcb_account_format" name="kcb_account_format" maxLength={80} defaultValue={campus.kcb_account_format ?? ''} placeholder="{till}#{admission}" /><p className="text-xs text-muted-foreground">{'{till}'} = the KCB school number above. Default: <code>{'{till}#{admission}'}</code>.</p></div>
+              </div>
+            </fieldset>
             <div className="space-y-2 sm:col-span-2"><Label htmlFor="payment_instructions">Other payment instructions <span className="text-muted-foreground">(bank account, branch…)</span></Label><Textarea id="payment_instructions" name="payment_instructions" rows={3} maxLength={600} defaultValue={campus.payment_instructions ?? ''} /></div>
             <div className="flex flex-wrap gap-6 sm:col-span-2">
               <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="is_active" defaultChecked={campus.is_active} /> Show this school on the website</label>

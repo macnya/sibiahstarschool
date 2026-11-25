@@ -27,7 +27,7 @@ export default async function ContactPage() {
 
       <section className="py-16 md:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form Section */}
             <div>
               <h2 className="text-2xl font-bold text-primary mb-6">Send Us a Message</h2>
