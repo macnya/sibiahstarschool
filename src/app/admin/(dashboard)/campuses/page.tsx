@@ -78,8 +78,18 @@ export default async function CampusesPage({ searchParams }: { searchParams: Pro
             <div className="space-y-2"><Label htmlFor="website_url">Website</Label><Input id="website_url" name="website_url" maxLength={300} placeholder="https://" /></div>
             <div className="space-y-2"><Label htmlFor="map_url">Google Maps link</Label><Input id="map_url" name="map_url" maxLength={400} placeholder="https://maps.google.com/…" /></div>
 
-            <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} /></div>
-            <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number</Label><Input id="till_number" name="till_number" maxLength={20} /></div>
+            <fieldset className="space-y-4 rounded-lg border p-4 sm:col-span-2">
+              <legend className="px-2 text-sm font-semibold text-primary">How parents pay fees</legend>
+              <p className="text-xs text-muted-foreground">Fill in only what this school uses. Parents see exactly these instructions on the fees page and on invoices.</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-2"><Label htmlFor="paybill_number">M-Pesa Paybill number</Label><Input id="paybill_number" name="paybill_number" maxLength={20} placeholder="e.g. 247247" /></div>
+                <div className="space-y-2"><Label htmlFor="paybill_account_format">Paybill account number <span className="text-muted-foreground">(a Paybill always asks for one)</span></Label><Input id="paybill_account_format" name="paybill_account_format" maxLength={80} placeholder="empty = child’s admission number" /><p className="text-xs text-muted-foreground">Use {'{admission}'} for the child’s number, e.g. <code>{'FEES{admission}'}</code>, or type one fixed account for everyone.</p></div>
+                <div className="space-y-2"><Label htmlFor="till_number">M-Pesa Till number <span className="text-muted-foreground">(Buy Goods, no account number)</span></Label><Input id="till_number" name="till_number" maxLength={20} /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_till_number">KCB Lipa Karo school number</Label><Input id="kcb_till_number" name="kcb_till_number" maxLength={30} /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_paybill_number">KCB Paybill number</Label><Input id="kcb_paybill_number" name="kcb_paybill_number" maxLength={30} placeholder="e.g. 522522" /></div>
+                <div className="space-y-2"><Label htmlFor="kcb_account_format">KCB account number format</Label><Input id="kcb_account_format" name="kcb_account_format" maxLength={80} placeholder="{till}#{admission}" /><p className="text-xs text-muted-foreground">{'{till}'} = the KCB school number above. Default: <code>{'{till}#{admission}'}</code>.</p></div>
+              </div>
+            </fieldset>
             <fieldset className="sm:col-span-2">
               <legend className="mb-2 text-sm font-medium">Classes this school offers</legend>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

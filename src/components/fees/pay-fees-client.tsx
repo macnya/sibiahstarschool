@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from 'react';
 import { CheckCircle2, Loader2, Search, Smartphone } from 'lucide-react';
 import { checkFeePayment, lookupFeeAccount, startFeePayment } from '@/app/pay-fees/actions';
 import { formatKES } from '@/lib/fees/money';
+import { channelsFor } from '@/lib/fees/payment-channels';
 import { formatDate } from '@/lib/admissions/constants';
 import type { FeeAccount } from '@/lib/supabase/types';
 import { Button } from '@/components/ui/button';
@@ -152,19 +153,31 @@ export function PayFeesClient() {
                   </form>
                 ) : null}
 
-                {(account.paybill_number || account.till_number || account.payment_instructions) && (
-                  <div className="rounded-lg bg-muted p-4 text-sm">
-                    <p className="mb-1 font-semibold text-primary">{phoneCapable ? 'Or pay from your M-Pesa menu' : 'How to pay'}</p>
-                    {account.paybill_number && (
-                      <p>Lipa na M-Pesa → <strong>Pay Bill</strong> → Business no. <strong>{account.paybill_number}</strong> → Account no. <strong>{account.admission_number}</strong></p>
-                    )}
-                    {!account.paybill_number && account.till_number && (
-                      <p>Lipa na M-Pesa → <strong>Buy Goods</strong> → Till no. <strong>{account.till_number}</strong> (tell the school office your child’s admission number)</p>
-                    )}
-                    {account.payment_instructions && <p className="mt-2 whitespace-pre-line text-muted-foreground">{account.payment_instructions}</p>}
-                    <p className="mt-2 text-xs text-muted-foreground">Payments made this way appear on the account within a minute.</p>
-                  </div>
-                )}
+                {(() => {
+                  const channels = channelsFor(account, account.admission_number, account.campus_name);
+                  if (channels.length === 0) return null;
+                  return (
+                    <div className="space-y-3">
+                      <p className="font-semibold text-primary">{phoneCapable ? 'Or pay from your phone or bank' : 'How to pay'}</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {channels.map((ch) => (
+                          <div key={ch.id} className="rounded-lg border bg-muted/50 p-4 text-sm">
+                            <p className="mb-2 font-semibold text-primary">{ch.title}</p>
+                            {ch.steps.length > 0 && (
+                              <ol className="space-y-1">
+                                {ch.steps.map((st, n) => (
+                                  <li key={n}>{st.label}{st.value && <> <strong className="rounded bg-white px-1.5 py-0.5 font-mono text-base">{st.value}</strong></>}</li>
+                                ))}
+                              </ol>
+                            )}
+                            {ch.note && <p className="mt-2 whitespace-pre-line text-muted-foreground">{ch.note}</p>}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">Type the account number exactly as shown. Payments made this way appear on the account within a minute (bank and KCB statement payments can take a little longer).</p>
+                    </div>
+                  );
+                })()}
               </CardContent>
             </Card>
           )}

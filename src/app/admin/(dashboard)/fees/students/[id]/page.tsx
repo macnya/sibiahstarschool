@@ -50,11 +50,11 @@ export default async function StudentFeesPage({ params, searchParams }: { params
                 <div><label htmlFor="amount" className="mb-1 block text-xs text-muted-foreground">Amount (KES)</label><Input id="amount" name="amount" inputMode="decimal" defaultValue={owed > 0 ? String(owed / 100) : ''} required /></div>
                 <div>
                   <label htmlFor="method" className="mb-1 block text-xs text-muted-foreground">Method</label>
-                  <select id="method" name="method" defaultValue="mpesa" className={field}>
-                    <option value="mpesa">M-Pesa</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="bank">Bank transfer / deposit</option><option value="other">Other</option>
+                  <select id="method" name="method" defaultValue="kcb" className={field}>
+                    <option value="kcb">KCB Lipa Karo</option><option value="mpesa">M-Pesa</option><option value="bank">Bank transfer / deposit</option><option value="cash">Cash</option><option value="cheque">Cheque</option><option value="card">Card (POS)</option><option value="other">Other</option>
                   </select>
                 </div>
-                <div><label htmlFor="reference" className="mb-1 block text-xs text-muted-foreground">M-Pesa code / cheque no. / bank slip</label><Input id="reference" name="reference" maxLength={60} autoComplete="off" /></div>
+                <div><label htmlFor="reference" className="mb-1 block text-xs text-muted-foreground">KCB / M-Pesa code, cheque no. or bank slip</label><Input id="reference" name="reference" maxLength={60} autoComplete="off" /></div>
                 <div><label htmlFor="payer_name" className="mb-1 block text-xs text-muted-foreground">Paid by</label><Input id="payer_name" name="payer_name" defaultValue={s.guardian_name} maxLength={120} /></div>
                 <div><label htmlFor="received_on" className="mb-1 block text-xs text-muted-foreground">Date received</label><Input id="received_on" name="received_on" type="date" defaultValue={today} max={today} /></div>
                 <Button type="submit" className="w-full">Record &amp; print receipt</Button>

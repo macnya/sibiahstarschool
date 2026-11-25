@@ -17,10 +17,23 @@ export function parseKES(input: string | null | undefined): number | null {
 
 export const METHOD_LABEL: Record<string, string> = {
   mpesa: 'M-Pesa',
+  kcb: 'KCB Lipa Karo',
+  bank: 'Bank',
   cash: 'Cash',
   cheque: 'Cheque',
-  bank: 'Bank',
+  card: 'Card (POS)',
   other: 'Other',
+};
+
+/** What the "reference" box asks for, per method. */
+export const REFERENCE_LABEL: Record<string, string> = {
+  mpesa: 'M-Pesa transaction code',
+  kcb: 'KCB transaction reference',
+  bank: 'Bank slip / reference',
+  cheque: 'Cheque number',
+  card: 'Card slip / approval no.',
+  cash: 'Reference (optional)',
+  other: 'Reference (optional)',
 };
 
 export const ADJUSTMENT_LABEL: Record<string, string> = {

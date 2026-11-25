@@ -9,7 +9,8 @@ const TABS = [
   { href: '/admin/fees/payments', label: 'Payments' },
   { href: '/admin/fees/arrears', label: 'Arrears' },
   { href: '/admin/fees/invoices', label: 'Invoices' },
-  { href: '/admin/fees/mpesa', label: 'M-Pesa' },
+  { href: '/admin/fees/import', label: 'Import statement' },
+  { href: '/admin/fees/mpesa', label: 'Incoming' },
   { href: '/admin/fees/setup', label: 'Setup' },
 ];
 

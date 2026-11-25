@@ -142,6 +142,10 @@ export interface CampusRow {
   image_url: string | null;
   paybill_number: string | null;
   till_number: string | null;
+  paybill_account_format: string | null;
+  kcb_till_number: string | null;
+  kcb_paybill_number: string | null;
+  kcb_account_format: string | null;
   payment_instructions: string | null;
   admissions_open: boolean;
   is_active: boolean;
@@ -330,7 +334,7 @@ export interface InvoiceLineRow {
   amount_cents: number;
 }
 
-export type PaymentMethod = 'mpesa' | 'cash' | 'cheque' | 'bank' | 'other';
+export type PaymentMethod = 'mpesa' | 'kcb' | 'bank' | 'cash' | 'cheque' | 'card' | 'other';
 
 export interface PaymentRow {
   id: string;
@@ -342,7 +346,7 @@ export interface PaymentRow {
   reference: string | null;
   payer_name: string | null;
   payer_phone: string | null;
-  source: 'staff' | 'mpesa_c2b' | 'mpesa_stk';
+  source: 'staff' | 'mpesa_c2b' | 'mpesa_stk' | 'statement';
   status: 'confirmed' | 'reversed';
   received_on: string;
   notes: string | null;
@@ -379,6 +383,7 @@ export interface MpesaTransactionRow {
   payer_name: string | null;
   shortcode: string | null;
   campus_id: string | null;
+  channel: 'mpesa' | 'kcb' | 'bank';
   status: 'matched' | 'unmatched' | 'ignored';
   student_id: string | null;
   payment_id: string | null;
@@ -418,7 +423,11 @@ export interface FeeAccount {
   campus_name: string;
   campus_code: string;
   paybill_number: string | null;
+  paybill_account_format: string | null;
   till_number: string | null;
+  kcb_till_number: string | null;
+  kcb_paybill_number: string | null;
+  kcb_account_format: string | null;
   payment_instructions: string | null;
   balance_cents: number;
   entries: FeeAccountEntry[];
@@ -570,6 +579,15 @@ export interface Database {
         Returns: {
           committed: boolean; ok: number; duplicates: number; errors: number;
           rows: { row: number; status: 'ok' | 'duplicate' | 'error'; admission_number: string | null; message: string | null }[];
+        };
+      };
+      import_statement: {
+        Args: { p_campus: string; p_channel: 'mpesa' | 'kcb' | 'bank'; p_rows: unknown[]; p_commit: boolean };
+        Returns: {
+          committed: boolean; total: number; matched: number; unmatched: number; duplicates: number; errors: number;
+          matched_cents: number; unmatched_cents: number;
+          rows: { line: number; status: 'matched' | 'unmatched' | 'duplicate' | 'error'; message: string | null; reference: string | null;
+                  amount_cents: number | null; student_name: string | null; admission_number: string | null }[];
         };
       };
       get_fee_account: { Args: { p_admission_number: string; p_phone: string }; Returns: FeeAccount | null };

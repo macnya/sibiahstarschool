@@ -3,6 +3,7 @@
 import { headers } from 'next/headers';
 import { createPublicClient } from '@/lib/supabase/public';
 import { createServiceClient } from '@/lib/supabase/service';
+import { formatAccount } from '@/lib/fees/payment-channels';
 import { callbackUrl, getMpesaConfig, normalizeKenyanPhone, stkPush } from '@/lib/mpesa/daraja';
 import { allowRequest } from '@/lib/rate-limit';
 import type { FeeAccount } from '@/lib/supabase/types';
@@ -82,7 +83,8 @@ export async function startFeePayment(input: { admissionNumber: string; phone: s
     const sent = await stkPush(cfg, {
       phone: payPhone,
       amountKes: amount,
-      accountReference: account.admission_number,
+      // The same account number the school tells parents to type on its Paybill.
+      accountReference: formatAccount(account.paybill_account_format, { admission: account.admission_number }),
       description: 'School fees',
       callbackUrl: callbackUrl(origin, '/api/payments/stk/callback'),
     });

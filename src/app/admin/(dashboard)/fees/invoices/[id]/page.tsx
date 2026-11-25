@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { cancelInvoiceAction } from '@/app/admin/fees-actions';
 import { getInvoice } from '@/lib/fees/admin-queries';
 import { formatKES } from '@/lib/fees/money';
+import { channelsFor } from '@/lib/fees/payment-channels';
 import { formatDate } from '@/lib/admissions/constants';
 import { PrintButton } from '@/components/fees/print-button';
 import { Button } from '@/components/ui/button';
@@ -60,14 +61,24 @@ export default async function InvoicePage({ params, searchParams }: { params: Pr
             <tr><td className="p-2 text-right font-semibold">Total</td><td className="p-2 text-right text-lg font-bold">{formatKES(invoice.total_cents)}</td></tr>
           </tbody>
         </table>
-        {(campus?.paybill_number || campus?.till_number) && (
-          <footer className="mt-6 rounded-md bg-muted p-4 text-sm">
-            <p className="font-semibold">How to pay</p>
-            {campus.paybill_number && <p>M-Pesa Paybill <strong>{campus.paybill_number}</strong>, account number <strong>{student?.admission_number}</strong></p>}
-            {!campus.paybill_number && campus.till_number && <p>M-Pesa Buy Goods Till <strong>{campus.till_number}</strong></p>}
-            {campus.payment_instructions && <p className="mt-1 whitespace-pre-line text-muted-foreground">{campus.payment_instructions}</p>}
-          </footer>
-        )}
+        {(() => {
+          const channels = campus ? channelsFor(campus, student?.admission_number ?? '', campus.name) : [];
+          if (channels.length === 0) return null;
+          return (
+            <footer className="mt-6 rounded-md bg-muted p-4 text-sm">
+              <p className="mb-2 font-semibold">How to pay</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {channels.map((ch) => (
+                  <div key={ch.id}>
+                    <p className="font-medium">{ch.title}</p>
+                    {ch.steps.map((st, n) => <p key={n}>{st.label}{st.value && <> <strong>{st.value}</strong></>}</p>)}
+                    {ch.note && <p className="whitespace-pre-line text-muted-foreground">{ch.note}</p>}
+                  </div>
+                ))}
+              </div>
+            </footer>
+          );
+        })()}
         {invoice.notes && <p className="mt-4 text-sm text-muted-foreground">Note: {invoice.notes}</p>}
       </article>
 

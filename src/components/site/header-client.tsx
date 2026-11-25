@@ -9,7 +9,7 @@ import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/com
 import { cn } from '@/lib/utils';
 
 interface NavItem { href: string; label: string; hint?: string }
-interface NavGroup { key: string; label: string; blurb: string; items: NavItem[] }
+interface NavGroup { key: string; href: string; label: string; blurb: string; items: NavItem[] }
 
 const PHONE = '+254721412004';
 
@@ -17,6 +17,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
   return [
     {
       key: 'about',
+      href: '/about',
       label: 'About',
       blurb: 'Who we are, what we believe and the people behind our schools.',
       items: [
@@ -27,6 +28,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
     },
     {
       key: 'schools',
+      href: '/schools',
       label: 'Our Schools',
       blurb: 'One family of schools, from pre-school to Grade 9.',
       items: [
@@ -36,6 +38,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
     },
     {
       key: 'academics',
+      href: '/curriculum',
       label: 'Academics',
       blurb: 'A balanced programme that builds knowledge, character and confidence.',
       items: [
@@ -48,6 +51,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
     },
     {
       key: 'admissions',
+      href: '/admissions',
       label: 'Admissions',
       blurb: 'Apply online in about five minutes and track every step.',
       items: [
@@ -60,6 +64,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
     },
     {
       key: 'life',
+      href: '/events',
       label: 'Life at School',
       blurb: 'News, events and moments from our school community.',
       items: [
@@ -83,16 +88,19 @@ export function HeaderClient({ campuses }: { campuses: { name: string; slug: str
   const pathname = usePathname();
   const groups = buildGroups(campuses);
   const [open, setOpen] = useState<string | null>(null);
+  const [pinned, setPinnedState] = useState(false);
+  const setPinned = (v: boolean) => { pinnedRef.current = v; setPinnedState(v); };
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const pinnedRef = useRef(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const cancelClose = () => { if (closeTimer.current) clearTimeout(closeTimer.current); };
-  const scheduleClose = () => { cancelClose(); closeTimer.current = setTimeout(() => setOpen(null), 160); };
+  const scheduleClose = () => { cancelClose(); closeTimer.current = setTimeout(() => { if (!pinnedRef.current) setOpen(null); }, 160); };
 
   // Close menus when the page changes.
-  useEffect(() => { setOpen(null); setMobileOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(null); setPinned(false); setMobileOpen(false); }, [pathname]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -103,10 +111,10 @@ export function HeaderClient({ campuses }: { campuses: { name: string; slug: str
 
   // Click outside / Escape closes the open menu (keyboard users keep their place).
   useEffect(() => {
-    const onDown = (e: MouseEvent) => { if (navRef.current && !navRef.current.contains(e.target as Node)) setOpen(null); };
+    const onDown = (e: MouseEvent) => { if (navRef.current && !navRef.current.contains(e.target as Node)) { setOpen(null); setPinned(false); } };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && open) {
-        setOpen(null);
+        setOpen(null); setPinned(false);
         navRef.current?.querySelector<HTMLButtonElement>(`[data-group="${open}"]`)?.focus();
       }
     };
@@ -154,22 +162,28 @@ export function HeaderClient({ campuses }: { campuses: { name: string; slug: str
               return (
                 <div
                   key={g.key}
-                  className="relative"
-                  onMouseEnter={() => { cancelClose(); setOpen(g.key); }}
-                  onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen((cur) => (cur === g.key ? null : cur)); }}
+                  className="relative flex items-center"
+                  onPointerEnter={(e) => { if (e.pointerType === 'mouse') { cancelClose(); if (!pinnedRef.current || !open) setOpen(g.key); } }}
+                  onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node | null)) { setOpen((cur) => (cur === g.key ? null : cur)); setPinned(false); } }}
                 >
+                  <Link
+                    href={g.href}
+                    className={cn(
+                      'rounded-md py-2 pl-3 pr-1 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      isOpen || groupActive(g) ? 'text-primary' : 'text-foreground/75 hover:text-primary',
+                    )}
+                  >
+                    {g.label}
+                  </Link>
                   <button
                     type="button"
                     data-group={g.key}
                     aria-expanded={isOpen}
                     aria-controls={`menu-${g.key}`}
-                    onClick={() => setOpen(isOpen ? null : g.key)}
-                    className={cn(
-                      'flex items-center gap-1 rounded-md px-3 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                      isOpen || groupActive(g) ? 'text-primary' : 'text-foreground/75 hover:text-primary',
-                    )}
+                    aria-label={`Show ${g.label} menu`}
+                    onClick={() => { if (isOpen && pinned) { setOpen(null); setPinned(false); } else { cancelClose(); setOpen(g.key); setPinned(true); } }}
+                    className="rounded-md px-1.5 py-2 text-foreground/60 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    {g.label}
                     <ChevronDown className={cn('h-4 w-4 transition-transform', isOpen && 'rotate-180')} aria-hidden="true" />
                   </button>
                   <div
