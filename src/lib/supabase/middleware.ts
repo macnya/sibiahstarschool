@@ -50,6 +50,22 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Portal inner pages need a login; the sign-in pages themselves stay public.
+  const portalGuard: [string, string][] = [
+    ['/parent-portal/dashboard', '/parent-portal'],
+    ['/parent-portal/child', '/parent-portal'],
+    ['/teacher-portal/dashboard', '/teacher-portal'],
+    ['/teacher-portal/class', '/teacher-portal'],
+  ];
+  for (const [prefix, login] of portalGuard) {
+    if (!user && (pathname === prefix || pathname.startsWith(prefix + '/'))) {
+      const url = request.nextUrl.clone();
+      url.pathname = login;
+      url.search = '';
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Signed-in users have no reason to see the login form.
   if (isLoginPage && user) {
     const url = request.nextUrl.clone();

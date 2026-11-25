@@ -14,8 +14,8 @@ import { Label } from '@/components/ui/label';
 
 type Stage = 'idle' | 'sending' | 'waiting' | 'paid' | 'failed';
 
-export function PayFeesClient() {
-  const [admission, setAdmission] = useState('');
+export function PayFeesClient({ initialAdmission = '' }: { initialAdmission?: string }) {
+  const [admission, setAdmission] = useState(initialAdmission);
   const [phone, setPhone] = useState('');
   const [account, setAccount] = useState<FeeAccount | null>(null);
   const [phoneCapable, setPhoneCapable] = useState(false);

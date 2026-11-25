@@ -80,6 +80,7 @@ function buildGroups(campuses: { name: string; slug: string }[]): NavGroup[] {
 const UTILITY = [
   { href: '/pay-fees', label: 'Pay Fees', icon: Wallet },
   { href: '/admissions/status', label: 'Track Application' },
+  { href: '/parent-portal', label: 'Parent Portal' },
   { href: '/events', label: 'Events' },
   { href: '/contact', label: 'Contact' },
 ];

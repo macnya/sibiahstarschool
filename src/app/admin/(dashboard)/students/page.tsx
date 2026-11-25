@@ -72,7 +72,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
                 <TableRow key={s.id}>
                   <TableCell className="font-mono text-sm">{s.admission_number}</TableCell>
                   <TableCell className="font-medium">
-                    {s.first_name} {s.middle_name} {s.last_name}
+                    <Link href={`/admin/students/${s.id}`} className="text-primary hover:underline">{s.first_name} {s.middle_name} {s.last_name}</Link>
                     {s.status !== 'active' && <span className="ml-2 rounded bg-muted px-1.5 py-0.5 text-xs capitalize">{s.status}</span>}
                   </TableCell>
                   <TableCell className="text-sm">

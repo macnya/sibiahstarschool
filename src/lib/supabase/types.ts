@@ -254,12 +254,42 @@ export interface StudentRow {
   medical_notes: string | null;
   special_needs: string | null;
   upi_number: string | null;
+  class_id: string | null;
   source: 'admission' | 'import';
   status: StudentStatus;
   enrolled_on: string;
   application_id: string | null;
   created_at: string;
   updated_at: string;
+}
+
+export interface ClassRow {
+  id: string;
+  campus_id: string;
+  grade_id: string;
+  year: number;
+  stream: string;
+  capacity: number;
+  created_at: string;
+}
+
+export interface ClassTeacherRow {
+  class_id: string;
+  teacher_id: string;
+  is_class_teacher: boolean;
+  subject: string | null;
+  created_at: string;
+}
+
+/** One child as a signed-in parent sees them. */
+export interface MyChild {
+  student_id: string;
+  name: string;
+  admission_number: string;
+  school: string;
+  class_name: string | null;
+  class_teacher: string | null;
+  balance_cents: number;
 }
 
 /** What a family sees when they look up their own application. */
@@ -526,6 +556,13 @@ export interface Database {
         Update: Partial<StudentRow>;
         Relationships: [];
       };
+      classes: { Row: ClassRow; Insert: Insertable<ClassRow>; Update: Partial<ClassRow>; Relationships: [] };
+      class_teachers: {
+        Row: ClassTeacherRow;
+        Insert: Omit<ClassTeacherRow, 'created_at'> & Partial<Pick<ClassTeacherRow, 'created_at'>>;
+        Update: Partial<ClassTeacherRow>;
+        Relationships: [];
+      };
       terms: { Row: TermRow; Insert: Insertable<TermRow>; Update: Partial<TermRow>; Relationships: [] };
       fee_items: { Row: FeeItemRow; Insert: Insertable<FeeItemRow>; Update: Partial<FeeItemRow>; Relationships: [] };
       fee_structures: { Row: FeeStructureRow; Insert: Insertable<FeeStructureRow>; Update: Partial<FeeStructureRow>; Relationships: [] };
@@ -590,6 +627,17 @@ export interface Database {
                   amount_cents: number | null; student_name: string | null; admission_number: string | null }[];
         };
       };
+      create_class: { Args: { p_campus: string; p_grade: string; p_year: number; p_stream: string; p_capacity: number }; Returns: string };
+      place_students: { Args: { p_class: string; p_students: string[] }; Returns: number };
+      place_unplaced: { Args: { p_class: string }; Returns: number };
+      remove_from_class: { Args: { p_student: string }; Returns: undefined };
+      assign_class_teacher: { Args: { p_class: string; p_teacher: string; p_is_head: boolean; p_subject: string | null }; Returns: undefined };
+      remove_class_teacher: { Args: { p_class: string; p_teacher: string }; Returns: undefined };
+      delete_class: { Args: { p_class: string }; Returns: undefined };
+      claim_child: { Args: { p_admission_number: string; p_phone: string }; Returns: { student_id: string; student_name: string; admission_number: string } | null };
+      my_children: { Args: Record<string, never>; Returns: MyChild[] };
+      my_child_account: { Args: { p_student: string }; Returns: FeeAccount | null };
+      unlink_child: { Args: { p_student: string }; Returns: undefined };
       get_fee_account: { Args: { p_admission_number: string; p_phone: string }; Returns: FeeAccount | null };
     };
     Enums: {
