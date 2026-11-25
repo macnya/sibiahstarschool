@@ -1,5 +1,7 @@
 'use server';
 
+import { after } from 'next/server';
+import { dispatchQuietly } from '@/lib/sms/send';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
@@ -174,6 +176,7 @@ export async function recordPaymentAction(formData: FormData) {
     p_notes: text(formData, 'notes', 500) || null,
   });
   if (error) back(path, friendly(error, 'Could not record the payment.'));
+  after(dispatchQuietly);
   revalidatePath('/admin/fees');
   redirect(`/admin/fees/receipts/${data}`);
 }

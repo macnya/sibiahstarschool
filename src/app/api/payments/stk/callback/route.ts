@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
+import { dispatchQuietly } from '@/lib/sms/send';
 import { callbackSecretOk, parseStkCallback, type StkCallbackBody } from '@/lib/mpesa/daraja';
 import { createServiceClient } from '@/lib/supabase/service';
 
@@ -24,5 +25,6 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error('[mpesa stk] error:', err instanceof Error ? err.message : err);
   }
+  after(dispatchQuietly);
   return NextResponse.json({ ResultCode: 0, ResultDesc: 'Accepted' });
 }

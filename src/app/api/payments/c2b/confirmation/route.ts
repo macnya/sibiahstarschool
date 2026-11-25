@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
+import { dispatchQuietly } from '@/lib/sms/send';
 import { callbackSecretOk } from '@/lib/mpesa/daraja';
 import { createServiceClient } from '@/lib/supabase/service';
 
@@ -22,5 +23,6 @@ export async function POST(request: Request) {
     console.error('[mpesa c2b] error:', err instanceof Error ? err.message : err);
   }
   // Always acknowledge: Safaricom does not need to know about our bookkeeping.
+  after(dispatchQuietly);
   return NextResponse.json({ ResultCode: 0, ResultDesc: 'Accepted' });
 }

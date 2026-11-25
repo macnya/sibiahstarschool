@@ -11,6 +11,7 @@ const TABS = [
   { href: '/admin/fees/invoices', label: 'Invoices' },
   { href: '/admin/fees/import', label: 'Import statement' },
   { href: '/admin/fees/mpesa', label: 'Incoming' },
+  { href: '/admin/fees/sms', label: 'SMS' },
   { href: '/admin/fees/setup', label: 'Setup' },
 ];
 
