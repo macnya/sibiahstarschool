@@ -18,7 +18,8 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const { supabase } = await requireParent();
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-  const [{ data: acc }, { data: kids }] = await Promise.all([supabase.rpc('my_child_account', { p_student: id }), supabase.rpc('my_children')]);
+  const [{ data: acc }, { data: kids }, { data: att }] = await Promise.all([supabase.rpc('my_child_account', { p_student: id }), supabase.rpc('my_children'), supabase.rpc('child_attendance', { p_student: id })]);
+  const attendance = att as { days: number; present: number; absent: number; late: number; excused: number; recent: { day: string; status: string; note: string | null }[] } | null;
   const account = acc as FeeAccount | null;
   if (!account) notFound();
   const child = ((kids ?? []) as MyChild[]).find((k) => k.student_id === id);
@@ -40,6 +41,24 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
             </div>
             <Button asChild size="lg"><Link href={`/pay-fees?adm=${encodeURIComponent(account.admission_number)}`}>Pay by M-Pesa phone prompt</Link></Button>
           </div>
+
+          {attendance && attendance.days > 0 && (
+            <div>
+              <h2 className="mb-3 text-lg font-semibold text-primary">Attendance, last 60 days</h2>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {[['Present', attendance.present - attendance.late, 'text-green-700'], ['Late', attendance.late, 'text-amber-700'], ['Absent', attendance.absent, 'text-red-700'], ['Excused', attendance.excused, 'text-slate-700']].map(([l, n, c]) => (
+                  <div key={String(l)} className="rounded-lg border bg-card p-4 text-center"><p className={`text-2xl font-bold ${c}`}>{n}</p><p className="text-xs text-muted-foreground">{l}</p></div>
+                ))}
+              </div>
+              {attendance.recent.length > 0 && (
+                <ul className="mt-3 divide-y rounded-lg border bg-card text-sm">
+                  {attendance.recent.map((r) => (
+                    <li key={r.day} className="flex flex-wrap justify-between gap-2 px-3 py-2"><span>{formatDate(r.day)}</span><span className="capitalize">{r.status}{r.note ? ` · ${r.note}` : ''}</span></li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
 
           {channels.length > 0 && (
             <div>

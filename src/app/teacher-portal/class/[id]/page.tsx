@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/shared/page-header';
 import { PrintButton } from '@/components/fees/print-button';
 import { classLabel } from '@/lib/classes/queries-shared';
@@ -33,7 +34,7 @@ export default async function TeacherClassPage({ params }: { params: Promise<{ i
         <div className="container mx-auto max-w-5xl space-y-5 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
             <Link href="/teacher-portal/dashboard" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="mr-1 h-4 w-4" />My classes</Link>
-            <PrintButton />
+            <div className="flex gap-2"><Button asChild size="sm"><Link href={`/teacher-portal/class/${id}/attendance`}>Take attendance</Link></Button><PrintButton /></div>
           </div>
           <h2 className="hidden text-xl font-bold print:block">{title} · {c.year} class list</h2>
           <div className="overflow-x-auto rounded-lg border bg-card">

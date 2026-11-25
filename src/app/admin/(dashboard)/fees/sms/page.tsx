@@ -1,4 +1,5 @@
 import { MessageSquare, RefreshCw, Send } from 'lucide-react';
+import { toggleAbsenceSmsAction } from '@/app/attendance-actions';
 import { noticeAction, reminderAction, sendQueuedAction, toggleReceiptsAction } from '@/app/admin/sms-actions';
 import { getAdminContext, getCampusesAndGrades } from '@/lib/admissions/admin-queries';
 import { smsConfigured } from '@/lib/sms/send';
@@ -57,6 +58,19 @@ export default async function SmsPage({ searchParams }: { searchParams: Promise<
             <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm">
               <span>{c.name}: <strong>{c.sms_receipts_enabled ? 'On' : 'Off'}</strong></span>
               <form action={toggleReceiptsAction}><input type="hidden" name="campus" value={c.id} /><input type="hidden" name="enabled" value={c.sms_receipts_enabled ? 'false' : 'true'} /><Button type="submit" size="sm" variant="outline">Turn {c.sms_receipts_enabled ? 'off' : 'on'}</Button></form>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="rounded-xl border bg-card p-5">
+        <h3 className="font-semibold">Absence alerts</h3>
+        <p className="mb-3 text-sm text-muted-foreground">When on, the parent gets an SMS the first time their child is marked absent for today. Back-dated changes never send.</p>
+        <ul className="space-y-2">
+          {mine.map((c) => (
+            <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-md border px-3 py-2 text-sm">
+              <span>{c.name}: <strong>{c.sms_absence_enabled ? 'On' : 'Off'}</strong></span>
+              <form action={toggleAbsenceSmsAction}><input type="hidden" name="campus" value={c.id} /><input type="hidden" name="enabled" value={c.sms_absence_enabled ? 'false' : 'true'} /><Button type="submit" size="sm" variant="outline">Turn {c.sms_absence_enabled ? 'off' : 'on'}</Button></form>
             </li>
           ))}
         </ul>

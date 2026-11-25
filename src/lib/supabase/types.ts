@@ -128,6 +128,7 @@ export interface ActiveScholarshipRow {
 export interface CampusRow {
   id: string;
   sms_receipts_enabled: boolean;
+  sms_absence_enabled: boolean;
   code: string;
   name: string;
   slug: string;
