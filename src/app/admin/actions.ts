@@ -23,7 +23,7 @@ async function requireEditor() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect('/admin/login');
+  if (!user) redirect('/staff-login');
 
   const { data: profile } = await supabase
     .from('profiles')

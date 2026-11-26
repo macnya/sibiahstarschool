@@ -64,3 +64,23 @@ export async function lookupApplication(reference: string, phone: string): Promi
   const rows = (data ?? []) as ApplicationStatusResult[];
   return { ok: true, result: rows[0] ?? null };
 }
+
+export type TrackResult = { ok: true; results: ApplicationStatusResult[] } | { ok: false; error: string };
+
+/** The easy way for a family to check progress: the parent's phone number plus one name of the child. */
+export async function trackApplications(phone: string, childName: string): Promise<TrackResult> {
+  if (!allowRequest(`track:${await clientKey()}`, 15)) {
+    return { ok: false, error: 'Too many attempts. Please wait a few minutes and try again.' };
+  }
+  if (phone.replace(/\D/g, '').length < 9 || childName.trim().length < 3) {
+    return { ok: false, error: 'Enter the parent’s phone number and at least 3 letters of one of the child’s names.' };
+  }
+  const supabase = createPublicClient();
+  const { data, error } = await supabase.rpc('track_applications', { p_phone: phone, p_name: childName });
+  if (error) {
+    if (error.code === 'P0001') return { ok: false, error: error.message };
+    console.error('[admissions] track failed:', error.code, error.message);
+    return { ok: false, error: 'We could not check just now. Please try again.' };
+  }
+  return { ok: true, results: (data ?? []) as ApplicationStatusResult[] };
+}

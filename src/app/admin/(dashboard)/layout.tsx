@@ -20,7 +20,7 @@ export default async function AdminLayout({
   // middleware.ts already redirects unauthenticated users, but a layout
   // that trusts middleware alone would expose everything if the matcher
   // is ever edited. Check here too.
-  if (!user) redirect('/admin/login');
+  if (!user) redirect('/staff-login');
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -29,7 +29,7 @@ export default async function AdminLayout({
     .maybeSingle();
 
   if (!profile || !['admin', 'editor'].includes(profile.role)) {
-    redirect('/admin/login');
+    redirect('/staff-login');
   }
 
   // Group admins see everything; an admin attached to a campus only sees

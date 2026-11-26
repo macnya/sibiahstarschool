@@ -108,6 +108,7 @@ export async function getStudentProfile(id: string) {
     supabase.from('grade_levels').select('*'),
     supabase.from('guardian_links').select('user_id').eq('student_id', id),
   ]);
+  const { data: routeData } = await supabase.from('transport_routes').select('id, name').eq('campus_id', student.campus_id).order('name');
   const gradeRow = grade.data as GradeLevelRow | null;
   const klass = current.data as ClassRow | null;
   return {
@@ -121,5 +122,6 @@ export async function getStudentProfile(id: string) {
       .sort((a, b) => b.year - a.year || a.order - b.order)
       .map(({ id, label }) => ({ id, label })),
     parentAccounts: (links.data ?? []).length,
+    routes: (routeData ?? []) as { id: string; name: string }[],
   };
 }

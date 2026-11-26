@@ -34,7 +34,7 @@ function int(formData: FormData, key: string) {
 async function authed() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  if (!user) redirect('/staff-login');
   return supabase;
 }
 

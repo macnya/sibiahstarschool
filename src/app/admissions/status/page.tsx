@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function ApplicationStatusPage() {
   return (
     <div>
-      <PageHeader eyebrow="Admissions" title="Track Your Application" subtitle="Enter your reference number and the phone number you applied with." />
+      <PageHeader eyebrow="Admissions" title="Track Your Application" subtitle="Enter the parent’s phone number and one name of your child." />
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <StatusLookup />

@@ -77,11 +77,37 @@ export async function teacherSignIn(_prev: PortalState, formData: FormData): Pro
   return signInWith(formData, 'teacher');
 }
 
+/** One sign-in for everyone on the staff: administrators, teachers and department staff. Sends each to their own area. */
+export async function staffSignIn(_prev: PortalState, formData: FormData): Promise<PortalState> {
+  if (!allowRequest(`staff-signin:${await clientIp()}`, 12)) return { error: 'Too many attempts. Please wait a few minutes.' };
+  const email = String(formData.get('email') ?? '').trim();
+  const password = String(formData.get('password') ?? '');
+  const next = String(formData.get('next') ?? '');
+  if (!email || !password) return { error: 'Enter your email and password.' };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: 'Those details do not match an account.' };
+
+  const { data: { user } } = await supabase.auth.getUser();
+  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user!.id).maybeSingle();
+  const role = (profile as { role: string } | null)?.role;
+  if (!role || !['admin', 'editor', 'teacher', 'staff'].includes(role)) {
+    await supabase.auth.signOut();
+    return { error: 'This is not a staff account. Parents sign in through the Parent Portal. Staff accounts are created by the school administrator.' };
+  }
+  revalidatePath('/', 'layout');
+  if (role === 'teacher') redirect('/teacher-portal/dashboard');
+  if (role === 'staff') redirect('/staff/dashboard');
+  redirect(next.startsWith('/admin') && !next.startsWith('//') ? next : '/admin');
+}
+
 export async function portalSignOut(formData: FormData) {
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath('/', 'layout');
-  redirect(String(formData.get('to') ?? '') === 'teacher' ? '/teacher-portal' : '/parent-portal');
+  const to = String(formData.get('to') ?? '');
+  redirect(to === 'teacher' ? '/teacher-portal' : to === 'staff' ? '/staff-login' : '/parent-portal');
 }
 
 /** A parent links a child: admission number AND the phone number the school holds for them. */

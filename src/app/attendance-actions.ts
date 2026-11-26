@@ -23,7 +23,7 @@ export async function saveAttendanceAction(formData: FormData) {
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(returnTo === 'admin' ? '/admin/login' : '/teacher-portal');
+  if (!user) redirect(returnTo === 'admin' ? '/staff-login' : '/teacher-portal');
   const { error } = await supabase.rpc('mark_attendance', { p_class: classId, p_day: day, p_rows: rows });
   const qs = new URLSearchParams({ date: day });
   if (error) qs.set('error', error.message.slice(0, 160)); else qs.set('ok', `Saved for ${rows.length} pupils.`);

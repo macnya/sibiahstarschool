@@ -45,7 +45,7 @@ export async function updateSession(request: NextRequest) {
 
   if (isAdminArea && !isLoginPage && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = '/admin/login';
+    url.pathname = '/staff-login';
     url.searchParams.set('next', pathname);
     return NextResponse.redirect(url);
   }
@@ -56,6 +56,7 @@ export async function updateSession(request: NextRequest) {
     ['/parent-portal/child', '/parent-portal'],
     ['/teacher-portal/dashboard', '/teacher-portal'],
     ['/teacher-portal/class', '/teacher-portal'],
+    ['/staff/dashboard', '/staff-login'],
   ];
   for (const [prefix, login] of portalGuard) {
     if (!user && (pathname === prefix || pathname.startsWith(prefix + '/'))) {
@@ -64,14 +65,6 @@ export async function updateSession(request: NextRequest) {
       url.search = '';
       return NextResponse.redirect(url);
     }
-  }
-
-  // Signed-in users have no reason to see the login form.
-  if (isLoginPage && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/admin';
-    url.search = '';
-    return NextResponse.redirect(url);
   }
 
   return response;

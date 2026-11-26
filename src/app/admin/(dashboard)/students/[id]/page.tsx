@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { setStudentRouteAction } from '@/app/admin/staff-actions';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Wallet } from 'lucide-react';
 import { placeOneStudentAction, removeFromClassAction } from '@/app/admin/classes-actions';
@@ -49,6 +50,18 @@ export default async function StudentProfilePage({ params, searchParams }: { par
           )}
           {s.class_id && (
             <form action={removeFromClassAction} className="mt-3"><input type="hidden" name="student_id" value={s.id} /><input type="hidden" name="next" value={here} /><Button type="submit" variant="ghost" size="sm" className="text-muted-foreground">Take out of this class</Button></form>
+          )}
+        </section>
+
+        <section className="rounded-lg border bg-card p-5">
+          <h2 className="mb-2 text-base font-semibold text-primary">School transport</h2>
+          {p.routes.length === 0 ? <p className="text-sm text-muted-foreground">No routes created yet. <Link href="/admin/staff" className="text-primary underline">Add routes</Link> under Staff.</p> : (
+            <form action={setStudentRouteAction} className="flex flex-wrap items-end gap-2">
+              <input type="hidden" name="student_id" value={s.id} />
+              <div><label htmlFor="route_id" className="mb-1 block text-xs text-muted-foreground">Route</label>
+                <select id="route_id" name="route_id" defaultValue={s.route_id ?? ''} className={field}><option value="">Not on school transport</option>{p.routes.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}</select></div>
+              <Button type="submit">Save</Button>
+            </form>
           )}
         </section>
 

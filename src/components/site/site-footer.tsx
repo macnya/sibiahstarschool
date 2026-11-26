@@ -78,7 +78,7 @@ export async function SiteFooter() {
                 <li><Link href="/admissions/status" className={link}>Track an application</Link></li>
                 <li><Link href="/pay-fees" className={link}>Pay school fees</Link></li>
                 <li><Link href="/parent-portal" className={link}>Parent portal</Link></li>
-                <li><Link href="/teacher-portal" className={link}>Teacher portal</Link></li>
+                <li><Link href="/staff-login" className={link}>Staff login</Link></li>
                 <li><Link href="/scholarships" className={link}>Scholarships</Link></li>
                 <li><Link href="/contact" className={link}>Contact us</Link></li>
               </ul>

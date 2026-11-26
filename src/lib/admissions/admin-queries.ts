@@ -14,9 +14,9 @@ import type {
 export async function getAdminContext() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  if (!user) redirect('/staff-login');
   const { data: profile } = await supabase.from('profiles').select('*').eq('id', user.id).maybeSingle();
-  if (!profile || !['admin', 'editor'].includes(profile.role)) redirect('/admin/login');
+  if (!profile || !['admin', 'editor'].includes(profile.role)) redirect('/staff-login?denied=1');
   const p = profile as ProfileRow;
   return {
     supabase,

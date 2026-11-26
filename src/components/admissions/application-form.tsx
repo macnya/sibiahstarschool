@@ -9,6 +9,7 @@ import { applicationSchema, type ApplicationInput, type ApplicationValues } from
 import { HOW_HEARD, RELATIONSHIPS, STAGE_LABEL, STAGE_ORDER } from '@/lib/admissions/constants';
 import { submitApplication } from '@/app/admissions/apply/actions';
 import type { GradeStage } from '@/lib/supabase/types';
+import { UniformCard } from '@/components/admissions/uniform-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -82,7 +83,7 @@ export function ApplicationForm({ campuses, defaultCampusId }: { campuses: Apply
           <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
           <h2 className="text-2xl font-bold text-primary">Application received</h2>
           <p className="text-muted-foreground">
-            Thank you. Please keep your reference number — you will need it, with your phone number, to check progress at any time.
+            Thank you. Keep your reference number for your records. To check progress at any time you only need the parent’s phone number and one name of your child.
           </p>
           <div className="rounded-lg bg-muted px-6 py-4">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">Your reference number</p>
@@ -93,6 +94,7 @@ export function ApplicationForm({ campuses, defaultCampusId }: { campuses: Apply
             <li><strong className="text-foreground">2.</strong> We may invite your child for a short assessment or interview.</li>
             <li><strong className="text-foreground">3.</strong> You receive an offer, then the school completes enrolment.</li>
           </ol>
+          <UniformCard />
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <Button asChild><Link href="/admissions/status">Track my application</Link></Button>
             <Button asChild variant="outline"><Link href="/">Back to home</Link></Button>

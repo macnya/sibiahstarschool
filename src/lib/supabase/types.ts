@@ -15,7 +15,7 @@
  *   npx supabase gen types typescript --project-id <ref> > src/lib/supabase/types.ts
  */
 
-export type UserRole = 'admin' | 'editor' | 'teacher' | 'student' | 'parent';
+export type UserRole = 'admin' | 'editor' | 'teacher' | 'staff' | 'student' | 'parent';
 
 export interface ProfileRow {
   id: string;
@@ -257,6 +257,7 @@ export interface StudentRow {
   special_needs: string | null;
   upi_number: string | null;
   class_id: string | null;
+  route_id: string | null;
   source: 'admission' | 'import';
   status: StudentStatus;
   enrolled_on: string;

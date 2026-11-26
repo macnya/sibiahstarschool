@@ -33,7 +33,7 @@ export async function saveMarksAction(formData: FormData) {
   }
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(admin ? '/admin/login' : '/teacher-portal');
+  if (!user) redirect(admin ? '/staff-login' : '/teacher-portal');
   const { error } = await supabase.rpc('save_marks', { p_exam: exam, p_class: classId, p_area: area, p_rows: rows });
   revalidatePath(path);
   go(path, error?.message, error ? undefined : 'Marks saved.', { exam, class: classId, area });
@@ -46,7 +46,7 @@ export async function saveCommentsAction(formData: FormData) {
   const path = admin ? `/admin/exams/${exam}/comments` : `/teacher-portal/class/${classId}/comments`;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect(admin ? '/admin/login' : '/teacher-portal');
+  if (!user) redirect(admin ? '/staff-login' : '/teacher-portal');
   let failure: string | undefined;
   for (const [k] of formData.entries()) {
     if (!k.startsWith('t_') || !UUID.test(k.slice(2))) continue;

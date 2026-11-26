@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { claimChildAction, parentSignIn, parentSignUp, teacherSignIn, type PortalState } from '@/app/portal-actions';
+import { claimChildAction, parentSignIn, parentSignUp, staffSignIn, teacherSignIn, type PortalState } from '@/app/portal-actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -51,6 +51,19 @@ export function ClaimChildForm() {
       <div className="space-y-2"><Label htmlFor="cc-phone">Phone number the school has for you</Label><Input id="cc-phone" name="phone" type="tel" required placeholder="0712 345 678" autoComplete="off" /></div>
       <Button type="submit" disabled={pending}>{pending ? 'Checking…' : 'Add child'}</Button>
       <div className="sm:col-span-3"><Message state={state} /></div>
+    </form>
+  );
+}
+
+export function StaffSignInForm({ next }: { next?: string }) {
+  const [state, action, pending] = useActionState(staffSignIn, initial);
+  return (
+    <form action={action} className="space-y-4">
+      {next && <input type="hidden" name="next" value={next} />}
+      <div className="space-y-2"><Label htmlFor="staff-email">Email</Label><Input id="staff-email" name="email" type="email" autoComplete="username" required /></div>
+      <div className="space-y-2"><Label htmlFor="staff-password">Password</Label><Input id="staff-password" name="password" type="password" autoComplete="current-password" required /></div>
+      <Message state={state} />
+      <Button type="submit" disabled={pending} className="w-full">{pending ? 'Signing in…' : 'Sign in'}</Button>
     </form>
   );
 }

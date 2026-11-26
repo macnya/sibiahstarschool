@@ -23,6 +23,7 @@ const NAV: { href: string; label: string; icon: typeof LayoutDashboard; scopes: 
   { href: '/admin/attendance',   label: 'Attendance',    icon: CalendarCheck,   scopes: ['group', 'campus'] },
   { href: '/admin/exams',        label: 'Exams',         icon: FileText,        scopes: ['group', 'campus'] },
   { href: '/admin/classes',      label: 'Classes',       icon: School,          scopes: ['group', 'campus'] },
+  { href: '/admin/staff',        label: 'Staff',         icon: GraduationCap,   scopes: ['group', 'campus'] },
   { href: '/admin/teachers',     label: 'Teachers',      icon: GraduationCap,   scopes: ['group', 'campus'] },
   { href: '/admin/fees',         label: 'Fees',          icon: Wallet,          scopes: ['group', 'campus'] },
   { href: '/admin/campuses',     label: 'Schools',       icon: Building2,       scopes: ['group'] },

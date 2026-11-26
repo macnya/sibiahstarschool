@@ -2,6 +2,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, Download, Edit, ListChecks, MessageSquareHeart } from 'lucide-react';
 import Link from 'next/link';
+import { UniformCard } from '@/components/admissions/uniform-card';
 import type { Metadata } from 'next';
 import { getPageContent } from '@/lib/site-content/queries';
 
@@ -51,6 +52,7 @@ export default async function AdmissionsPage() {
                 </div>
               </div>
             ))}
+            <UniformCard />
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronDown, GraduationCap, Menu, Phone, Wallet } from 'lucide-react';
+import { ChevronDown, GraduationCap, KeyRound, Menu, Phone, Wallet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
@@ -81,6 +81,7 @@ const UTILITY = [
   { href: '/pay-fees', label: 'Pay Fees', icon: Wallet },
   { href: '/admissions/status', label: 'Track Application' },
   { href: '/parent-portal', label: 'Parent Portal' },
+  { href: '/staff-login', label: 'Staff Login', icon: KeyRound },
   { href: '/events', label: 'Events' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -251,7 +252,10 @@ export function HeaderClient({ campuses }: { campuses: { name: string; slug: str
                       </details>
                     ))}
                     <SheetClose asChild><Link href="/contact" className="block border-b border-white/10 px-3 py-3.5 text-base font-semibold">Contact</Link></SheetClose>
-                    <SheetClose asChild><Link href="/pay-fees" className="block px-3 py-3.5 text-base font-semibold">Pay school fees</Link></SheetClose>
+                    <SheetClose asChild><Link href="/pay-fees" className="block border-b border-white/10 px-3 py-3.5 text-base font-semibold">Pay school fees</Link></SheetClose>
+                    <SheetClose asChild><Link href="/admissions/status" className="block border-b border-white/10 px-3 py-3.5 text-base font-semibold">Track application</Link></SheetClose>
+                    <SheetClose asChild><Link href="/parent-portal" className="block border-b border-white/10 px-3 py-3.5 text-base font-semibold">Parent portal</Link></SheetClose>
+                    <SheetClose asChild><Link href="/staff-login" className="block px-3 py-3.5 text-base font-semibold">Staff login</Link></SheetClose>
                   </nav>
                   <div className="p-5">
                     <SheetClose asChild>

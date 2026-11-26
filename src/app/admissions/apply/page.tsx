@@ -30,7 +30,7 @@ export default async function ApplyPage({ searchParams }: { searchParams: Promis
       <PageHeader
         eyebrow="Admissions"
         title="Apply Online"
-        subtitle="Complete the application below. It takes about five minutes, and you can track it with your reference number."
+        subtitle="Complete the application below. It takes about five minutes, and you can track it afterwards with just the parent’s phone number and your child’s name."
       />
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
