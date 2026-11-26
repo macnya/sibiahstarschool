@@ -127,7 +127,7 @@ export function HeaderClient({ campuses }: { campuses: { name: string; slug: str
   const groupActive = useCallback((g: NavGroup) => g.items.some((i) => i.href.split('#')[0] !== '/' && pathname.startsWith(i.href.split('#')[0])), [pathname]);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 print:hidden">
       {/* Utility bar */}
       <div className="hidden bg-primary text-primary-foreground lg:block">
         <div className="container mx-auto flex h-9 items-center justify-between px-4 text-xs sm:px-6 lg:px-8">

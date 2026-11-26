@@ -34,7 +34,7 @@ export default async function TeacherClassPage({ params }: { params: Promise<{ i
         <div className="container mx-auto max-w-5xl space-y-5 px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
             <Link href="/teacher-portal/dashboard" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="mr-1 h-4 w-4" />My classes</Link>
-            <div className="flex gap-2"><Button asChild size="sm"><Link href={`/teacher-portal/class/${id}/attendance`}>Take attendance</Link></Button><PrintButton /></div>
+            <div className="flex gap-2"><Button asChild size="sm"><Link href={`/teacher-portal/class/${id}/attendance`}>Take attendance</Link></Button><Button asChild size="sm" variant="outline"><Link href={`/teacher-portal/class/${id}/marks`}>Enter marks</Link></Button><Button asChild size="sm" variant="outline"><Link href={`/teacher-portal/class/${id}/comments`}>Comments</Link></Button><PrintButton /></div>
           </div>
           <h2 className="hidden text-xl font-bold print:block">{title} · {c.year} class list</h2>
           <div className="overflow-x-auto rounded-lg border bg-card">

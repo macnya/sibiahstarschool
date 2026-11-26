@@ -24,7 +24,7 @@ export async function SiteFooter() {
   const link = 'text-sm text-primary-foreground/75 transition-colors hover:text-accent';
 
   return (
-    <footer className="bg-primary text-primary-foreground">
+    <footer className="bg-primary text-primary-foreground print:hidden">
       <div className="h-1 bg-accent" />
       <div className="star-pattern">
         <div className="container mx-auto px-4 py-14 sm:px-6 lg:px-8">

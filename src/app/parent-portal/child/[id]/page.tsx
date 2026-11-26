@@ -18,7 +18,8 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
   const { id } = await params;
   const { supabase } = await requireParent();
   if (!/^[0-9a-f-]{36}$/i.test(id)) notFound();
-  const [{ data: acc }, { data: kids }, { data: att }] = await Promise.all([supabase.rpc('my_child_account', { p_student: id }), supabase.rpc('my_children'), supabase.rpc('child_attendance', { p_student: id })]);
+  const [{ data: acc }, { data: kids }, { data: att }, { data: examsData }] = await Promise.all([supabase.rpc('my_child_account', { p_student: id }), supabase.rpc('my_children'), supabase.rpc('child_attendance', { p_student: id }), supabase.rpc('my_child_exams', { p_student: id })]);
+  const exams = (examsData ?? []) as { id: string; name: string; year: number; term: number }[];
   const attendance = att as { days: number; present: number; absent: number; late: number; excused: number; recent: { day: string; status: string; note: string | null }[] } | null;
   const account = acc as FeeAccount | null;
   if (!account) notFound();
@@ -41,6 +42,15 @@ export default async function ChildPage({ params }: { params: Promise<{ id: stri
             </div>
             <Button asChild size="lg"><Link href={`/pay-fees?adm=${encodeURIComponent(account.admission_number)}`}>Pay by M-Pesa phone prompt</Link></Button>
           </div>
+
+          {exams.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-lg font-semibold text-primary">Report cards</h2>
+              <ul className="divide-y rounded-lg border bg-card text-sm">
+                {exams.map((x) => <li key={x.id}><Link href={`/parent-portal/child/${id}/report/${x.id}`} className="flex justify-between gap-2 px-3 py-3 hover:bg-muted/50"><span className="font-medium text-primary">{x.name}</span><span className="text-muted-foreground">Term {x.term}, {x.year}</span></Link></li>)}
+              </ul>
+            </div>
+          )}
 
           {attendance && attendance.days > 0 && (
             <div>
