@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Upload, AlertCircle } from 'lucide-react';
 
-const MAX_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 10 * 1024 * 1024;
 const ALLOWED = ['image/jpeg', 'image/png', 'image/webp', 'image/avif'];
 
 /**
@@ -41,7 +41,7 @@ export function ImageField({
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError('That image is over 5 MB. Please resize it first.');
+      setError('That image is over 10 MB. Please resize it first.');
       return;
     }
 
